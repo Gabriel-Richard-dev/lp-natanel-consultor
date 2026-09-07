@@ -1,12 +1,15 @@
 import { ArrowRight } from "lucide-react";
-import ofertas from "@/data/ofertas.json";
 import { OfertaCard } from "@/components/sections/oferta-card";
-import { useCardReveal } from "@/hooks/use-card-reveal";
+import { useFocusList } from "@/hooks/use-focus-list";
+import { useImoveis } from "@/hooks/use-imoveis";
+import { useOfertasScroll } from "@/hooks/use-ofertas-scroll";
 
 const PREVIEW_COUNT = 6;
 
 export function Ofertas() {
-  const ref = useCardReveal<HTMLDivElement>(".oferta-card");
+  const { imoveis: ofertas } = useImoveis();
+  const ref = useOfertasScroll<HTMLDivElement>([ofertas.length]);
+  useFocusList(ref, ".oferta-card", [ofertas.length]);
   const preview = ofertas.slice(0, PREVIEW_COUNT);
 
   return (

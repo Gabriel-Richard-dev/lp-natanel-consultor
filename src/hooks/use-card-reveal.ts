@@ -3,7 +3,10 @@ import { useEffect, useRef } from "react";
 
 // Entrada diferenciada dos cards de oferta (anime.js) — flip 3D + escala,
 // pra não repetir o fade/slide do GSAP usado no resto do site.
-export function useCardReveal<T extends HTMLElement>(selector: string) {
+export function useCardReveal<T extends HTMLElement>(
+  selector: string,
+  deps: unknown[] = []
+) {
   const ref = useRef<T>(null);
 
   useEffect(() => {
@@ -25,13 +28,14 @@ export function useCardReveal<T extends HTMLElement>(selector: string) {
       delay: stagger(90),
       duration: 700,
       ease: "outBack",
-      autoplay: onScroll(),
+      autoplay: onScroll({ sync: true }),
     });
 
     return () => {
       animation.revert();
     };
-  }, [selector]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selector, ...deps]);
 
   return ref;
 }

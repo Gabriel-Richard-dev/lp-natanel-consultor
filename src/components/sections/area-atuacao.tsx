@@ -51,7 +51,11 @@ export function AreaAtuacao() {
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: ref.current, start: "top 70%", once: true },
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top 70%",
+          toggleActions: "play reverse play reverse",
+        },
       });
       tl.to(paths, {
         strokeDashoffset: 0,

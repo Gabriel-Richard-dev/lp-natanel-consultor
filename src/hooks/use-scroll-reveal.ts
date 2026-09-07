@@ -27,7 +27,7 @@ export function useScrollReveal<T extends HTMLElement>(
         scrollTrigger: {
           trigger: el,
           start: "top 80%",
-          once: true,
+          toggleActions: "play reverse play reverse",
         },
       });
     }, el);

@@ -1,4 +1,4 @@
-name: Atualizar ofertas
+name: Resincronizar ofertas do Chaves na Mão
 
 on:
   schedule:
@@ -6,20 +6,10 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  scrape:
+  sync:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: node scripts/scrape-ofertas.mjs
-      - name: Commit se houver mudança
+      - name: Chamar endpoint de sincronismo da API
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/ofertas.json
-          git diff --staged --quiet || git commit -m "chore: atualizar ofertas do Chaves na Mão"
-          git push
+          curl -f -X POST "${{ secrets.API_URL }}/sync/chaves-na-mao" \
+            -H "x-sync-secret: ${{ secrets.SYNC_SECRET }}"

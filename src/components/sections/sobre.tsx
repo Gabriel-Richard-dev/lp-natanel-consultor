@@ -1,20 +1,37 @@
-import { MapPin } from "lucide-react";
+import { MapPin, Search, TrendingUp } from "lucide-react";
 import natanaelFoto from "@/assets/natanael/natanael-2.jpeg";
-import ofertas from "@/data/ofertas.json";
+import { useImoveis } from "@/hooks/use-imoveis";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
-const precos = ofertas.map((o) => o.preco);
-const precoMin = Math.min(...precos).toLocaleString("pt-BR");
-const precoMax = Math.max(...precos).toLocaleString("pt-BR");
-
-const stats = [
-  { label: "Imóveis ativos", valor: `${ofertas.length}` },
-  { label: "Faixa de preço", valor: `R$ ${precoMin} — ${precoMax}` },
-  { label: "CRECI-CE", valor: "20127" },
+const servicos = [
+  {
+    icon: Search,
+    title: "Compra assessorada",
+    description:
+      "Filtramos as opções certas pro seu perfil e orçamento, visitamos junto com você e negociamos o melhor preço.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Avaliação e investimento",
+    description:
+      "Análise de mercado real para você saber o valor justo do imóvel ou identificar boas oportunidades de investimento.",
+  },
 ];
 
 export function Sobre() {
   const ref = useScrollReveal<HTMLDivElement>({ selector: ".sobre-anim" });
+  const { imoveis } = useImoveis();
+
+  const precos = imoveis.map((o) => o.preco);
+  const faixaPreco = precos.length
+    ? `R$ ${Math.min(...precos).toLocaleString("pt-BR")} — ${Math.max(...precos).toLocaleString("pt-BR")}`
+    : "—";
+
+  const stats = [
+    { label: "Imóveis ativos", valor: `${imoveis.length}` },
+    { label: "Faixa de preço", valor: faixaPreco },
+    { label: "CRECI-CE", valor: "20127" },
+  ];
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" id="sobre">
@@ -51,6 +68,26 @@ export function Sobre() {
             className="w-full max-w-sm rounded-2xl border border-border object-cover shadow-lg"
             src={natanaelFoto}
           />
+        </div>
+      </div>
+
+      <div className="sobre-anim mt-16 border-border border-t pt-12">
+        <h3 className="mb-6 font-medium text-muted-foreground text-sm uppercase tracking-wide">
+          Como posso te ajudar
+        </h3>
+        <div className="grid gap-6 sm:grid-cols-2">
+          {servicos.map(({ icon: Icon, title, description }) => (
+            <div
+              className="rounded-2xl border border-border bg-card p-6 shadow-sm"
+              key={title}
+            >
+              <Icon className="mb-3 h-6 w-6 text-emerald-600" />
+              <h4 className="mb-1.5 font-semibold">{title}</h4>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                {description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

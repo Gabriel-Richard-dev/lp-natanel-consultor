@@ -3,7 +3,7 @@ import { AreaAtuacao } from "@/components/sections/area-atuacao";
 import { Contato } from "@/components/sections/contato";
 import { Hero } from "@/components/sections/hero";
 import { Ofertas } from "@/components/sections/ofertas";
-import { Servicos } from "@/components/sections/servicos";
+import { SimulacaoFinanciamento } from "@/components/sections/simulacao-financiamento";
 import { Sobre } from "@/components/sections/sobre";
 import { Catalogo } from "@/pages/catalogo";
 
@@ -33,8 +33,8 @@ function App() {
     <main>
       <Hero />
       <Sobre />
-      <Servicos />
       <Ofertas />
+      <SimulacaoFinanciamento />
       <AreaAtuacao />
       <Contato />
     </main>

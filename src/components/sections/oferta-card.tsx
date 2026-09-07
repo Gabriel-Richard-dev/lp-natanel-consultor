@@ -1,4 +1,6 @@
 import { BedDouble, Ruler, ShowerHead } from "lucide-react";
+import type { Imovel } from "@/lib/api";
+import { useTilt } from "@/hooks/use-tilt";
 
 const WHATSAPP_NUMBER = "5585987785187";
 
@@ -10,31 +12,23 @@ function waLinkPara(titulo: string, url: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
 }
 
-export type Oferta = {
-  id: string;
-  titulo: string;
-  preco: number;
-  url: string;
-  imagem: string;
-  bairro: string;
-  cidade: string;
-  quartos: number | null;
-  banheiros: number | null;
-  area: string | null;
-};
+export function OfertaCard({ oferta }: { oferta: Imovel }) {
+  const tiltRef = useTilt<HTMLDivElement>();
 
-export function OfertaCard({ oferta }: { oferta: Oferta }) {
   return (
     <div
-      className="oferta-card flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
-      style={{ perspective: "1000px" }}
+      className="oferta-card flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-xl"
+      ref={tiltRef}
+      style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
     >
-      <img
-        alt={oferta.titulo}
-        className="h-48 w-full object-cover"
-        loading="lazy"
-        src={oferta.imagem}
-      />
+      <div className="relative h-48 w-full overflow-hidden">
+        <img
+          alt={oferta.titulo}
+          className="oferta-img absolute inset-0 h-[130%] w-full object-cover"
+          loading="lazy"
+          src={oferta.imagem ?? undefined}
+        />
+      </div>
       <div className="flex flex-1 flex-col p-5">
         <span className="mb-1 font-semibold text-emerald-700 text-xl dark:text-emerald-400">
           {formatPreco(oferta.preco)}

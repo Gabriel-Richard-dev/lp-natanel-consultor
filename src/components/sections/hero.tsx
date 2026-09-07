@@ -1,15 +1,16 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { MessageCircle } from "lucide-react";
+import { ChevronDown, MessageCircle } from "lucide-react";
 import logo from "@/assets/logo/logo-natanael.png";
 import natanaelFoto from "@/assets/natanael/natanael-1.jpeg";
-import ofertas from "@/data/ofertas.json";
 import { Particles } from "@/components/sections/particles";
+import { useImoveis } from "@/hooks/use-imoveis";
 
 const WHATSAPP_NUMBER = "5585987785187";
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
+  const { imoveis } = useImoveis();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -43,7 +44,7 @@ export function Hero() {
         />
         <img
           alt="Natanael Machado, consultor de imóveis"
-          className="hidden h-full w-full object-cover object-[center_10%] md:block"
+          className="hidden h-full w-full scale-x-[-1] object-cover object-[center_10%] md:block"
           src={natanaelFoto}
         />
         <div className="absolute inset-0 bg-linear-to-r from-[#0b1210] via-[#0b1210]/60 to-transparent md:hidden" />
@@ -73,7 +74,7 @@ export function Hero() {
 
           <p className="mb-10 border-white/15 border-t pt-4 text-white/50 text-xs tracking-wide sm:text-sm">
             CRECI-CE 20127 &nbsp;·&nbsp; Fortaleza, Eusébio e Maracanaú
-            &nbsp;·&nbsp; {ofertas.length} imóveis disponíveis
+            &nbsp;·&nbsp; {imoveis.length} imóveis disponíveis
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -99,6 +100,14 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      <a
+        aria-label="Rolar para saber mais"
+        className="-translate-x-1/2 absolute bottom-6 left-1/2 z-10 animate-bounce text-white/60 transition-colors hover:text-white"
+        href="#sobre"
+      >
+        <ChevronDown className="h-8 w-8" />
+      </a>
     </section>
   );
 }

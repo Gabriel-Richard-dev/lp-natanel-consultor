@@ -1,0 +1,20 @@
+{
+  "name": "natanael-consultor-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "hash-senha": "node src/hash-password.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.700.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.13.0"
+  }
+}

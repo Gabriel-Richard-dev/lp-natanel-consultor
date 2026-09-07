@@ -1,6 +1,50 @@
 services:
-  site:
-    build: .
-    ports:
-      - "8080:80"
+  db:
+    image: postgres:16-alpine
     restart: unless-stopped
+    environment:
+      POSTGRES_USER: natanael
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-natanael}
+      POSTGRES_DB: imoveis
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./server/src/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    ports:
+      - "5432:5432"
+
+  s3:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-minioadmin123}
+    volumes:
+      - s3_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    depends_on:
+      - db
+      - s3
+    environment:
+      DATABASE_URL: postgres://natanael:${DB_PASSWORD:-natanael}@db:5432/imoveis
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?rode "npm run hash-senha -- <senha>" em server/ e cole aqui}
+      SYNC_SECRET: ${SYNC_SECRET:?defina SYNC_SECRET no .env}
+      S3_ENDPOINT: http://s3:9000
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-minioadmin}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-minioadmin123}
+      S3_BUCKET: imoveis
+      S3_PUBLIC_URL: ${S3_PUBLIC_URL:-http://localhost:9000/imoveis}
+      CHAVES_NA_MAO_URL: https://www.chavesnamao.com.br/corretor/natanael-machado/id-616202/
+    ports:
+      - "3001:3001"
+
+volumes:
+  db_data:
+  s3_data:

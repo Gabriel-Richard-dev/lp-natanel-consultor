@@ -1,14 +1,13 @@
 import { ArrowLeft } from "lucide-react";
 import logo from "@/assets/logo/logo-natanael.png";
-import { OfertaCard } from "@/components/sections/oferta-card";
-import ofertas from "@/data/ofertas.json";
-import { useCardReveal } from "@/hooks/use-card-reveal";
+import { OfertaRow } from "@/components/sections/oferta-row";
+import { useImoveis } from "@/hooks/use-imoveis";
 
 export function Catalogo() {
-  const ref = useCardReveal<HTMLDivElement>(".oferta-card");
+  const { imoveis: ofertas } = useImoveis();
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-16 md:px-6">
+    <main className="mx-auto max-w-5xl px-4 py-16 md:px-6">
       <div className="mb-10 flex items-center justify-between">
         <img alt="Natanael Machado" className="h-14 w-auto" src={logo} />
         <a
@@ -23,14 +22,14 @@ export function Catalogo() {
       <h1 className="mb-2 font-bold text-3xl tracking-tight md:text-4xl">
         Catálogo completo
       </h1>
-      <p className="mb-12 text-muted-foreground">
+      <p className="mb-4 text-muted-foreground">
         Todos os {ofertas.length} imóveis disponíveis com Natanael Machado
         agora.
       </p>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" ref={ref}>
-        {ofertas.map((oferta) => (
-          <OfertaCard key={oferta.id} oferta={oferta} />
+      <div className="divide-y divide-border">
+        {ofertas.map((oferta, index) => (
+          <OfertaRow index={index} key={oferta.id} oferta={oferta} />
         ))}
       </div>
     </main>
