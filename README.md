@@ -1,32 +1,38 @@
-# React + TypeScript + Vite
+# Natanael Machado — Consultor Imobiliário
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```
+web/      site (React + Vite) e painel admin em /#/admin
+api/      API (FastAPI + Postgres), fotos no MinIO, sync com o Chaves na Mão
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Rodar
+
+```sh
+cp .env.example .env   # preencha as senhas e o JWT_SECRET
+docker compose build api
+docker compose run --rm --no-deps api python -m app.hash_senha 'senha-do-painel'
+# cole o hash em ADMIN_PASSWORD_HASH (entre aspas simples)
+docker compose up -d --build
+```
+
+- Site: http://localhost:8080 — painel: http://localhost:8080/#/admin
+- API: http://localhost:3001
+- MinIO (console das fotos): http://localhost:9001 — só acessível na própria máquina
+
+A API sincroniza os imóveis do Chaves na Mão ao iniciar e a cada 6h
+(e pelo botão no painel). Imóveis cadastrados à mão nunca são alterados pelo sync.
+
+## Desenvolvimento
+
+```sh
+docker compose up -d db minio api
+cd web && npm install && npm run dev
+```
+
+## Segurança
+
+- Login: senha com bcrypt, 5 tentativas erradas por IP bloqueiam 15 min, sessão de 24h.
+- CORS: a API só aceita o navegador vindo de `CORS_ORIGINS`.
+- Fotos: toda imagem é reprocessada para WebP (bloqueia arquivo disfarçado e remove GPS/EXIF), máx. 5MB.
+- Postgres não é exposto fora do Docker; console do MinIO só em 127.0.0.1.
+- Checagens: `docker compose run --rm --no-deps api python test_app.py`
