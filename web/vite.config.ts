@@ -11,4 +11,11 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
+  // dev: mesmo caminho que o nginx usa em produção
+  server: {
+    proxy: {
+      '/api': { target: 'http://localhost:3001', rewrite: (p) => p.replace(/^\/api/, '') },
+      '/fotos': { target: 'http://localhost:9000', rewrite: (p) => p.replace(/^\/fotos/, '') },
+    },
+  },
 })
