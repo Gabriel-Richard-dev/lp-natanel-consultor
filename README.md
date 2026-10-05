@@ -15,8 +15,8 @@ docker compose run --rm --no-deps api python -m app.hash_senha 'senha-do-painel'
 docker compose up -d --build
 ```
 
-- Site: http://localhost:8080 — painel: http://localhost:8080/#/admin
-- API: http://localhost:3001
+- Site: http://localhost:8080 — painel: http://localhost:8080/admin
+- API: http://localhost:8080/api (e direto em http://localhost:3001, só na própria máquina)
 - MinIO (console das fotos): http://localhost:9001 — só acessível na própria máquina
 
 A API sincroniza os imóveis do Chaves na Mão ao iniciar e a cada 6h

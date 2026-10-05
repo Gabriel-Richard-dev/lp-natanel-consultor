@@ -18,7 +18,7 @@ export type ImovelInput = Omit<Imovel, "id" | "origem" | "atualizado_em" | "prec
   preco: number | null;
 };
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 // Access token curto: fica só na memória (nunca no localStorage, imune a XSS).
 // O refresh token vive num cookie httpOnly que o navegador manda sozinho.
