@@ -138,7 +138,7 @@ export function VisaoGeral({ painel }: { painel: Painel }) {
         <section className={cn(cartao, "flex flex-col p-5")}>
           <h2 className="font-medium text-sm">Chaves na Mão</h2>
           <p className="mt-1 text-apagado text-sm leading-relaxed">
-            Seus anúncios do portal entram no site sozinhos a cada 6 horas.
+            Use o botão abaixo para trazer seus anúncios do portal para o site.
           </p>
           <dl className="my-5 space-y-2 text-sm">
             <div className="flex justify-between gap-3">

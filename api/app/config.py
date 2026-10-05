@@ -12,7 +12,6 @@ MINIO_BUCKET = os.environ["MINIO_BUCKET"]
 MINIO_PUBLIC_URL = os.environ["MINIO_PUBLIC_URL"].rstrip("/")
 
 CHAVES_NA_MAO_URL = os.environ["CHAVES_NA_MAO_URL"]
-SYNC_INTERVALO_S = 6 * 60 * 60
 
 # Cookie do refresh token. Em produção (HTTPS) defina COOKIE_SECURE=true.
 # Se o site e a API ficarem em domínios diferentes, use COOKIE_SAMESITE=none

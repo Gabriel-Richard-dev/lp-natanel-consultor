@@ -19,8 +19,7 @@ docker compose up -d --build
 - API: http://localhost:8080/api (e direto em http://localhost:3001, só na própria máquina)
 - MinIO (console das fotos): http://localhost:9001 — só acessível na própria máquina
 
-A API sincroniza os imóveis do Chaves na Mão ao iniciar e a cada 6h
-(e pelo botão no painel). Imóveis cadastrados à mão nunca são alterados pelo sync.
+Os imóveis do Chaves na Mão só são sincronizados pelo botão no painel. Imóveis cadastrados à mão nunca são alterados pelo sync.
 
 ## Desenvolvimento
 
