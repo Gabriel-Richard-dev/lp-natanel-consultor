@@ -19,25 +19,13 @@ COOKIE_PATH = "/auth"
 log = logging.getLogger("uvicorn.error")
 
 
-async def sync_agendado():
-    while True:
-        try:
-            total = await asyncio.to_thread(chaves_na_mao.sincronizar)
-            log.info("sync Chaves na Mão: %s imóveis", total)
-        except Exception as err:
-            log.error("sync Chaves na Mão falhou: %s", err)
-        await asyncio.sleep(config.SYNC_INTERVALO_S)
-
-
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     pool.open(wait=True)
     aplicar_schema()
     sessions.limpar_vencidas()
     fotos.garantir_bucket()
-    tarefa = asyncio.create_task(sync_agendado())
     yield
-    tarefa.cancel()
     pool.close()
 
 
