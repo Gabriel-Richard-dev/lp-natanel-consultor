@@ -23,8 +23,8 @@ services:
     volumes:
       - s3_data:/data
     ports:
-      - "9000:9000" # fotos públicas
-      - "127.0.0.1:9001:9001" # console, só na própria máquina
+      - "${MINIO_PORT:-9000}:9000" # fotos públicas
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001" # console, só na própria máquina
 
   api:
     build: ./api
@@ -48,7 +48,7 @@ services:
       MINIO_PUBLIC_URL: ${S3_PUBLIC_URL:-http://localhost:9000/imoveis}
       CHAVES_NA_MAO_URL: https://www.chavesnamao.com.br/corretor/natanael-machado/id-616202/
     ports:
-      - "3001:3001"
+      - "${API_PORT:-3001}:3001"
 
   web:
     build:
@@ -59,7 +59,7 @@ services:
     depends_on:
       - api
     ports:
-      - "8080:80"
+      - "${WEB_PORT:-8080}:80"
 
 volumes:
   db_data:
