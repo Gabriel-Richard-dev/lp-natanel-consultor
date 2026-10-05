@@ -35,7 +35,8 @@ services:
       minio:
         condition: service_started
     environment:
-      DATABASE_URL: postgresql://natanael:${DB_PASSWORD:-natanael}@db:5432/imoveis
+      DATABASE_URL: postgresql://natanael@db:5432/imoveis
+      PGPASSWORD: ${DB_PASSWORD:-natanael} # fora da URL: senha com @ : / quebraria o parse
       JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env (32+ caracteres)}
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://localhost:5173}
