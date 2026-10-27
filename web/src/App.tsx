@@ -25,7 +25,7 @@ function App() {
   }
 
   return (
-    <div className="font-corpo">
+    <div className="bg-fundo-marca font-corpo text-white">
       <SiteHeader />
       <main>
         <Hero />

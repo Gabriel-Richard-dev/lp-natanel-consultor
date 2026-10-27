@@ -33,7 +33,7 @@ const ficha = (i: Imovel) =>
 
 function Foto({ imovel, className }: { imovel: Imovel; className: string }) {
   return (
-    <div className={`overflow-hidden bg-concreto/60 ${className}`}>
+    <div className={`overflow-hidden bg-white/5 ${className}`}>
       {imovel.imagem ? (
         <img
           alt=""
@@ -43,7 +43,7 @@ function Foto({ imovel, className }: { imovel: Imovel; className: string }) {
           src={imovel.imagem}
         />
       ) : (
-        <div className="flex h-full items-center justify-center text-nanquim/25">
+        <div className="flex h-full items-center justify-center text-white/20">
           <Building2 className="h-10 w-10" />
         </div>
       )}
@@ -57,20 +57,20 @@ export function Ofertas() {
   const [destaque, ...resto] = intercalar(imoveis).slice(0, NA_LISTA + 1);
 
   return (
-    <section className="bg-white py-20 md:py-24" id="ofertas">
+    <section className="bg-marca py-20 md:py-24" id="ofertas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <h2 className="max-w-2xl font-display font-semibold text-3xl text-nanquim tracking-tight md:text-4xl">
+        <h2 className="max-w-2xl font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
           Empreendimentos para visitar
         </h2>
-        <p className="mt-3 max-w-xl text-nanquim/75 leading-relaxed">
+        <p className="mt-3 max-w-xl text-white/70 leading-relaxed">
           Lançamentos, imóveis em obras e prontos para morar. O valor muda de unidade para unidade, por isso
           confirmamos com você no atendimento.
         </p>
 
         {carregando ? (
           <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
-            <div className="h-96 animate-pulse rounded-lg bg-cal" />
-            <div className="h-96 animate-pulse rounded-lg bg-cal" />
+            <div className="h-96 animate-pulse rounded-lg bg-white/5" />
+            <div className="h-96 animate-pulse rounded-lg bg-white/5" />
           </div>
         ) : destaque ? (
           <div className="mt-12 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
@@ -80,18 +80,18 @@ export function Ofertas() {
               type="button"
             >
               <Foto className="aspect-[16/10] rounded-lg" imovel={destaque} />
-              <span className="mt-4 block text-mar text-sm">{quem(destaque)}</span>
-              <span className="mt-1 block font-display font-semibold text-2xl text-nanquim leading-snug group-hover:text-mar">
+              <span className="mt-4 block text-gold text-sm">{quem(destaque)}</span>
+              <span className="mt-1 block font-display font-semibold text-2xl text-white leading-snug group-hover:text-gold">
                 {destaque.titulo}
               </span>
-              <span className="mt-1 block text-nanquim/70 text-sm">{onde(destaque)}</span>
-              <span className="mt-1 block text-nanquim/70 text-sm">{ficha(destaque)}</span>
-              <span className="mt-3 inline-block font-medium text-nanquim text-sm underline decoration-2 decoration-dourado underline-offset-4">
+              <span className="mt-1 block text-white/65 text-sm">{onde(destaque)}</span>
+              <span className="mt-1 block text-white/65 text-sm">{ficha(destaque)}</span>
+              <span className="mt-3 inline-block font-medium text-white text-sm underline decoration-2 decoration-gold underline-offset-4">
                 Ver detalhes
               </span>
             </button>
 
-            <ul className="divide-y divide-concreto border-concreto border-y lg:self-start">
+            <ul className="divide-y divide-white/10 border-white/10 border-y lg:self-start">
               {resto.map((i) => (
                 <li key={i.id}>
                   <button
@@ -101,11 +101,11 @@ export function Ofertas() {
                   >
                     <Foto className="h-24 w-28 shrink-0 rounded-md" imovel={i} />
                     <span className="min-w-0">
-                      <span className="block text-mar text-xs">{quem(i)}</span>
-                      <span className="mt-0.5 line-clamp-2 block font-display font-semibold text-nanquim leading-snug group-hover:text-mar">
+                      <span className="block text-gold text-xs">{quem(i)}</span>
+                      <span className="mt-0.5 line-clamp-2 block font-display font-semibold text-white leading-snug group-hover:text-gold">
                         {i.titulo}
                       </span>
-                      <span className="mt-1 block truncate text-nanquim/70 text-xs">{onde(i)}</span>
+                      <span className="mt-1 block truncate text-white/65 text-xs">{onde(i)}</span>
                     </span>
                   </button>
                 </li>
@@ -113,13 +113,13 @@ export function Ofertas() {
             </ul>
           </div>
         ) : (
-          <div className="mt-12 max-w-xl rounded-lg border border-concreto border-dashed p-8">
-            <p className="font-display font-semibold text-lg text-nanquim">
+          <div className="mt-12 max-w-xl rounded-lg border border-white/10 border-dashed p-8">
+            <p className="font-display font-semibold text-lg text-white">
               {erro ? "Não conseguimos carregar os imóveis agora." : "Estamos atualizando a lista de imóveis."}
             </p>
-            <p className="mt-1 text-nanquim/70 text-sm">Chame a gente e receba as opções direto no WhatsApp.</p>
+            <p className="mt-1 text-white/65 text-sm">Chame a gente e receba as opções direto no WhatsApp.</p>
             <a
-              className="mt-5 inline-flex items-center gap-2 rounded-md bg-nanquim px-5 py-3 font-semibold text-cal text-sm hover:bg-mar"
+              className="mt-5 inline-flex items-center gap-2 rounded-md bg-gold px-5 py-3 font-semibold text-black text-sm hover:bg-gold-claro"
               href={whatsappLink("Olá! Quero conhecer os imóveis disponíveis.")}
               rel="noreferrer"
               target="_blank"
@@ -131,7 +131,7 @@ export function Ofertas() {
 
         {imoveis.length > NA_LISTA + 1 && (
           <a
-            className="mt-12 inline-block rounded-md border-2 border-nanquim px-6 py-3 font-semibold text-nanquim transition-colors hover:bg-nanquim hover:text-cal"
+            className="mt-12 inline-block rounded-md border-2 border-gold px-6 py-3 font-semibold text-gold transition-colors hover:bg-gold hover:text-black"
             href="/catalogo"
           >
             Ver os {imoveis.length} imóveis do catálogo

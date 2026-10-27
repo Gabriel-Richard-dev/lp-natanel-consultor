@@ -13,7 +13,7 @@ const NAV = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-nanquim text-cal/75">
+    <footer className="bg-preto text-white/65">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-[1.2fr_1fr_1.2fr] md:px-6">
         <div>
           <img alt="Alves Costa" className="mb-4 h-20 w-auto" src={logo} />
@@ -22,11 +22,11 @@ export function SiteFooter() {
           </p>
         </div>
         <nav aria-label="Rodapé">
-          <h2 className="mb-4 font-display font-semibold text-cal">Navegue</h2>
+          <h2 className="mb-4 font-display font-semibold text-white">Navegue</h2>
           <ul className="space-y-2.5 text-sm">
             {NAV.map((l) => (
               <li key={l.href}>
-                <a className="transition-colors hover:text-dourado" href={l.href}>
+                <a className="transition-colors hover:text-gold" href={l.href}>
                   {l.label}
                 </a>
               </li>
@@ -34,10 +34,10 @@ export function SiteFooter() {
           </ul>
         </nav>
         <div>
-          <h2 className="mb-4 font-display font-semibold text-cal">Horário de atendimento</h2>
-          <Horario escuro />
+          <h2 className="mb-4 font-display font-semibold text-white">Horário de atendimento</h2>
+          <Horario />
           <a
-            className="mt-5 inline-flex items-center gap-2 rounded-md bg-dourado px-4 py-2.5 font-semibold text-nanquim text-sm transition hover:brightness-110"
+            className="mt-5 inline-flex items-center gap-2 rounded-md bg-gold px-4 py-2.5 font-semibold text-black text-sm transition-colors hover:bg-gold-claro"
             href={whatsappLink()}
             rel="noreferrer"
             target="_blank"
@@ -46,8 +46,8 @@ export function SiteFooter() {
           </a>
         </div>
       </div>
-      <div className="border-cal/10 border-t">
-        <p className="mx-auto max-w-6xl px-4 py-5 text-cal/50 text-xs md:px-6">
+      <div className="border-white/10 border-t">
+        <p className="mx-auto max-w-6xl px-4 py-5 text-white/45 text-xs md:px-6">
           © {new Date().getFullYear()} Alves Costa. Imagens ilustrativas dos empreendimentos; valores, condições e
           disponibilidade sujeitos a alteração sem aviso prévio. Seus dados são usados só para o nosso contato com você.
         </p>

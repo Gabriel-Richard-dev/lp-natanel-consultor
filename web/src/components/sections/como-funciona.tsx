@@ -32,23 +32,23 @@ function Chave({ className }: { className?: string }) {
 
 export function ComoFunciona() {
   return (
-    <section className="bg-white py-20 md:py-24" id="como-funciona">
+    <section className="bg-marca py-20 md:py-24" id="como-funciona">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <h2 className="max-w-2xl font-display font-semibold text-3xl text-nanquim tracking-tight md:text-4xl">
+        <h2 className="max-w-2xl font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
           Do primeiro contato até as chaves
         </h2>
-        <ol className="mt-12 border-concreto border-t">
+        <ol className="mt-12 border-white/10 border-t">
           {ETAPAS.map((e, i) => (
             <li
-              className="grid items-baseline gap-x-8 gap-y-2 border-concreto border-b py-6 sm:grid-cols-[4rem_14rem_1fr]"
+              className="grid items-baseline gap-x-8 gap-y-2 border-white/10 border-b py-6 sm:grid-cols-[4rem_14rem_1fr]"
               key={e.titulo}
             >
-              <span className="font-display font-semibold text-3xl text-mar tabular-nums">{i + 1}</span>
-              <h3 className="flex items-center gap-3 font-display font-semibold text-nanquim text-xl">
+              <span className="font-display font-semibold text-3xl text-gold tabular-nums">{i + 1}</span>
+              <h3 className="flex items-center gap-3 font-display font-semibold text-white text-xl">
                 {e.titulo}
-                {i === ETAPAS.length - 1 && <Chave className="h-5 w-10 text-dourado" />}
+                {i === ETAPAS.length - 1 && <Chave className="h-5 w-10 text-gold" />}
               </h3>
-              <p className="max-w-lg text-nanquim/75 leading-relaxed">{e.texto}</p>
+              <p className="max-w-lg text-white/70 leading-relaxed">{e.texto}</p>
             </li>
           ))}
         </ol>

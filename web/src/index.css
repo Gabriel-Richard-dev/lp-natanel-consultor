@@ -188,21 +188,11 @@
   --color-apagado: #6e685d;
 }
 
-/* Landing nova: cal, nanquim e mar; o dourado só aparece sobre nanquim */
+/* Preto e dourado da marca; a landing usa os mesmos tokens do painel */
 @theme {
-  --color-cal: #f1f3ef;
-  --color-nanquim: #0c2b36;
-  --color-mar: #1a6e7f;
-  --color-dourado: #c8a24a;
-  --color-concreto: #c9d1ce;
+  --color-preto: #07080b;
   --font-display: "Bricolage Grotesque Variable", "Geist Variable", sans-serif;
   --font-corpo: "Figtree Variable", "Geist Variable", sans-serif;
-  --animate-crescer: crescer 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  @keyframes crescer {
-    from {
-      transform: scaleX(0);
-    }
-  }
 }
 
 /* o cabeçalho fixo não pode cobrir o topo da seção ao navegar por âncora */
@@ -216,24 +206,60 @@ html {
   outline-offset: 2px;
 }
 
-/* "Quero morar em [cidade]...": selects que se leem como parte da frase */
-.campo-frase {
-  appearance: none;
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%231a6e7f' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.1em center / 0.4em;
-  border: 0;
-  border-bottom: 3px solid var(--color-mar);
-  border-radius: 0;
-  color: var(--color-mar);
+/* Campos de formulário e filtros do site público: input e select com o mesmo desenho */
+@layer components {
+  .campo {
+    height: 3rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    background-color: rgb(255 255 255 / 0.05);
+    padding: 0 0.95rem;
+    color: #fff;
+    font: inherit;
+    font-size: 0.9375rem;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+  }
+  .campo::placeholder {
+    color: rgb(255 255 255 / 0.4);
+  }
+  .campo:hover {
+    border-color: rgb(255 255 255 / 0.32);
+  }
+  .campo:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgb(212 175 75 / 0.25);
+  }
+  select.campo {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23d4af4b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 0.95rem center;
+    background-repeat: no-repeat;
+    background-size: 0.7rem;
+    cursor: pointer;
+    padding-right: 2.5rem;
+    text-overflow: ellipsis;
+  }
+  select.campo option {
+    background-color: #13161d;
+    color: #fff;
+  }
+  .campo-compacto {
+    height: 2.75rem;
+  }
+}
+
+/* o reset do Tailwind v4 deixa o cursor padrão nos botões */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+label:has(input[type="checkbox"]) {
   cursor: pointer;
-  field-sizing: content;
-  font: inherit;
-  padding: 0 0.7em 0 0;
 }
-.campo-frase option {
-  color: var(--color-nanquim);
-  font: 1rem var(--font-corpo);
-}
-.campo-frase:focus-visible {
-  outline: 3px solid var(--color-mar);
-  outline-offset: 4px;
+button:disabled {
+  cursor: not-allowed;
 }

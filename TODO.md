@@ -59,8 +59,9 @@ Todas as 10 existem no portal e estão sendo lidas: Victa, MRV, Direcional, Pra 
 
 ## 6. Landing nova (branch `landing-nova`)
 Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https://ergueimoveis.com.br
-- [x] Direção visual nova: cal, nanquim, mar e dourado (dourado só sobre nanquim); Bricolage Grotesque + Figtree
-- [x] Hero com a busca escrita como frase (cidade, fase, quartos) e contagem ao vivo no botão; faixa de empreendimentos por fase com dados do banco
+- [x] Visual: preto e dourado da marca (tokens `fundo-marca`, `marca`, `preto`, `gold`), Bricolage Grotesque + Figtree; hero com foto de empreendimento e busca compacta
+- [x] Campos e selects com um só estilo (`.campo` em `index.css`); `cursor: pointer` global nos botões
+- [x] Hero: busca por cidade, fase e quartos com contagem ao vivo no botão e atalhos por fase (a versão com a busca escrita como frase foi descartada)
 - [x] Quatro cidades atendidas (Fortaleza, Eusébio, Maracanaú e Caucaia) em `lib/cidades.ts`; cidade sem empreendimento leva ao formulário
 - [x] Seções: imóveis (1 destaque + lista), construtoras, onde atendemos, simulador, como funciona, quem somos, contato com formulário
 - [x] Horário de atendimento (seg a sex 8h às 18h, sáb 8h às 14h) em `lib/atendimento.ts`, com "Aberto agora" no fuso de Fortaleza

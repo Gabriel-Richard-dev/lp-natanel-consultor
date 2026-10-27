@@ -1,7 +1,7 @@
 import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { Horario } from "@/components/layout/horario";
-import { campoClaro as campo } from "@/components/ui/campo-claro";
+import { campo } from "@/components/ui/campo";
 import { enviarLead } from "@/lib/api";
 import { CIDADES_ATENDIDAS } from "@/lib/cidades";
 import { whatsappLink } from "@/lib/contato";
@@ -60,39 +60,39 @@ export function Captacao() {
     `${cidade ? ` em ${cidade}` : ""}${!vender && valor ? ` (${valor.toLowerCase()})` : ""}.`;
 
   return (
-    <section className="bg-cal py-20 md:py-24" id="contato">
+    <section className="bg-fundo-marca py-20 md:py-24" id="contato">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-[1fr_1.1fr]">
         <div>
-          <h2 className="font-display font-semibold text-3xl text-nanquim tracking-tight md:text-4xl">
+          <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
             Conte o que você procura
           </h2>
-          <p className="mt-4 max-w-md text-nanquim/75 leading-relaxed">
+          <p className="mt-4 max-w-md text-white/70 leading-relaxed">
             Nem todo imóvel está anunciado. Deixe seu contato e receba as melhores oportunidades para o seu momento.
           </p>
-          <dl className="mt-8 divide-y divide-concreto border-concreto border-y">
+          <dl className="mt-8 divide-y divide-white/10 border-white/10 border-y">
             {BENEFICIOS.map(({ titulo, texto }) => (
               <div className="py-4" key={titulo}>
-                <dt className="font-display font-semibold text-nanquim">{titulo}</dt>
-                <dd className="mt-1 text-nanquim/70 text-sm leading-relaxed">{texto}</dd>
+                <dt className="font-display font-semibold text-white">{titulo}</dt>
+                <dd className="mt-1 text-white/65 text-sm leading-relaxed">{texto}</dd>
               </div>
             ))}
           </dl>
           <div className="mt-8">
-            <h3 className="mb-3 font-display font-semibold text-nanquim">Horário de atendimento</h3>
+            <h3 className="mb-3 font-display font-semibold text-white">Horário de atendimento</h3>
             <Horario />
           </div>
         </div>
 
-        <div className="rounded-lg border border-concreto bg-white p-6 md:p-10">
+        <div className="rounded-lg border border-white/10 bg-marca p-6 md:p-10">
           {enviado ? (
             <div aria-live="polite" className="flex h-full flex-col justify-center" role="status">
-              <CheckCircle2 className="mb-4 h-10 w-10 text-mar" />
-              <h3 className="font-display font-semibold text-2xl text-nanquim">Recebemos seu contato</h3>
-              <p className="mt-2 max-w-sm text-nanquim/75">
+              <CheckCircle2 className="mb-4 h-10 w-10 text-gold" />
+              <h3 className="font-display font-semibold text-2xl text-white">Recebemos seu contato</h3>
+              <p className="mt-2 max-w-sm text-white/70">
                 Falamos com você pelo WhatsApp no próximo horário de atendimento. Se preferir, adiante a conversa agora:
               </p>
               <a
-                className="mt-6 inline-flex w-fit items-center gap-2 rounded-md bg-nanquim px-6 py-3 font-semibold text-cal transition-colors hover:bg-mar"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-md bg-gold px-6 py-3 font-semibold text-black transition-colors hover:bg-gold-claro"
                 href={whatsappLink(resumo)}
                 rel="noreferrer"
                 target="_blank"
@@ -103,7 +103,7 @@ export function Captacao() {
           ) : (
             <form className="space-y-5" onSubmit={enviar}>
               <fieldset>
-                <legend className="mb-2 font-medium text-nanquim text-sm">Eu quero</legend>
+                <legend className="mb-2 font-medium text-white text-sm">Eu quero</legend>
                 <div className="grid grid-cols-3 gap-2">
                   {INTERESSES.map((i) => (
                     <button
@@ -111,8 +111,8 @@ export function Captacao() {
                       className={cn(
                         "rounded-md border px-2 py-2.5 text-center text-sm transition",
                         interesse === i
-                          ? "border-nanquim bg-nanquim font-medium text-cal"
-                          : "border-concreto text-nanquim/80 hover:border-nanquim"
+                          ? "border-gold bg-gold font-medium text-black"
+                          : "border-white/10 text-white/80 hover:border-white/40"
                       )}
                       key={i}
                       onClick={() => setInteresse(i)}
@@ -125,7 +125,7 @@ export function Captacao() {
               </fieldset>
 
               <div>
-                <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-nome">
+                <label className="mb-1.5 block font-medium text-white text-sm" htmlFor="lead-nome">
                   Seu nome
                 </label>
                 <input
@@ -142,7 +142,7 @@ export function Captacao() {
               </div>
 
               <div>
-                <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-tel">
+                <label className="mb-1.5 block font-medium text-white text-sm" htmlFor="lead-tel">
                   WhatsApp
                 </label>
                 <input
@@ -161,7 +161,7 @@ export function Captacao() {
 
               <div className={cn("grid gap-4", !vender && "sm:grid-cols-2")}>
                 <div>
-                  <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-cidade">
+                  <label className="mb-1.5 block font-medium text-white text-sm" htmlFor="lead-cidade">
                     {vender ? "Onde fica o imóvel?" : "Cidade de interesse"}
                   </label>
                   <select className={campo} id="lead-cidade" onChange={(e) => setCidade(e.target.value)} value={cidade}>
@@ -173,7 +173,7 @@ export function Captacao() {
                 </div>
                 {!vender && (
                   <div>
-                    <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-valor">
+                    <label className="mb-1.5 block font-medium text-white text-sm" htmlFor="lead-valor">
                       Faixa de valor
                     </label>
                     <select className={campo} id="lead-valor" onChange={(e) => setValor(e.target.value)} value={valor}>
@@ -197,10 +197,10 @@ export function Captacao() {
                 value={isca}
               />
 
-              <label className="flex cursor-pointer items-start gap-3 text-nanquim/70 text-xs leading-relaxed">
+              <label className="flex cursor-pointer items-start gap-3 text-white/65 text-xs leading-relaxed">
                 <input
                   checked={aceite}
-                  className="mt-0.5 h-4 w-4 shrink-0 accent-mar"
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
                   onChange={(e) => setAceite(e.target.checked)}
                   required
                   type="checkbox"
@@ -212,13 +212,13 @@ export function Captacao() {
               </label>
 
               {erro && (
-                <p className="text-red-700 text-sm" role="alert">
+                <p className="text-red-400 text-sm" role="alert">
                   {erro}
                 </p>
               )}
 
               <button
-                className="flex w-full items-center justify-center gap-2 rounded-md bg-nanquim px-6 py-3.5 font-semibold text-cal transition-colors hover:bg-mar disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-md bg-gold px-6 py-3.5 font-semibold text-black transition-colors hover:bg-gold-claro disabled:opacity-60"
                 disabled={enviando}
                 type="submit"
               >

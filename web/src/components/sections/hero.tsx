@@ -1,9 +1,7 @@
-import { MessageCircle } from "lucide-react";
 import { useState } from "react";
-import { Horario } from "@/components/layout/horario";
 import { useImoveis } from "@/hooks/use-imoveis";
+import { campo } from "@/components/ui/campo";
 import { CIDADES_ATENDIDAS } from "@/lib/cidades";
-import { whatsappLink } from "@/lib/contato";
 import { FASES, grupoDaFase } from "@/lib/fase";
 import { navegar } from "@/lib/rota";
 import { normalizar } from "@/lib/utils";
@@ -24,9 +22,12 @@ export function Hero() {
       (!quartos || (i.quartos ?? 0) >= quartos)
   ).length;
 
+  // foto do hero: um empreendimento pronto para morar, com foto; senão qualquer um com foto
+  const foto =
+    imoveis.find((i) => i.imagem && i.origem === "habitnet" && grupoDaFase(i.fase) === "pronto") ??
+    imoveis.find((i) => i.imagem);
+
   const porFase = FASES.map((f) => ({ ...f, n: imoveis.filter((i) => grupoDaFase(i.fase) === f.valor).length }));
-  const maior = Math.max(1, ...porFase.map((f) => f.n));
-  const comFase = porFase.reduce((soma, f) => soma + f.n, 0);
 
   function buscar(e: React.FormEvent) {
     e.preventDefault();
@@ -38,96 +39,103 @@ export function Hero() {
   }
 
   return (
-    <section className="bg-cal pt-14 pb-20 md:pt-20 md:pb-28" id="top">
-      <h1 className="sr-only">Alves Costa: imóveis em Fortaleza, Eusébio, Maracanaú e Caucaia</h1>
-      <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <form aria-label="Buscar imóveis" onSubmit={buscar}>
-          <p className="max-w-4xl font-display font-semibold text-[clamp(1.9rem,4.6vw,3.25rem)] text-nanquim leading-[1.35] tracking-tight">
-            Quero morar em{" "}
-            <select aria-label="Cidade" className="campo-frase" onChange={(e) => setCidade(e.target.value)} value={cidade}>
-              <option value="">qualquer cidade</option>
+    <section className="relative isolate overflow-hidden bg-fundo-marca" id="top">
+      {foto?.imagem && (
+        <img
+          alt=""
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
+          fetchPriority="high"
+          src={foto.imagem}
+        />
+      )}
+      {/* escurece da esquerda (texto) para a direita (foto) e por baixo (busca) */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-fundo-marca/95 via-fundo-marca/55 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-fundo-marca/80 via-transparent to-fundo-marca/25" />
+
+      <div className="mx-auto flex min-h-[34rem] max-w-6xl flex-col justify-center px-4 py-16 md:min-h-[40rem] md:px-6 md:py-24">
+        <h1 className="max-w-2xl font-display font-semibold text-4xl text-white leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+          Encontre o seu lar em Fortaleza e região
+        </h1>
+        <p className="mt-5 max-w-xl text-lg text-white/75 leading-relaxed">
+          Lançamentos, imóveis em obras e prontos para morar, com a Alves Costa ao seu lado até a entrega das chaves.
+        </p>
+
+        <form
+          aria-label="Buscar imóveis"
+          className="mt-10 grid max-w-4xl gap-3 rounded-xl border border-white/15 bg-fundo-marca/80 p-4 backdrop-blur-md sm:grid-cols-2 md:grid-cols-[1fr_1fr_0.7fr_auto] md:items-end md:p-5"
+          onSubmit={buscar}
+        >
+          <div>
+            <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-cidade">
+              Cidade
+            </label>
+            <select className={campo} id="busca-cidade" onChange={(e) => setCidade(e.target.value)} value={cidade}>
+              <option value="">Todas</option>
               {CIDADES_ATENDIDAS.map((c) => (
                 <option key={c}>{c}</option>
               ))}
             </select>
-            , num imóvel{" "}
-            <select aria-label="Fase da obra" className="campo-frase" onChange={(e) => setFase(e.target.value)} value={fase}>
-              <option value="">em qualquer fase</option>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-fase">
+              Fase da obra
+            </label>
+            <select className={campo} id="busca-fase" onChange={(e) => setFase(e.target.value)} value={fase}>
+              <option value="">Todas</option>
               {FASES.map((f) => (
                 <option key={f.valor} value={f.valor}>
-                  {f.label.toLowerCase()}
+                  {f.label}
                 </option>
               ))}
             </select>
-            , com{" "}
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-quartos">
+              Quartos
+            </label>
             <select
-              aria-label="Quartos"
-              className="campo-frase"
+              className={campo}
+              id="busca-quartos"
               onChange={(e) => setQuartos(Number(e.target.value))}
               value={quartos}
             >
-              <option value={0}>qualquer número de</option>
+              <option value={0}>Qualquer</option>
               {QUARTOS.map((q) => (
                 <option key={q} value={q}>
                   {q} ou mais
                 </option>
               ))}
-            </select>{" "}
-            quartos.
-          </p>
-
-          <div className="mt-10 grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-            <div>
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
-                <button
-                  className="rounded-md bg-nanquim px-7 py-4 font-semibold text-cal transition-colors hover:bg-mar"
-                  type="submit"
-                >
-                  {carregando ? "Ver imóveis" : `Ver ${encontrados} ${encontrados === 1 ? "imóvel" : "imóveis"}`}
-                </button>
-                <a
-                  className="flex items-center gap-2 font-medium text-mar underline decoration-2 underline-offset-4"
-                  href={whatsappLink("Olá! Vim pelo site da Alves Costa e gostaria de ajuda para encontrar um imóvel.")}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <MessageCircle className="h-4 w-4" /> Prefiro falar no WhatsApp
-                </a>
-              </div>
-
-              <div className="mt-12">
-                <Horario />
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-concreto bg-white p-6">
-              <h2 className="font-display font-semibold text-lg text-nanquim">Empreendimentos por fase</h2>
-              <p className="mt-1 text-nanquim/70 text-sm">
-                {carregando ? "Carregando…" : `${comFase} com fase informada. Toque numa fase para ver a lista.`}
-              </p>
-              <ul className="mt-6 space-y-5">
-                {porFase.map((f) => (
-                  <li key={f.valor}>
-                    <a className="group block" href={`/catalogo?fase=${f.valor}`}>
-                      <span className="flex items-baseline justify-between gap-3 text-sm">
-                        <span className="font-medium text-nanquim group-hover:text-mar">{f.label}</span>
-                        <span className="font-display font-semibold text-nanquim text-xl tabular-nums">{f.n}</span>
-                      </span>
-                      <span className="mt-2 block h-3 rounded-sm bg-cal">
-                        <span
-                          className="block h-full origin-left rounded-sm bg-mar motion-safe:animate-crescer"
-                          key={carregando ? "carregando" : "pronto"}
-                          style={{ width: `${(f.n / maior) * 100}%` }}
-                        />
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </select>
           </div>
+          <button
+            className="h-12 rounded-lg bg-gold px-7 font-semibold text-black transition-colors hover:bg-gold-claro sm:col-span-2 md:col-span-1"
+            type="submit"
+          >
+            {carregando ? "Ver imóveis" : `Ver ${encontrados} ${encontrados === 1 ? "imóvel" : "imóveis"}`}
+          </button>
         </form>
+
+        {!carregando && (
+          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
+            {porFase.map((f) => (
+              <li key={f.valor}>
+                <a
+                  className="underline-offset-4 transition-colors hover:text-gold hover:underline"
+                  href={`/catalogo?fase=${f.valor}`}
+                >
+                  {f.n} {f.label.toLowerCase()}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
+
+      {foto?.imagem && (
+        <p className="absolute right-6 bottom-4 hidden text-white/60 text-xs md:block">
+          Imagem ilustrativa: {[foto.titulo, foto.construtora].filter(Boolean).join(", ")}
+        </p>
+      )}
     </section>
   );
 }
