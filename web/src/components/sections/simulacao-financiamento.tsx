@@ -68,7 +68,7 @@ function Controle({
         <label className="font-medium text-sm" htmlFor={id}>
           {label}
         </label>
-        <div className="flex w-36 items-center rounded-lg border border-input bg-background px-2.5 focus-within:ring-2 focus-within:ring-emerald-600/30 sm:w-40">
+        <div className="flex w-36 items-center rounded-lg border border-input bg-background px-2.5 focus-within:ring-2 focus-within:ring-gold-fundo/30 sm:w-40">
           {prefixo && <span className="text-muted-foreground text-xs">{prefixo}</span>}
           {/* reais: texto com separador de milhar; o resto: campo numérico nativo
               (aceita "10,5" sem engolir a vírgula no meio da digitação) */}
@@ -88,7 +88,7 @@ function Controle({
       </div>
       <input
         aria-label={label}
-        className="w-full accent-emerald-600"
+        className="w-full accent-gold-fundo"
         max={max}
         min={min}
         onChange={(e) => onChange(Number(e.target.value))}
@@ -116,13 +116,13 @@ export function SimulacaoFinanciamento() {
   const entrada = Math.round((valorImovel * entradaPct) / 100);
   const s = simular({ valor: valorImovel, entrada, anos, taxaAnual, sistema });
   const partes = [
-    { nome: "Entrada", valor: Math.min(entrada, valorImovel), cor: "bg-amber-300" },
-    { nome: "Valor financiado", valor: s.financiado, cor: "bg-emerald-400" },
+    { nome: "Entrada", valor: Math.min(entrada, valorImovel), cor: "bg-white/80" },
+    { nome: "Valor financiado", valor: s.financiado, cor: "bg-gold" },
     { nome: "Juros", valor: s.totalJuros, cor: "bg-white/35" },
   ];
 
   const waLink = whatsappLink(
-    `Olá Natanael! Fiz uma simulação no seu site: imóvel de ${formatPreco(valorImovel)}, ` +
+    `Olá! Fiz uma simulação no site da Alves Costa: imóvel de ${formatPreco(valorImovel)}, ` +
       `entrada de ${formatPreco(entrada)} (${Math.round(entradaPct)}%), ${anos} anos, ` +
       `tabela ${sistema === "sac" ? "SAC" : "Price"} a ${String(taxaAnual).replace(".", ",")}% ao ano. ` +
       `${sistema === "sac" ? "Primeira parcela" : "Parcela"} estimada em ${formatPreco(s.primeira)}. Podemos conversar?`
@@ -200,7 +200,7 @@ export function SimulacaoFinanciamento() {
                   className={cn(
                     "rounded-xl border p-3 text-left transition",
                     sistema === opcao.valor
-                      ? "border-emerald-600 bg-emerald-50 ring-1 ring-emerald-600"
+                      ? "border-gold-fundo bg-amber-50 ring-1 ring-gold-fundo"
                       : "border-border hover:bg-muted"
                   )}
                   key={opcao.valor}
@@ -217,11 +217,11 @@ export function SimulacaoFinanciamento() {
           </fieldset>
         </div>
 
-        <div className="sim-anim rounded-2xl bg-[#0b1210] p-6 text-white md:p-8 lg:sticky lg:top-8">
+        <div className="sim-anim rounded-2xl bg-[#0b0d12] p-6 text-white md:p-8 lg:sticky lg:top-8">
           <p className="text-sm text-white/60">
             {sistema === "sac" ? "Primeira parcela" : "Parcela fixa"}
           </p>
-          <p className="font-bold text-4xl text-emerald-400 tracking-tight md:text-5xl">
+          <p className="font-bold text-4xl text-gold tracking-tight md:text-5xl">
             <AnimatedValor value={s.primeira} />
             <span className="font-normal text-base text-white/50"> /mês</span>
           </p>
@@ -279,13 +279,13 @@ export function SimulacaoFinanciamento() {
           </div>
 
           <a
-            className="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-3 font-medium text-black transition-colors hover:bg-emerald-400"
+            className="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-gold px-5 py-3 font-medium text-black transition-colors hover:bg-gold-claro"
             href={waLink}
             rel="noreferrer"
             target="_blank"
           >
             <MessageCircle className="h-4 w-4" />
-            Enviar simulação para o Natanael
+            Enviar simulação pelo WhatsApp
           </a>
           <p className="mt-3 text-white/40 text-xs leading-relaxed">
             Estimativa sem seguros obrigatórios, taxas do banco e TR. O valor final depende da

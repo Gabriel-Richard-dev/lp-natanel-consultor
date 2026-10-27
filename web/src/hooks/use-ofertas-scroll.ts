@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+import { movimentoReduzido } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,7 +11,7 @@ export function useOfertasScroll<T extends HTMLElement>(deps: unknown[] = []) {
 
   useEffect(() => {
     const container = ref.current;
-    if (!container) return;
+    if (!container || movimentoReduzido()) return;
 
     const cards = container.querySelectorAll<HTMLElement>(".oferta-card");
 

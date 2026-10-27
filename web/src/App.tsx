@@ -1,6 +1,11 @@
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect } from "react";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { WhatsappFlutuante } from "@/components/layout/whatsapp-flutuante";
 import { AreaAtuacao } from "@/components/sections/area-atuacao";
+import { Captacao } from "@/components/sections/captacao";
+import { Construtoras } from "@/components/sections/construtoras";
 import { Contato } from "@/components/sections/contato";
 import { Hero } from "@/components/sections/hero";
 import { Ofertas } from "@/components/sections/ofertas";
@@ -34,14 +39,21 @@ function App() {
   }
 
   return (
-    <main>
-      <Hero />
-      <Sobre />
-      <Ofertas />
-      <SimulacaoFinanciamento />
-      <AreaAtuacao />
-      <Contato />
-    </main>
+    <>
+      <SiteHeader />
+      <main id="top">
+        <Hero />
+        <Construtoras />
+        <Ofertas />
+        <Captacao />
+        <SimulacaoFinanciamento />
+        <Sobre />
+        <AreaAtuacao />
+        <Contato />
+      </main>
+      <SiteFooter />
+      <WhatsappFlutuante />
+    </>
   );
 }
 

@@ -1,7 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import logo from "@/assets/logo/logo-natanael.png";
-import foto from "@/assets/natanael/natanael-1.jpeg";
+import logo from "@/assets/logo/logo-alves-costa.png";
 import { login } from "@/lib/api";
 import { cn, mensagemDe } from "@/lib/utils";
 import { botaoPrimario, inputCls } from "./ui";
@@ -27,17 +26,13 @@ export function Login({ onEntrar }: { onEntrar: () => void }) {
 
   return (
     <main className="grid min-h-screen bg-papel lg:grid-cols-2">
-      <div className="relative hidden bg-[#dcdcda] lg:block">
-        <img
-          alt="Natanael Machado"
-          className="absolute inset-0 h-full w-full object-cover object-[38%_center]"
-          src={foto}
-        />
+      <div className="hidden items-center justify-center bg-fundo-marca p-12 lg:flex">
+        <img alt="Alves Costa, a chave da felicidade é sonhar" className="w-full max-w-lg" src={logo} />
       </div>
 
       <div className="flex items-center justify-center px-6 py-12">
         <form className="w-full max-w-xs" onSubmit={entrar}>
-          <img alt="Natanael Machado, corretor de imóveis" className="mb-12 h-24 w-auto" src={logo} />
+          <img alt="Alves Costa" className="mb-12 h-20 w-auto rounded-lg bg-fundo-marca p-2 lg:hidden" src={logo} />
           <h1 className="font-semibold text-tinta text-xl">Painel do corretor</h1>
           <p className="mt-1 mb-8 text-apagado text-sm">
             Entre com sua senha para cuidar dos imóveis do site.

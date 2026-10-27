@@ -1,4 +1,4 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import AttractButton from "@/components/ui/attract-button";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { whatsappLink } from "@/lib/contato";
@@ -16,7 +16,7 @@ export function Contato() {
         Vamos conversar sobre seu próximo imóvel?
       </h2>
       <p className="mb-10 text-muted-foreground">
-        Atendimento em Fortaleza, Eusébio e Maracanaú. Responda em minutos
+        Atendimento em Fortaleza, Eusébio e Maracanaú. Respondemos em minutos
         pelo WhatsApp.
       </p>
 
@@ -25,7 +25,7 @@ export function Contato() {
         rel="noreferrer"
         target="_blank"
       >
-        <AttractButton className="mx-auto gap-2 bg-emerald-600 text-white hover:bg-emerald-700">
+        <AttractButton className="mx-auto gap-2 bg-fundo-marca text-gold hover:bg-marca-2">
           <MessageCircle className="h-4 w-4" />
           Chamar no WhatsApp
         </AttractButton>
@@ -52,13 +52,6 @@ export function Contato() {
             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
             <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
           </svg>
-        </a>
-        <a
-          aria-label="E-mail"
-          className="hover:text-foreground"
-          href="mailto:contato@natanaelmachado.com.br"
-        >
-          <Mail className="h-5 w-5" />
         </a>
       </div>
     </section>

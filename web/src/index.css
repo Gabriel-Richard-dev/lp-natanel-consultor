@@ -170,14 +170,29 @@
     @apply font-sans;
     }
 }
-/* Painel do corretor: dourado do logo + verde-escuro do site */
+/* Marca Alves Costa: dourado do logo sobre preto-azulado */
 @theme {
-  --color-marca: #13231d;
-  --color-marca-2: #1f3a2f;
-  --color-ouro: #a88850;
+  --color-fundo-marca: #0b0d12;
+  --color-gold: #d4af4b;
+  --color-gold-claro: #e3c46a;
+  --color-gold-fundo: #8a6d1f;
+  --color-marca: #13161d;
+  --color-marca-2: #232733;
+  --color-ouro: #c9a43f;
   --color-ouro-texto: #86692f;
   --color-papel: #f6f4ef;
   --color-linha: #e4ded2;
   --color-tinta: #1d1b17;
   --color-apagado: #6e685d;
+}
+
+/* o cabeçalho fixo não pode cobrir o topo da seção ao navegar por âncora */
+html {
+  scroll-padding-top: 4.5rem;
+}
+
+/* foco de teclado visível em qualquer controle (links, botões, campos) */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }

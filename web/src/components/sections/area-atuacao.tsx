@@ -91,9 +91,9 @@ export function AreaAtuacao() {
   }, []);
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" ref={ref}>
+    <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" id="atuacao" ref={ref}>
       <h2 className="mb-4 text-center font-bold text-3xl tracking-tight md:text-4xl">
-        Onde eu atuo
+        Onde atuamos
       </h2>
       <p className="mx-auto mb-16 max-w-xl text-center text-muted-foreground">
         Cobertura na região metropolitana de Fortaleza, com foco em três
@@ -110,9 +110,9 @@ export function AreaAtuacao() {
         >
           {CITIES.map(({ nome, path }) => (
             <path
-              className="cidade-path text-emerald-600 dark:text-emerald-400"
+              className="cidade-path text-gold-fundo dark:text-gold"
               d={path}
-              fill="rgba(5,150,105,0.08)"
+              fill="rgba(168,136,80,0.10)"
               key={nome}
               stroke="currentColor"
               strokeLinejoin="round"
@@ -125,7 +125,7 @@ export function AreaAtuacao() {
                 <circle
                   cx={x}
                   cy={y}
-                  fill="#059669"
+                  fill="#8a6d1f"
                   r="5"
                   stroke="white"
                   strokeWidth="1.5"
@@ -147,7 +147,7 @@ export function AreaAtuacao() {
         <ul className="space-y-6">
           {CITIES.map(({ nome }) => (
             <li className="cidade-item flex items-start gap-3" key={nome}>
-              <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500" />
+              <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-gold-fundo" />
               <div>
                 <div className="font-semibold">{nome}</div>
                 <p className="text-muted-foreground text-sm">

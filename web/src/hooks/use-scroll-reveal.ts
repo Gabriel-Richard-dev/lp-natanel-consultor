@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+import { movimentoReduzido } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,7 @@ export function useScrollReveal<T extends HTMLElement>(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || movimentoReduzido()) return;
 
     const targets = options.selector
       ? el.querySelectorAll(options.selector)
