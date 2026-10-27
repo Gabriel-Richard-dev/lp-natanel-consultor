@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
 import { campo } from "@/components/ui/campo";
-import { Chave } from "@/components/ui/chave";
 import { Segmentado } from "@/components/ui/segmentado";
 import { useImoveis } from "@/hooks/use-imoveis";
 import type { Imovel } from "@/lib/api";
 import { CIDADES_ATENDIDAS } from "@/lib/cidades";
+import { escolherFotos } from "@/lib/fotos-hero";
 import { FASES, FASES_FILTRO, grupoDaFase } from "@/lib/fase";
 import { navegar } from "@/lib/rota";
 import { cn, movimentoReduzido, normalizar } from "@/lib/utils";
@@ -17,22 +17,6 @@ const QUARTOS = [
   { valor: 3, label: "3+" },
 ];
 const TROCA_MS = 6500;
-
-// Até quatro fotos de empreendimentos diferentes: pronto, lançamento, em obras e Eusébio
-function escolherFotos(imoveis: Imovel[]) {
-  const com = imoveis.filter((i) => i.imagem && i.origem === "habitnet");
-  const em = (cidade: string) => (i: Imovel) => normalizar(i.cidade ?? "") === cidade;
-  const escolhas = [
-    com.find((i) => grupoDaFase(i.fase) === "pronto"),
-    com.find((i) => grupoDaFase(i.fase) === "lancamento"),
-    com.find((i) => grupoDaFase(i.fase) === "obras" && em("caucaia")(i)) ?? com.find((i) => grupoDaFase(i.fase) === "obras"),
-    com.find(em("eusebio")),
-  ].filter((i): i is Imovel => !!i);
-  const unicos = [...new Map(escolhas.map((i) => [i.id, i])).values()];
-  if (unicos.length) return unicos;
-  const qualquer = imoveis.find((i) => i.imagem);
-  return qualquer ? [qualquer] : [];
-}
 
 export function Hero() {
   const { imoveis, carregando } = useImoveis();
@@ -74,15 +58,11 @@ export function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-fundo-marca" id="top">
+      <div aria-hidden="true" className="planta -z-10 absolute inset-0" />
       <div aria-hidden="true" className="-z-10 absolute -top-40 -right-40 h-[38rem] w-[38rem] rounded-full bg-gold/10 blur-3xl" />
 
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-14 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:py-20">
         <div>
-          <p className="mb-6 flex items-center gap-3 font-medium text-gold">
-            <span aria-hidden="true" className="h-px w-8 bg-gold/70 sm:w-12" />
-            A chave da felicidade é sonhar
-            <Chave className="h-4 w-8" />
-          </p>
           <h1 className="text-balance font-display font-semibold text-5xl text-white leading-[1.02] tracking-tight sm:text-6xl">
             Encontre o seu lar em Fortaleza e região
           </h1>

@@ -191,6 +191,8 @@
 /* Preto e dourado da marca; a landing usa os mesmos tokens do painel */
 @theme {
   --color-preto: #07080b;
+  --color-prata: #e8eaee;
+  --color-ouro-texto: #75590f;
   --font-display: "Bricolage Grotesque Variable", "Geist Variable", sans-serif;
   --font-corpo: "Figtree Variable", "Geist Variable", sans-serif;
 }
@@ -204,6 +206,22 @@ html {
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
+}
+
+/* Cada seção sobe sobre a anterior com cantos arredondados: a troca de cor vira uma curva, não um corte */
+@layer components {
+  .folha {
+    position: relative;
+    margin-top: -1.75rem;
+    border-radius: 1.75rem 1.75rem 0 0;
+    box-shadow: 0 -18px 40px -22px rgb(0 0 0 / 0.45);
+  }
+  @media (min-width: 768px) {
+    .folha {
+      margin-top: -2.5rem;
+      border-radius: 2.5rem 2.5rem 0 0;
+    }
+  }
 }
 
 /* Campos de formulário e filtros do site público: input e select com o mesmo desenho */
@@ -262,4 +280,12 @@ label:has(input[type="checkbox"]) {
 }
 button:disabled {
   cursor: not-allowed;
+}
+
+/* planta baixa: grade fina dourada que some nas bordas */
+.planta {
+  background-image: linear-gradient(rgb(212 175 75 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(212 175 75 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 80% at 72% 45%, #000 15%, transparent 72%);
 }

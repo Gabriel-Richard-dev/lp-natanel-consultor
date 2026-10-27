@@ -27,7 +27,7 @@ export function Login({ onEntrar }: { onEntrar: () => void }) {
   return (
     <main className="grid min-h-screen bg-papel lg:grid-cols-2">
       <div className="hidden items-center justify-center bg-fundo-marca p-12 lg:flex">
-        <img alt="Alves Costa, a chave da felicidade é sonhar" className="w-full max-w-lg" src={logo} />
+        <img alt="Alves Costa" className="w-full max-w-lg" src={logo} />
       </div>
 
       <div className="flex items-center justify-center px-6 py-12">

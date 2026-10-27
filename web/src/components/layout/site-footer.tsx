@@ -13,7 +13,7 @@ const NAV = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-preto text-white/65">
+    <footer className="folha bg-preto pt-6 text-white/65 md:pt-10">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-[1.2fr_1fr_1.2fr] md:px-6">
         <div>
           <img alt="Alves Costa" className="mb-4 h-20 w-auto" src={logo} />

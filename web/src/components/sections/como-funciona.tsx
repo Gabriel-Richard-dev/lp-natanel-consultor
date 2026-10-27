@@ -25,7 +25,7 @@ const ETAPAS = [
 
 export function ComoFunciona() {
   return (
-    <section className="bg-marca py-20 md:py-24" id="como-funciona">
+    <section className="bg-marca folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="como-funciona">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <h2 className="max-w-2xl font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
           Do primeiro contato até as chaves

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
 import { useImoveis } from "@/hooks/use-imoveis";
 import type { Imovel } from "@/lib/api";
+import { escolherFotos } from "@/lib/fotos-hero";
 import { whatsappLink } from "@/lib/contato";
 
 const NA_LISTA = 4;
@@ -54,10 +55,11 @@ function Foto({ imovel, className }: { imovel: Imovel; className: string }) {
 export function Ofertas() {
   const { imoveis, carregando, erro } = useImoveis();
   const [aberto, setAberto] = useState<Imovel | null>(null);
-  const [destaque, ...resto] = intercalar(imoveis).slice(0, NA_LISTA + 1);
+  const noHero = new Set(escolherFotos(imoveis).map((i) => i.id));
+  const [destaque, ...resto] = intercalar(imoveis.filter((i) => !noHero.has(i.id))).slice(0, NA_LISTA + 1);
 
   return (
-    <section className="bg-white py-20 md:py-24" id="ofertas">
+    <section className="bg-prata folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="ofertas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <h2 className="max-w-2xl font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
           Empreendimentos para visitar
@@ -80,7 +82,7 @@ export function Ofertas() {
               type="button"
             >
               <Foto className="aspect-[16/10] rounded-lg" imovel={destaque} />
-              <span className="mt-4 block text-gold-fundo text-sm">{quem(destaque)}</span>
+              <span className="mt-4 block text-ouro-texto text-sm">{quem(destaque)}</span>
               <span className="mt-1 block font-display font-semibold text-2xl text-fundo-marca leading-snug group-hover:text-gold">
                 {destaque.titulo}
               </span>
@@ -101,7 +103,7 @@ export function Ofertas() {
                   >
                     <Foto className="h-24 w-28 shrink-0 rounded-md" imovel={i} />
                     <span className="min-w-0">
-                      <span className="block text-gold-fundo text-xs">{quem(i)}</span>
+                      <span className="block text-ouro-texto text-xs">{quem(i)}</span>
                       <span className="mt-0.5 line-clamp-2 block font-display font-semibold text-fundo-marca leading-snug group-hover:text-gold">
                         {i.titulo}
                       </span>

@@ -63,6 +63,9 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [x] Campos e selects com um só estilo (`.campo` em `index.css`); `cursor: pointer` global nos botões
 - [x] Hero: foto em janela de arco que alterna entre 4 empreendimentos reais, com etiqueta de chaveiro (detalhes e bolinhas), lema da marca com a chave e busca com controles segmentados (fase, quartos) e contagem ao vivo
 - [x] Faixa de números logo após o hero; "Onde atendemos" com foto de empreendimento de cada cidade; "Como funciona" em linha do tempo
+- [x] Transições: seções como "folhas" sobrepostas com cantos arredondados e sombra (`.folha`), fundo prata no lugar do branco puro
+- [x] Elementos de marca: arcos (hero e "Quem somos"), silhueta de prédios (eco das barras da logo), planta baixa sutil no hero, etiquetas de construtora com contagem
+- [x] Removido o lema "A chave da felicidade é sonhar" do texto do site (continua dentro da imagem da logo)
 - [x] Filtros: componente `Segmentado` no hero e no catálogo, barra do catálogo em duas linhas
 - [x] Ritmo de fundos: Empreendimentos, Onde atendemos e Contato em branco; o resto escuro
 - [x] Quatro cidades atendidas (Fortaleza, Eusébio, Maracanaú e Caucaia) em `lib/cidades.ts`; cidade sem empreendimento leva ao formulário

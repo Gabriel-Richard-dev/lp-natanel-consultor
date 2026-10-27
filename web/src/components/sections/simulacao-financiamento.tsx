@@ -127,7 +127,7 @@ export function SimulacaoFinanciamento() {
   );
 
   return (
-    <section className="bg-fundo-marca py-20 md:py-24" id="simulador">
+    <section className="bg-fundo-marca folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="simulador">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
       <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
         Simule seu financiamento

@@ -7,7 +7,7 @@ export function Cidades() {
   const daCidade = (cidade: string) => imoveis.filter((i) => normalizar(i.cidade ?? "") === normalizar(cidade));
 
   return (
-    <section className="bg-white py-20 md:py-24" id="cidades">
+    <section className="bg-prata folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="cidades">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <h2 className="font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
           Onde atendemos
@@ -21,7 +21,7 @@ export function Cidades() {
             return (
               <li key={cidade}>
                 <a
-                  className="group relative block aspect-[4/5] overflow-hidden rounded-xl bg-marca ring-gold ring-offset-2 transition hover:ring-2"
+                  className="group relative block aspect-[4/5] overflow-hidden rounded-xl bg-marca ring-gold ring-offset-2 ring-offset-prata transition hover:ring-2"
                   href={n ? `/catalogo?cidade=${encodeURIComponent(cidade)}` : "#contato"}
                 >
                   {foto && (

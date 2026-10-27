@@ -60,7 +60,7 @@ export function Captacao() {
     `${cidade ? ` em ${cidade}` : ""}${!vender && valor ? ` (${valor.toLowerCase()})` : ""}.`;
 
   return (
-    <section className="bg-white py-20 md:py-24" id="contato">
+    <section className="bg-prata folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="contato">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-[1fr_1.1fr]">
         <div>
           <h2 className="font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
