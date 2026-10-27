@@ -60,26 +60,26 @@ export function Captacao() {
     `${cidade ? ` em ${cidade}` : ""}${!vender && valor ? ` (${valor.toLowerCase()})` : ""}.`;
 
   return (
-    <section className="bg-fundo-marca py-20 md:py-24" id="contato">
+    <section className="bg-white py-20 md:py-24" id="contato">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-[1fr_1.1fr]">
         <div>
-          <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
+          <h2 className="font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
             Conte o que você procura
           </h2>
-          <p className="mt-4 max-w-md text-white/70 leading-relaxed">
+          <p className="mt-4 max-w-md text-fundo-marca/70 leading-relaxed">
             Nem todo imóvel está anunciado. Deixe seu contato e receba as melhores oportunidades para o seu momento.
           </p>
-          <dl className="mt-8 divide-y divide-white/10 border-white/10 border-y">
+          <dl className="mt-8 divide-y divide-black/10 border-black/10 border-y">
             {BENEFICIOS.map(({ titulo, texto }) => (
               <div className="py-4" key={titulo}>
-                <dt className="font-display font-semibold text-white">{titulo}</dt>
-                <dd className="mt-1 text-white/65 text-sm leading-relaxed">{texto}</dd>
+                <dt className="font-display font-semibold text-fundo-marca">{titulo}</dt>
+                <dd className="mt-1 text-fundo-marca/70 text-sm leading-relaxed">{texto}</dd>
               </div>
             ))}
           </dl>
           <div className="mt-8">
-            <h3 className="mb-3 font-display font-semibold text-white">Horário de atendimento</h3>
-            <Horario />
+            <h3 className="mb-3 font-display font-semibold text-fundo-marca">Horário de atendimento</h3>
+            <Horario claro />
           </div>
         </div>
 
