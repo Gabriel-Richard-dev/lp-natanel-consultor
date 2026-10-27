@@ -26,6 +26,7 @@ export function Hero() {
 
   const porFase = FASES.map((f) => ({ ...f, n: imoveis.filter((i) => grupoDaFase(i.fase) === f.valor).length }));
   const maior = Math.max(1, ...porFase.map((f) => f.n));
+  const comFase = porFase.reduce((soma, f) => soma + f.n, 0);
 
   function buscar(e: React.FormEvent) {
     e.preventDefault();
@@ -102,7 +103,7 @@ export function Hero() {
             <div className="rounded-lg border border-concreto bg-white p-6">
               <h2 className="font-display font-semibold text-lg text-nanquim">Empreendimentos por fase</h2>
               <p className="mt-1 text-nanquim/70 text-sm">
-                {carregando ? "Carregando…" : `${imoveis.length} no total. Toque numa fase para ver a lista.`}
+                {carregando ? "Carregando…" : `${comFase} com fase informada. Toque numa fase para ver a lista.`}
               </p>
               <ul className="mt-6 space-y-5">
                 {porFase.map((f) => (
