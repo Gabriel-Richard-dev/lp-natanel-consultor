@@ -5,6 +5,7 @@ import { Captacao } from "@/components/sections/captacao";
 import { Cidades } from "@/components/sections/cidades";
 import { ComoFunciona } from "@/components/sections/como-funciona";
 import { Construtoras } from "@/components/sections/construtoras";
+import { FaixaNumeros } from "@/components/sections/faixa-numeros";
 import { Hero } from "@/components/sections/hero";
 import { Ofertas } from "@/components/sections/ofertas";
 import { SimulacaoFinanciamento } from "@/components/sections/simulacao-financiamento";
@@ -29,6 +30,7 @@ function App() {
       <SiteHeader />
       <main>
         <Hero />
+        <FaixaNumeros />
         <Ofertas />
         <Construtoras />
         <Cidades />

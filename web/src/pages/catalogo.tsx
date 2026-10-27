@@ -1,6 +1,7 @@
 import { ArrowLeft, MessageCircle, Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { campoCompacto } from "@/components/ui/campo";
+import { Segmentado } from "@/components/ui/segmentado";
 import logo from "@/assets/logo/logo-alves-costa.webp";
 import { WhatsappFlutuante } from "@/components/layout/whatsapp-flutuante";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
@@ -8,12 +9,17 @@ import { OfertaCard } from "@/components/sections/oferta-card";
 import { useImoveis } from "@/hooks/use-imoveis";
 import type { Imovel } from "@/lib/api";
 import { whatsappLink } from "@/lib/contato";
-import { FASES, type FaseGrupo, grupoDaFase } from "@/lib/fase";
+import { FASES, FASES_FILTRO, type FaseGrupo, grupoDaFase } from "@/lib/fase";
 import { cn, normalizar } from "@/lib/utils";
 
 type Ordem = "recentes" | "menor" | "maior";
 
-const QUARTOS = [0, 1, 2, 3];
+const QUARTOS_FILTRO = [
+  { valor: 0, label: "Quartos" },
+  { valor: 1, label: "1+" },
+  { valor: 2, label: "2+" },
+  { valor: 3, label: "3+" },
+];
 const POR_PAGINA = 24;
 
 type Filtros = {
@@ -127,94 +133,22 @@ export function Catalogo() {
       </header>
 
       <div className="border-white/10 border-b bg-fundo-marca/95 backdrop-blur md:sticky md:top-0 md:z-20">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3 md:px-6">
-          <div className="relative min-w-52 flex-1">
-            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-white/55" />
-            <input
-              aria-label="Buscar por bairro, nome ou construtora"
-              className={cn(campoCompacto, "pl-10")}
-              onChange={(e) => mudar({ busca: e.target.value })}
-              placeholder="Bairro, nome ou construtora"
-              type="search"
-              value={busca}
-            />
-          </div>
-
-          <div aria-label="Fase do empreendimento" className="-mx-4 flex w-[calc(100%+2rem)] gap-2 overflow-x-auto px-4 md:mx-0 md:w-auto md:px-0" role="group">
-            {[{ valor: "" as const, label: "Todos" }, ...FASES].map((f) => (
-              <button
-                aria-pressed={fase === f.valor}
-                className={cn(
-                  "shrink-0 rounded-full border px-4 py-2 text-sm transition",
-                  fase === f.valor
-                    ? "border-gold bg-gold font-medium text-black"
-                    : "border-white/10 text-white/70 hover:border-white/40 hover:text-white"
-                )}
-                key={f.valor || "todos"}
-                onClick={() => mudar({ fase: f.valor })}
-                type="button"
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
-          <button
-            aria-expanded={maisFiltros}
-            className="flex w-full items-center justify-center gap-2 rounded-md border border-white/10 py-2.5 text-white text-sm md:hidden"
-            onClick={() => setMaisFiltros((v) => !v)}
-            type="button"
-          >
-            <SlidersHorizontal className="h-4 w-4" /> Mais filtros
-            {extrasAtivos > 0 && (
-              <span className="rounded-full bg-gold px-2 py-0.5 text-black text-xs">{extrasAtivos}</span>
-            )}
-          </button>
-
-          <div className={cn("w-full grid-cols-2 gap-2", maisFiltros ? "grid" : "hidden", "md:contents")}>
-            <select
-              aria-label="Cidade"
-              className={cn(campoCompacto, "w-full md:w-auto")}
-              onChange={(e) => mudar({ cidade: e.target.value })}
-              value={cidade}
-            >
-              <option value="">Todas as cidades</option>
-              {cidades.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-            {construtoras.length > 1 && (
-              <select
-                aria-label="Construtora"
-                className={cn(campoCompacto, "w-full md:w-auto")}
-                onChange={(e) => mudar({ construtora: e.target.value })}
-                value={construtora}
-              >
-                <option value="">Todas as construtoras</option>
-                {construtoras.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
-            )}
-            <div aria-label="Quartos" className="flex rounded-md border border-white/10 bg-marca p-0.5" role="group">
-              {QUARTOS.map((q) => (
-                <button
-                  aria-pressed={quartos === q}
-                  className={cn(
-                    "flex-1 rounded-md px-3 py-2 text-sm transition",
-                    quartos === q ? "bg-gold font-medium text-black" : "text-white/70 hover:text-white"
-                  )}
-                  key={q}
-                  onClick={() => mudar({ quartos: q })}
-                  type="button"
-                >
-                  {q === 0 ? "Quartos" : `${q}+`}
-                </button>
-              ))}
+        <div className="mx-auto max-w-6xl space-y-3 px-4 py-4 md:px-6">
+          <div className="grid gap-3 md:grid-cols-[1fr_14rem]">
+            <div className="relative">
+              <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-white/50" />
+              <input
+                aria-label="Buscar por bairro, nome ou construtora"
+                className={cn(campoCompacto, "w-full pl-10")}
+                onChange={(e) => mudar({ busca: e.target.value })}
+                placeholder="Buscar por bairro, nome ou construtora"
+                type="search"
+                value={busca}
+              />
             </div>
             <select
               aria-label="Ordenar"
-              className={cn(campoCompacto, "w-full md:w-auto")}
+              className={cn(campoCompacto, "w-full")}
               onChange={(e) => mudar({ ordem: e.target.value as Ordem })}
               value={ordem}
             >
@@ -222,6 +156,60 @@ export function Catalogo() {
               <option value="menor">Menor preço</option>
               <option value="maior">Maior preço</option>
             </select>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Segmentado
+              className="w-full md:w-[25rem]"
+              onChange={(v) => mudar({ fase: v as FaseGrupo | "" })}
+              opcoes={FASES_FILTRO}
+              rotulo="Fase do empreendimento"
+              valor={fase}
+            />
+
+            <button
+              aria-expanded={maisFiltros}
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-white/15 text-sm text-white md:hidden"
+              onClick={() => setMaisFiltros((v) => !v)}
+              type="button"
+            >
+              <SlidersHorizontal className="h-4 w-4" /> Mais filtros
+              {extrasAtivos > 0 && <span className="rounded-full bg-gold px-2 py-0.5 text-black text-xs">{extrasAtivos}</span>}
+            </button>
+
+            <div className={cn("w-full grid-cols-2 gap-3", maisFiltros ? "grid" : "hidden", "md:contents")}>
+              <select
+                aria-label="Cidade"
+                className={cn(campoCompacto, "w-full md:w-44")}
+                onChange={(e) => mudar({ cidade: e.target.value })}
+                value={cidade}
+              >
+                <option value="">Cidades</option>
+                {cidades.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+              {construtoras.length > 1 && (
+                <select
+                  aria-label="Construtora"
+                  className={cn(campoCompacto, "w-full md:w-48")}
+                  onChange={(e) => mudar({ construtora: e.target.value })}
+                  value={construtora}
+                >
+                  <option value="">Construtoras</option>
+                  {construtoras.map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              )}
+              <Segmentado
+                className="col-span-2 md:col-span-1 md:w-64"
+                onChange={(v) => mudar({ quartos: v })}
+                opcoes={QUARTOS_FILTRO}
+                rotulo="Quartos"
+                valor={quartos}
+              />
+            </div>
           </div>
         </div>
       </div>

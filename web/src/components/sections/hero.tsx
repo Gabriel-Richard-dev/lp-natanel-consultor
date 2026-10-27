@@ -2,14 +2,20 @@ import { useEffect, useMemo, useState } from "react";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
 import { campo } from "@/components/ui/campo";
 import { Chave } from "@/components/ui/chave";
+import { Segmentado } from "@/components/ui/segmentado";
 import { useImoveis } from "@/hooks/use-imoveis";
 import type { Imovel } from "@/lib/api";
 import { CIDADES_ATENDIDAS } from "@/lib/cidades";
-import { FASES, grupoDaFase } from "@/lib/fase";
+import { FASES, FASES_FILTRO, grupoDaFase } from "@/lib/fase";
 import { navegar } from "@/lib/rota";
 import { cn, movimentoReduzido, normalizar } from "@/lib/utils";
 
-const QUARTOS = [1, 2, 3];
+const QUARTOS = [
+  { valor: 0, label: "Todos" },
+  { valor: 1, label: "1+" },
+  { valor: 2, label: "2+" },
+  { valor: 3, label: "3+" },
+];
 const TROCA_MS = 6500;
 
 // Até quatro fotos de empreendimentos diferentes: pronto, lançamento, em obras e Eusébio
@@ -31,7 +37,7 @@ function escolherFotos(imoveis: Imovel[]) {
 export function Hero() {
   const { imoveis, carregando } = useImoveis();
   const [cidade, setCidade] = useState("");
-  const [fase, setFase] = useState("");
+  const [fase, setFase] = useState<string>("");
   const [quartos, setQuartos] = useState(0);
   const [atual, setAtual] = useState(0);
   const [pausado, setPausado] = useState(false);
@@ -68,147 +74,147 @@ export function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-fundo-marca" id="top">
-      {fotos.map((f, i) => (
-        <img
-          alt=""
-          aria-hidden="true"
-          className={cn(
-            "absolute inset-0 -z-20 h-full w-full object-cover transition-opacity duration-[1600ms] ease-in-out",
-            i === atual % fotos.length ? "opacity-100" : "opacity-0"
-          )}
-          fetchPriority={i === 0 ? "high" : "low"}
-          key={f.id}
-          src={f.imagem ?? ""}
-        />
-      ))}
-      {/* escurece da esquerda (texto) para a direita (foto) e por baixo (busca) */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-fundo-marca/95 via-fundo-marca/55 to-transparent" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-fundo-marca/85 via-transparent to-fundo-marca/25" />
+      <div aria-hidden="true" className="-z-10 absolute -top-40 -right-40 h-[38rem] w-[38rem] rounded-full bg-gold/10 blur-3xl" />
 
-      <div className="mx-auto flex min-h-[36rem] max-w-6xl flex-col justify-center px-4 py-16 md:min-h-[44rem] md:px-6 md:py-24">
-        <p className="mb-6 flex items-center gap-3 font-medium text-gold">
-          <span aria-hidden="true" className="h-px w-8 bg-gold/70 sm:w-12" />
-          A chave da felicidade é sonhar
-          <Chave className="h-4 w-8" />
-        </p>
-        <h1 className="max-w-3xl font-display font-semibold text-5xl text-white leading-[1.02] tracking-tight sm:text-6xl md:text-7xl">
-          Encontre o seu lar em Fortaleza e região
-        </h1>
-        <p className="mt-6 max-w-xl text-lg text-white/80 leading-relaxed">
-          Lançamentos, imóveis em obras e prontos para morar, com a Alves Costa ao seu lado até a entrega das chaves.
-        </p>
+      <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-14 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:py-20">
+        <div>
+          <p className="mb-6 flex items-center gap-3 font-medium text-gold">
+            <span aria-hidden="true" className="h-px w-8 bg-gold/70 sm:w-12" />
+            A chave da felicidade é sonhar
+            <Chave className="h-4 w-8" />
+          </p>
+          <h1 className="text-balance font-display font-semibold text-5xl text-white leading-[1.02] tracking-tight sm:text-6xl">
+            Encontre o seu lar em Fortaleza e região
+          </h1>
+          <p className="mt-6 max-w-lg text-lg text-white/75 leading-relaxed">
+            Lançamentos, imóveis em obras e prontos para morar, com a Alves Costa ao seu lado até a entrega das chaves.
+          </p>
 
-        <form
-          aria-label="Buscar imóveis"
-          className="mt-10 grid max-w-4xl gap-3 rounded-xl border border-white/15 bg-fundo-marca/80 p-4 shadow-2xl shadow-black/40 backdrop-blur-md sm:grid-cols-2 md:grid-cols-[1fr_1fr_0.7fr_auto] md:items-end md:p-5"
-          onSubmit={buscar}
-        >
-          <div>
-            <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-cidade">
-              Cidade
-            </label>
-            <select className={campo} id="busca-cidade" onChange={(e) => setCidade(e.target.value)} value={cidade}>
-              <option value="">Todas</option>
-              {CIDADES_ATENDIDAS.map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-fase">
-              Fase da obra
-            </label>
-            <select className={campo} id="busca-fase" onChange={(e) => setFase(e.target.value)} value={fase}>
-              <option value="">Todas</option>
-              {FASES.map((f) => (
-                <option key={f.valor} value={f.valor}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-quartos">
-              Quartos
-            </label>
-            <select
-              className={campo}
-              id="busca-quartos"
-              onChange={(e) => setQuartos(Number(e.target.value))}
-              value={quartos}
-            >
-              <option value={0}>Qualquer</option>
-              {QUARTOS.map((q) => (
-                <option key={q} value={q}>
-                  {q} ou mais
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            className="h-12 rounded-lg bg-gold px-7 font-semibold text-black transition-colors hover:bg-gold-claro sm:col-span-2 md:col-span-1"
-            type="submit"
-          >
-            {carregando ? "Ver imóveis" : `Ver ${encontrados} ${encontrados === 1 ? "imóvel" : "imóveis"}`}
-          </button>
-        </form>
-
-        {!carregando && (
-          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/75">
-            {porFase.map((f) => (
-              <li key={f.valor}>
-                <a
-                  className="underline-offset-4 transition-colors hover:text-gold hover:underline"
-                  href={`/catalogo?fase=${f.valor}`}
-                >
-                  {f.n} {f.label.toLowerCase()}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {destaque && (
-        <div
-          className="absolute right-6 bottom-6 hidden w-72 rounded-xl border border-white/15 bg-fundo-marca/75 p-4 backdrop-blur-md md:block"
-          onBlur={() => setPausado(false)}
-          onFocus={() => setPausado(true)}
-          onMouseEnter={() => setPausado(true)}
-          onMouseLeave={() => setPausado(false)}
-        >
-          <p className="text-gold text-sm">{[destaque.construtora, destaque.fase].filter(Boolean).join(", ")}</p>
-          <p className="mt-0.5 font-display font-semibold text-lg text-white leading-snug">{destaque.titulo}</p>
-          <p className="text-sm text-white/65">{[destaque.bairro, destaque.cidade].filter(Boolean).join(", ")}</p>
-          <div className="mt-3 flex items-center justify-between">
+          <form aria-label="Buscar imóveis" className="mt-9 space-y-4 rounded-xl border border-white/15 bg-marca p-4 md:p-5" onSubmit={buscar}>
+            <div>
+              <span className="mb-1.5 block text-sm text-white/70" id="rotulo-fase">
+                Fase da obra
+              </span>
+              <Segmentado
+                onChange={(v) => setFase(v)}
+                opcoes={FASES_FILTRO}
+                rotulo="Fase da obra"
+                valor={fase}
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="mb-1.5 block text-sm text-white/70" htmlFor="busca-cidade">
+                  Cidade
+                </label>
+                <select className={campo} id="busca-cidade" onChange={(e) => setCidade(e.target.value)} value={cidade}>
+                  <option value="">Todas as cidades</option>
+                  {CIDADES_ATENDIDAS.map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <span className="mb-1.5 block text-sm text-white/70">Quartos</span>
+                <Segmentado onChange={setQuartos} opcoes={QUARTOS} rotulo="Quartos" valor={quartos} />
+              </div>
+            </div>
             <button
-              className="font-medium text-gold text-sm underline-offset-4 hover:underline"
-              onClick={() => setAberto(destaque)}
-              type="button"
+              className="h-12 w-full rounded-lg bg-gold px-7 font-semibold text-black transition-colors hover:bg-gold-claro"
+              type="submit"
             >
-              Ver detalhes
+              {carregando ? "Ver imóveis" : `Ver ${encontrados} ${encontrados === 1 ? "imóvel" : "imóveis"}`}
             </button>
-            {fotos.length > 1 && (
-              <div className="flex gap-1.5" role="group" aria-label="Escolher foto">
-                {fotos.map((f, i) => (
+          </form>
+
+          {!carregando && (
+            <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
+              {porFase.map((f) => (
+                <li key={f.valor}>
+                  <a
+                    className="underline-offset-4 transition-colors hover:text-gold hover:underline"
+                    href={`/catalogo?fase=${f.valor}`}
+                  >
+                    {f.n} {f.label.toLowerCase()}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* janela em arco: a foto aparece inteira, sem escurecer, com a etiqueta do empreendimento pendurada */}
+        <div className="relative mx-auto w-full max-w-sm pb-10 lg:max-w-none lg:pb-0">
+          <div className="relative aspect-[7/8]">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 translate-x-3 translate-y-3 rounded-t-[999px] rounded-b-2xl border border-gold/50"
+            />
+            <div className="relative h-full overflow-hidden rounded-t-[999px] rounded-b-2xl bg-marca">
+              {fotos.map((f, i) => (
+                <img
+                  alt=""
+                  aria-hidden="true"
+                  className={cn(
+                    "absolute inset-0 h-full w-full object-cover transition-opacity duration-[1600ms] ease-in-out",
+                    i === atual % fotos.length ? "opacity-100" : "opacity-0"
+                  )}
+                  fetchPriority={i === 0 ? "high" : "low"}
+                  key={f.id}
+                  src={f.imagem ?? ""}
+                />
+              ))}
+            </div>
+
+            {destaque && (
+              <div
+                className="absolute bottom-4 -left-2 w-60 rounded-xl bg-gold p-4 text-black shadow-2xl shadow-black/50 sm:-left-6 sm:w-64"
+                onBlur={() => setPausado(false)}
+                onFocus={() => setPausado(true)}
+                onMouseEnter={() => setPausado(true)}
+                onMouseLeave={() => setPausado(false)}
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute top-3 right-3 h-3 w-3 rounded-full bg-fundo-marca shadow-[inset_0_1px_2px_rgb(0_0_0/0.6)]"
+                />
+                <p className="pr-6 font-medium text-black/70 text-sm">
+                  {[destaque.construtora, destaque.fase].filter(Boolean).join(", ")}
+                </p>
+                <p className="mt-0.5 font-display font-semibold text-xl leading-snug">{destaque.titulo}</p>
+                <p className="text-black/70 text-sm">{[destaque.bairro, destaque.cidade].filter(Boolean).join(", ")}</p>
+                <div className="mt-3 flex items-center justify-between">
                   <button
-                    aria-label={`Foto ${i + 1}: ${f.titulo}`}
-                    aria-pressed={i === atual % fotos.length}
-                    className={cn(
-                      "h-2 rounded-full transition-all",
-                      i === atual % fotos.length ? "w-6 bg-gold" : "w-2 bg-white/35 hover:bg-white/60"
-                    )}
-                    key={f.id}
-                    onClick={() => setAtual(i)}
+                    className="font-semibold text-sm underline underline-offset-4"
+                    onClick={() => setAberto(destaque)}
                     type="button"
-                  />
-                ))}
+                  >
+                    Ver detalhes
+                  </button>
+                  {fotos.length > 1 && (
+                    <div aria-label="Escolher foto" className="flex gap-1.5" role="group">
+                      {fotos.map((f, i) => (
+                        <button
+                          aria-label={`Foto ${i + 1}: ${f.titulo}`}
+                          aria-pressed={i === atual % fotos.length}
+                          className={cn(
+                            "h-2 rounded-full transition-all",
+                            i === atual % fotos.length ? "w-6 bg-black" : "w-2 bg-black/30 hover:bg-black/55"
+                          )}
+                          key={f.id}
+                          onClick={() => setAtual(i)}
+                          type="button"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
-          <p className="mt-3 text-white/45 text-xs">Imagem ilustrativa</p>
+          {destaque && <p className="mt-6 text-white/45 text-xs lg:mt-5">Imagem ilustrativa</p>}
         </div>
-      )}
+      </div>
       {aberto && <ImovelDialog imovel={aberto} onFechar={() => setAberto(null)} />}
     </section>
   );

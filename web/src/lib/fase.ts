@@ -15,3 +15,11 @@ export function grupoDaFase(fase: string | null): FaseGrupo | null {
   if (/obra|constru|reta final|morar em breve|iniciad/i.test(fase)) return "obras";
   return null;
 }
+
+// Rótulos curtos para controles segmentados ("" = todas)
+export const FASES_FILTRO: { valor: FaseGrupo | ""; label: string }[] = [
+  { valor: "", label: "Todas" },
+  { valor: "lancamento", label: "Lançamentos" },
+  { valor: "obras", label: "Em obras" },
+  { valor: "pronto", label: "Prontos" },
+];

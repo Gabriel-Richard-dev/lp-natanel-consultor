@@ -61,7 +61,9 @@ Todas as 10 existem no portal e estão sendo lidas: Victa, MRV, Direcional, Pra 
 Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https://ergueimoveis.com.br
 - [x] Visual: preto e dourado da marca (tokens `fundo-marca`, `marca`, `preto`, `gold`), Bricolage Grotesque + Figtree; hero com foto de empreendimento e busca compacta
 - [x] Campos e selects com um só estilo (`.campo` em `index.css`); `cursor: pointer` global nos botões
-- [x] Hero: foto que alterna entre 4 empreendimentos reais (cartão com detalhes e bolinhas), lema da marca com a chave, busca por cidade, fase e quartos com contagem ao vivo (a versão com a busca escrita como frase foi descartada)
+- [x] Hero: foto em janela de arco que alterna entre 4 empreendimentos reais, com etiqueta de chaveiro (detalhes e bolinhas), lema da marca com a chave e busca com controles segmentados (fase, quartos) e contagem ao vivo
+- [x] Faixa de números logo após o hero; "Onde atendemos" com foto de empreendimento de cada cidade; "Como funciona" em linha do tempo
+- [x] Filtros: componente `Segmentado` no hero e no catálogo, barra do catálogo em duas linhas
 - [x] Ritmo de fundos: Empreendimentos, Onde atendemos e Contato em branco; o resto escuro
 - [x] Quatro cidades atendidas (Fortaleza, Eusébio, Maracanaú e Caucaia) em `lib/cidades.ts`; cidade sem empreendimento leva ao formulário
 - [x] Seções: imóveis (1 destaque + lista), construtoras, onde atendemos, simulador, como funciona, quem somos, contato com formulário

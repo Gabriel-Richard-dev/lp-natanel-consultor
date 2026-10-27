@@ -1,0 +1,27 @@
+import { useImoveis } from "@/hooks/use-imoveis";
+import { CIDADES_ATENDIDAS } from "@/lib/cidades";
+
+export function FaixaNumeros() {
+  const { imoveis } = useImoveis();
+  const construtoras = new Set(imoveis.map((i) => i.construtora).filter(Boolean)).size;
+
+  const itens = [
+    { valor: imoveis.length ? String(imoveis.length) : "…", rotulo: "empreendimentos disponíveis" },
+    { valor: construtoras ? String(construtoras) : "…", rotulo: "construtoras" },
+    { valor: String(CIDADES_ATENDIDAS.length), rotulo: "cidades atendidas" },
+    { valor: "Grátis", rotulo: "atendimento e simulação" },
+  ];
+
+  return (
+    <section aria-label="Alves Costa em números" className="border-white/10 border-y bg-preto">
+      <dl className="mx-auto grid max-w-6xl grid-cols-2 gap-y-8 px-4 py-10 md:grid-cols-4 md:px-6">
+        {itens.map((n, i) => (
+          <div className={`flex flex-col-reverse justify-end md:px-8 ${i ? "md:border-white/10 md:border-l" : "md:pl-0"}`} key={n.rotulo}>
+            <dt className="mt-1 text-sm text-white/65">{n.rotulo}</dt>
+            <dd className="font-display font-semibold text-4xl text-gold tabular-nums">{n.valor}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
