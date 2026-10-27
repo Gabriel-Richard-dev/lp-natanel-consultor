@@ -1,7 +1,6 @@
 import { gsap } from "gsap";
 import { MessageCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { formatPreco, whatsappLink } from "@/lib/contato";
 import { type Sistema, simular } from "@/lib/financiamento";
 import { cn } from "@/lib/utils";
@@ -68,8 +67,8 @@ function Controle({
         <label className="font-medium text-sm" htmlFor={id}>
           {label}
         </label>
-        <div className="flex w-36 items-center rounded-lg border border-input bg-background px-2.5 focus-within:ring-2 focus-within:ring-gold-fundo/30 sm:w-40">
-          {prefixo && <span className="text-muted-foreground text-xs">{prefixo}</span>}
+        <div className="flex w-36 items-center rounded-lg border border-concreto bg-cal px-2.5 focus-within:ring-2 focus-within:ring-mar/30 sm:w-40">
+          {prefixo && <span className="text-nanquim/65 text-xs">{prefixo}</span>}
           {/* reais: texto com separador de milhar; o resto: campo numérico nativo
               (aceita "10,5" sem engolir a vírgula no meio da digitação) */}
           <input
@@ -83,12 +82,12 @@ function Controle({
             type={dinheiro ? "text" : "number"}
             value={dinheiro ? value.toLocaleString("pt-BR") : value}
           />
-          {sufixo && <span className="text-muted-foreground text-xs">{sufixo}</span>}
+          {sufixo && <span className="text-nanquim/65 text-xs">{sufixo}</span>}
         </div>
       </div>
       <input
         aria-label={label}
-        className="w-full accent-gold-fundo"
+        className="w-full accent-mar"
         max={max}
         min={min}
         onChange={(e) => onChange(Number(e.target.value))}
@@ -97,7 +96,7 @@ function Controle({
         value={Math.min(Math.max(value, min), max)}
       />
       {dica && (
-        <p className={cn("mt-1 text-xs", alerta ? "text-amber-700" : "text-muted-foreground")}>
+        <p className={cn("mt-1 text-xs", alerta ? "text-amber-800" : "text-nanquim/65")}>
           {dica}
         </p>
       )}
@@ -106,7 +105,6 @@ function Controle({
 }
 
 export function SimulacaoFinanciamento() {
-  const ref = useScrollReveal<HTMLDivElement>({ selector: ".sim-anim" });
   const [valorImovel, setValorImovel] = useState(300_000);
   const [entradaPct, setEntradaPct] = useState(20);
   const [anos, setAnos] = useState(30);
@@ -117,7 +115,7 @@ export function SimulacaoFinanciamento() {
   const s = simular({ valor: valorImovel, entrada, anos, taxaAnual, sistema });
   const partes = [
     { nome: "Entrada", valor: Math.min(entrada, valorImovel), cor: "bg-white/80" },
-    { nome: "Valor financiado", valor: s.financiado, cor: "bg-gold" },
+    { nome: "Valor financiado", valor: s.financiado, cor: "bg-dourado" },
     { nome: "Juros", valor: s.totalJuros, cor: "bg-white/35" },
   ];
 
@@ -129,17 +127,18 @@ export function SimulacaoFinanciamento() {
   );
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" id="simulador" ref={ref}>
-      <h2 className="sim-anim mb-4 text-center font-bold text-3xl tracking-tight md:text-4xl">
+    <section className="bg-cal py-20 md:py-24" id="simulador">
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+      <h2 className="font-display font-semibold text-3xl text-nanquim tracking-tight md:text-4xl">
         Simule seu financiamento
       </h2>
-      <p className="sim-anim mx-auto mb-12 max-w-xl text-center text-muted-foreground">
+      <p className="mt-3 mb-12 max-w-xl text-nanquim/75 leading-relaxed">
         Veja quanto fica a parcela, quanto você paga de juros e qual renda os bancos
         costumam pedir.
       </p>
 
       <div className="grid items-start gap-6 lg:grid-cols-[1.15fr_1fr]">
-        <div className="sim-anim space-y-7 rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8">
+        <div className="space-y-7 rounded-lg border border-concreto bg-white p-6 md:p-8">
           <Controle
             dinheiro
             id="valor-imovel"
@@ -200,15 +199,15 @@ export function SimulacaoFinanciamento() {
                   className={cn(
                     "rounded-xl border p-3 text-left transition",
                     sistema === opcao.valor
-                      ? "border-gold-fundo bg-amber-50 ring-1 ring-gold-fundo"
-                      : "border-border hover:bg-muted"
+                      ? "border-mar bg-cal ring-1 ring-mar"
+                      : "border-concreto bg-white hover:border-mar"
                   )}
                   key={opcao.valor}
                   onClick={() => setSistema(opcao.valor)}
                   type="button"
                 >
                   <span className="block font-semibold text-sm">{opcao.nome}</span>
-                  <span className="mt-0.5 block text-muted-foreground text-xs leading-snug">
+                  <span className="mt-0.5 block text-nanquim/65 text-xs leading-snug">
                     {opcao.descricao}
                   </span>
                 </button>
@@ -217,11 +216,11 @@ export function SimulacaoFinanciamento() {
           </fieldset>
         </div>
 
-        <div className="sim-anim rounded-2xl bg-[#0b0d12] p-6 text-white md:p-8 lg:sticky lg:top-8">
+        <div className="rounded-lg bg-nanquim p-6 text-white md:p-8 lg:sticky lg:top-8">
           <p className="text-sm text-white/60">
             {sistema === "sac" ? "Primeira parcela" : "Parcela fixa"}
           </p>
-          <p className="font-bold text-4xl text-gold tracking-tight md:text-5xl">
+          <p className="font-display font-semibold text-4xl text-dourado tracking-tight md:text-5xl">
             <AnimatedValor value={s.primeira} />
             <span className="font-normal text-base text-white/50"> /mês</span>
           </p>
@@ -279,7 +278,7 @@ export function SimulacaoFinanciamento() {
           </div>
 
           <a
-            className="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-gold px-5 py-3 font-medium text-black transition-colors hover:bg-gold-claro"
+            className="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-dourado px-5 py-3 font-medium text-black transition-colors hover:bg-dourado-claro"
             href={waLink}
             rel="noreferrer"
             target="_blank"
@@ -292,6 +291,7 @@ export function SimulacaoFinanciamento() {
             análise de crédito.
           </p>
         </div>
+      </div>
       </div>
     </section>
   );

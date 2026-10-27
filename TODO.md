@@ -56,3 +56,16 @@ Todas as 10 existem no portal e estão sendo lidas: Victa, MRV, Direcional, Pra 
 - [ ] CRECI da empresa
 - [ ] E-mail, endereço e Instagram oficiais
 - [ ] Natanael continua como corretor da equipe? (define se aparece em "Sobre")
+
+## 6. Landing nova (branch `landing-nova`)
+Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https://ergueimoveis.com.br
+- [x] Direção visual nova: cal, nanquim, mar e dourado (dourado só sobre nanquim); Bricolage Grotesque + Figtree
+- [x] Hero com a busca escrita como frase (cidade, fase, quartos) e contagem ao vivo no botão; faixa de empreendimentos por fase com dados do banco
+- [x] Quatro cidades atendidas (Fortaleza, Eusébio, Maracanaú e Caucaia) em `lib/cidades.ts`; cidade sem empreendimento leva ao formulário
+- [x] Seções: imóveis (1 destaque + lista), construtoras, onde atendemos, simulador, como funciona, quem somos, contato com formulário
+- [x] Horário de atendimento (seg a sex 8h às 18h, sáb 8h às 14h) em `lib/atendimento.ts`, com "Aberto agora" no fuso de Fortaleza
+- [x] Removidos: mapa "Onde atuamos", partículas, parallax/tilt na home, scroll reveal (ainda no `wip-habitnet`)
+- [x] Catálogo, diálogo do imóvel e `OfertaCard` na identidade nova (o preview do admin usa o mesmo card)
+- [ ] Revisar com fotos reais: os testes visuais foram feitos com dados de exemplo e sem imagens
+- [x] Logo em WebP (310 kB para 48 kB)
+- [ ] Seção de locação e busca por código (como no Ergue) dependem de dados que a Habitnet não traz

@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import logo from "@/assets/logo/logo-alves-costa.png";
+import logo from "@/assets/logo/logo-alves-costa.webp";
 import { login } from "@/lib/api";
 import { cn, mensagemDe } from "@/lib/utils";
 import { botaoPrimario, inputCls } from "./ui";

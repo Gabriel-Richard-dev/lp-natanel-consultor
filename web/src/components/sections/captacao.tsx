@@ -1,19 +1,21 @@
-import { CheckCircle2, Loader2, MessageCircle, ShieldCheck, Sparkles, UserCheck } from "lucide-react";
+import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
-import { campoEscuro as campo } from "@/components/ui/campo-escuro";
+import { Horario } from "@/components/layout/horario";
+import { campoClaro as campo } from "@/components/ui/campo-claro";
 import { enviarLead } from "@/lib/api";
+import { CIDADES_ATENDIDAS } from "@/lib/cidades";
 import { whatsappLink } from "@/lib/contato";
 import { mascaraTelefone } from "@/lib/telefone";
 import { cn, mensagemDe } from "@/lib/utils";
 
 const INTERESSES = ["Comprar", "Investir", "Vender meu imóvel"];
-const CIDADES = ["Fortaleza", "Eusébio", "Maracanaú", "Caucaia", "Outra"];
+const CIDADES = [...CIDADES_ATENDIDAS, "Outra"];
 const VALORES = ["Até R$ 200 mil", "R$ 200 a 300 mil", "R$ 300 a 500 mil", "Acima de R$ 500 mil", "Ainda não sei"];
 
 const BENEFICIOS = [
-  { icone: Sparkles, titulo: "Seleção sob medida", texto: "Filtramos lançamentos e imóveis prontos pelo seu perfil e orçamento." },
-  { icone: UserCheck, titulo: "Acompanhamento completo", texto: "Visitas, simulação, documentação e negociação, do início às chaves." },
-  { icone: ShieldCheck, titulo: "Sem compromisso", texto: "Atendimento gratuito. Você só segue em frente se fizer sentido." },
+  { titulo: "Seleção sob medida", texto: "Filtramos lançamentos e imóveis prontos pelo seu perfil e orçamento." },
+  { titulo: "Acompanhamento completo", texto: "Visitas, simulação, documentação e negociação, do início às chaves." },
+  { titulo: "Sem compromisso", texto: "Atendimento gratuito. Você só segue em frente se fizer sentido." },
 ];
 
 export function Captacao() {
@@ -58,45 +60,39 @@ export function Captacao() {
     `${cidade ? ` em ${cidade}` : ""}${!vender && valor ? ` (${valor.toLowerCase()})` : ""}.`;
 
   return (
-    <section className="bg-neutral-50 px-4 py-24 md:px-6" id="captacao">
-      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-3xl bg-fundo-marca shadow-xl lg:grid-cols-[1fr_1.05fr]">
-        <div className="relative p-8 md:p-12">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_60%_at_0%_0%,rgb(212_175_75/0.16),transparent_70%)]" />
-          <div className="relative">
-            <p className="mb-3 font-medium text-gold text-xs uppercase tracking-[0.2em]">Atendimento personalizado</p>
-            <h2 className="font-bold text-3xl text-white tracking-tight md:text-4xl">
-              Conte o que você procura.{" "}
-              <span className="font-serif text-gold italic">Nós encontramos.</span>
-            </h2>
-            <p className="mt-4 max-w-md text-white/60 leading-relaxed">
-              Nem todo imóvel está anunciado. Deixe seu contato e receba as melhores oportunidades para o seu momento.
-            </p>
-            <ul className="mt-8 space-y-5">
-              {BENEFICIOS.map(({ icone: Icone, titulo, texto }) => (
-                <li className="flex gap-4" key={titulo}>
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold/10 text-gold">
-                    <Icone className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="font-medium text-white">{titulo}</p>
-                    <p className="text-sm text-white/55 leading-relaxed">{texto}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+    <section className="bg-cal py-20 md:py-24" id="contato">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-[1fr_1.1fr]">
+        <div>
+          <h2 className="font-display font-semibold text-3xl text-nanquim tracking-tight md:text-4xl">
+            Conte o que você procura
+          </h2>
+          <p className="mt-4 max-w-md text-nanquim/75 leading-relaxed">
+            Nem todo imóvel está anunciado. Deixe seu contato e receba as melhores oportunidades para o seu momento.
+          </p>
+          <dl className="mt-8 divide-y divide-concreto border-concreto border-y">
+            {BENEFICIOS.map(({ titulo, texto }) => (
+              <div className="py-4" key={titulo}>
+                <dt className="font-display font-semibold text-nanquim">{titulo}</dt>
+                <dd className="mt-1 text-nanquim/70 text-sm leading-relaxed">{texto}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-8">
+            <h3 className="mb-3 font-display font-semibold text-nanquim">Horário de atendimento</h3>
+            <Horario />
           </div>
         </div>
 
-        <div className="border-white/10 border-t bg-white/[0.03] p-8 md:p-12 lg:border-t-0 lg:border-l">
+        <div className="rounded-lg border border-concreto bg-white p-6 md:p-10">
           {enviado ? (
-            <div aria-live="polite" className="flex h-full flex-col items-center justify-center text-center" role="status">
-              <CheckCircle2 className="mb-4 h-14 w-14 text-gold" />
-              <h3 className="font-semibold text-2xl text-white">Recebemos seu contato!</h3>
-              <p className="mt-2 max-w-xs text-white/60">
-                Em breve falamos com você pelo WhatsApp. Se preferir, adiante a conversa agora:
+            <div aria-live="polite" className="flex h-full flex-col justify-center" role="status">
+              <CheckCircle2 className="mb-4 h-10 w-10 text-mar" />
+              <h3 className="font-display font-semibold text-2xl text-nanquim">Recebemos seu contato</h3>
+              <p className="mt-2 max-w-sm text-nanquim/75">
+                Falamos com você pelo WhatsApp no próximo horário de atendimento. Se preferir, adiante a conversa agora:
               </p>
               <a
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gold px-6 py-3 font-medium text-black transition-colors hover:bg-gold-claro"
+                className="mt-6 inline-flex w-fit items-center gap-2 rounded-md bg-nanquim px-6 py-3 font-semibold text-cal transition-colors hover:bg-mar"
                 href={whatsappLink(resumo)}
                 rel="noreferrer"
                 target="_blank"
@@ -107,16 +103,16 @@ export function Captacao() {
           ) : (
             <form className="space-y-5" onSubmit={enviar}>
               <fieldset>
-                <legend className="mb-2 font-medium text-sm text-white/70">Eu quero</legend>
+                <legend className="mb-2 font-medium text-nanquim text-sm">Eu quero</legend>
                 <div className="grid grid-cols-3 gap-2">
                   {INTERESSES.map((i) => (
                     <button
                       aria-pressed={interesse === i}
                       className={cn(
-                        "rounded-lg border px-2 py-2.5 text-center text-sm transition",
+                        "rounded-md border px-2 py-2.5 text-center text-sm transition",
                         interesse === i
-                          ? "border-gold bg-gold font-medium text-black"
-                          : "border-white/15 text-white/70 hover:border-white/30 hover:text-white"
+                          ? "border-nanquim bg-nanquim font-medium text-cal"
+                          : "border-concreto text-nanquim/80 hover:border-nanquim"
                       )}
                       key={i}
                       onClick={() => setInteresse(i)}
@@ -129,7 +125,7 @@ export function Captacao() {
               </fieldset>
 
               <div>
-                <label className="mb-1.5 block font-medium text-sm text-white/70" htmlFor="lead-nome">
+                <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-nome">
                   Seu nome
                 </label>
                 <input
@@ -146,7 +142,7 @@ export function Captacao() {
               </div>
 
               <div>
-                <label className="mb-1.5 block font-medium text-sm text-white/70" htmlFor="lead-tel">
+                <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-tel">
                   WhatsApp
                 </label>
                 <input
@@ -165,33 +161,25 @@ export function Captacao() {
 
               <div className={cn("grid gap-4", !vender && "sm:grid-cols-2")}>
                 <div>
-                  <label className="mb-1.5 block font-medium text-sm text-white/70" htmlFor="lead-cidade">
+                  <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-cidade">
                     {vender ? "Onde fica o imóvel?" : "Cidade de interesse"}
                   </label>
                   <select className={campo} id="lead-cidade" onChange={(e) => setCidade(e.target.value)} value={cidade}>
-                    <option className="text-black" value="">
-                      Selecione
-                    </option>
+                    <option value="">Selecione</option>
                     {CIDADES.map((c) => (
-                      <option className="text-black" key={c}>
-                        {c}
-                      </option>
+                      <option key={c}>{c}</option>
                     ))}
                   </select>
                 </div>
                 {!vender && (
                   <div>
-                    <label className="mb-1.5 block font-medium text-sm text-white/70" htmlFor="lead-valor">
+                    <label className="mb-1.5 block font-medium text-nanquim text-sm" htmlFor="lead-valor">
                       Faixa de valor
                     </label>
                     <select className={campo} id="lead-valor" onChange={(e) => setValor(e.target.value)} value={valor}>
-                      <option className="text-black" value="">
-                        Selecione
-                      </option>
+                      <option value="">Selecione</option>
                       {VALORES.map((v) => (
-                        <option className="text-black" key={v}>
-                          {v}
-                        </option>
+                        <option key={v}>{v}</option>
                       ))}
                     </select>
                   </div>
@@ -209,10 +197,10 @@ export function Captacao() {
                 value={isca}
               />
 
-              <label className="flex cursor-pointer items-start gap-3 text-white/55 text-xs leading-relaxed">
+              <label className="flex cursor-pointer items-start gap-3 text-nanquim/70 text-xs leading-relaxed">
                 <input
                   checked={aceite}
-                  className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-mar"
                   onChange={(e) => setAceite(e.target.checked)}
                   required
                   type="checkbox"
@@ -224,13 +212,13 @@ export function Captacao() {
               </label>
 
               {erro && (
-                <p className="text-red-400 text-sm" role="alert">
+                <p className="text-red-700 text-sm" role="alert">
                   {erro}
                 </p>
               )}
 
               <button
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3.5 font-semibold text-black transition-colors hover:bg-gold-claro disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-md bg-nanquim px-6 py-3.5 font-semibold text-cal transition-colors hover:bg-mar disabled:opacity-60"
                 disabled={enviando}
                 type="submit"
               >

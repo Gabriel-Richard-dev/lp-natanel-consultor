@@ -1,6 +1,6 @@
 import { Building2, ExternalLink, LayoutDashboard, Loader2, LogOut, Plus, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import logo from "@/assets/logo/logo-alves-costa.png";
+import logo from "@/assets/logo/logo-alves-costa.webp";
 import { type Imovel, listarImoveis, logout, restaurarSessao } from "@/lib/api";
 import { cn, mensagemDe } from "@/lib/utils";
 import { Contatos } from "./contatos";

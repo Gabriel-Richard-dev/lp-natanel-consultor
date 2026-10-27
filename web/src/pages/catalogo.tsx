@@ -1,6 +1,6 @@
 import { ArrowLeft, MessageCircle, Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "@/assets/logo/logo-alves-costa.png";
+import logo from "@/assets/logo/logo-alves-costa.webp";
 import { WhatsappFlutuante } from "@/components/layout/whatsapp-flutuante";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
 import { OfertaCard } from "@/components/sections/oferta-card";
@@ -54,7 +54,7 @@ function paraUrl(f: Filtros) {
 }
 
 const campoCls =
-  "rounded-lg border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-gold-fundo focus:ring-2 focus:ring-gold-fundo/20";
+  "rounded-md border border-concreto bg-white px-3 py-2.5 text-nanquim text-sm outline-none focus:border-mar focus:ring-2 focus:ring-mar/25";
 
 export function Catalogo() {
   const { imoveis, carregando, erro } = useImoveis();
@@ -101,25 +101,25 @@ export function Catalogo() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <header className="bg-[#0b0d12]">
+    <main className="min-h-screen bg-cal font-corpo">
+      <header className="bg-nanquim">
         <div className="mx-auto max-w-6xl px-4 pt-6 pb-12 md:px-6 md:pb-16">
           <div className="mb-12 flex items-center justify-between">
             <a href="/">
               <img alt="Alves Costa" className="h-16 w-auto" src={logo} />
             </a>
             <a
-              className="flex items-center gap-1.5 font-medium text-sm text-white/60 hover:text-white"
+              className="flex items-center gap-1.5 font-medium text-cal/70 text-sm hover:text-dourado"
               href="/"
             >
               <ArrowLeft className="h-4 w-4" />
               Voltar para o site
             </a>
           </div>
-          <h1 className="font-bold text-3xl text-white tracking-tight md:text-5xl">
+          <h1 className="font-display font-semibold text-3xl text-cal tracking-tight md:text-5xl">
             Catálogo de imóveis
           </h1>
-          <p className="mt-3 max-w-xl text-white/60">
+          <p className="mt-3 max-w-xl text-cal/70">
             {carregando
               ? "Carregando imóveis…"
               : `${imoveis.length} imóveis disponíveis em Fortaleza e região, todos com acompanhamento da Alves Costa do início ao fim.`}
@@ -127,10 +127,10 @@ export function Catalogo() {
         </div>
       </header>
 
-      <div className="border-border border-b bg-background/95 backdrop-blur md:sticky md:top-0 md:z-20">
+      <div className="border-concreto border-b bg-white/95 backdrop-blur md:sticky md:top-0 md:z-20">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3 md:px-6">
           <div className="relative min-w-52 flex-1">
-            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-nanquim/60" />
             <input
               aria-label="Buscar por bairro, nome ou construtora"
               className={cn(campoCls, "w-full pl-9")}
@@ -148,8 +148,8 @@ export function Catalogo() {
                 className={cn(
                   "shrink-0 rounded-full border px-4 py-2 text-sm transition",
                   fase === f.valor
-                    ? "border-fundo-marca bg-fundo-marca font-medium text-gold"
-                    : "border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+                    ? "border-nanquim bg-nanquim font-medium text-cal"
+                    : "border-concreto text-nanquim/75 hover:border-nanquim hover:text-nanquim"
                 )}
                 key={f.valor || "todos"}
                 onClick={() => mudar({ fase: f.valor })}
@@ -162,13 +162,13 @@ export function Catalogo() {
 
           <button
             aria-expanded={maisFiltros}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-border py-2.5 text-sm md:hidden"
+            className="flex w-full items-center justify-center gap-2 rounded-md border border-concreto py-2.5 text-nanquim text-sm md:hidden"
             onClick={() => setMaisFiltros((v) => !v)}
             type="button"
           >
             <SlidersHorizontal className="h-4 w-4" /> Mais filtros
             {extrasAtivos > 0 && (
-              <span className="rounded-full bg-fundo-marca px-2 py-0.5 text-gold text-xs">{extrasAtivos}</span>
+              <span className="rounded-full bg-nanquim px-2 py-0.5 text-cal text-xs">{extrasAtivos}</span>
             )}
           </button>
 
@@ -197,13 +197,13 @@ export function Catalogo() {
                 ))}
               </select>
             )}
-            <div aria-label="Quartos" className="flex rounded-lg border border-border bg-background p-0.5" role="group">
+            <div aria-label="Quartos" className="flex rounded-md border border-concreto bg-white p-0.5" role="group">
               {QUARTOS.map((q) => (
                 <button
                   aria-pressed={quartos === q}
                   className={cn(
                     "flex-1 rounded-md px-3 py-2 text-sm transition",
-                    quartos === q ? "bg-fundo-marca font-medium text-gold" : "text-muted-foreground hover:text-foreground"
+                    quartos === q ? "bg-nanquim font-medium text-cal" : "text-nanquim/75 hover:text-nanquim"
                   )}
                   key={q}
                   onClick={() => mudar({ quartos: q })}
@@ -229,12 +229,12 @@ export function Catalogo() {
 
       <section className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         {!carregando && (
-          <div className="mb-6 flex items-center justify-between text-muted-foreground text-sm">
+          <div className="mb-6 flex items-center justify-between text-nanquim/70 text-sm">
             <p>
               {filtrando ? `${visiveis.length} de ${imoveis.length} imóveis` : `${imoveis.length} imóveis`}
             </p>
             {filtrando && (
-              <button className="font-medium text-gold-fundo hover:underline" onClick={limpar} type="button">
+              <button className="font-medium text-mar hover:underline" onClick={limpar} type="button">
                 Limpar filtros
               </button>
             )}
@@ -244,7 +244,7 @@ export function Catalogo() {
         {carregando ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }, (_, i) => (
-              <div className="h-96 animate-pulse rounded-2xl bg-muted" key={i} />
+              <div className="h-96 animate-pulse rounded-lg bg-concreto/60" key={i} />
             ))}
           </div>
         ) : visiveis.length ? (
@@ -254,9 +254,9 @@ export function Catalogo() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-border border-dashed bg-background py-16 text-center">
-            <p className="font-medium">{erro ? "Não conseguimos carregar os imóveis agora" : "Nenhum imóvel com esses filtros"}</p>
-            <button className="mt-2 text-gold-fundo text-sm hover:underline" onClick={limpar} type="button">
+          <div className="rounded-lg border border-concreto border-dashed bg-white py-16 text-center">
+            <p className="font-display font-semibold text-nanquim">{erro ? "Não conseguimos carregar os imóveis agora" : "Nenhum imóvel com esses filtros"}</p>
+            <button className="mt-2 text-mar text-sm hover:underline" onClick={limpar} type="button">
               Limpar filtros
             </button>
           </div>
@@ -265,7 +265,7 @@ export function Catalogo() {
         {visiveis.length > pagina.length && (
           <div className="mt-10 text-center">
             <button
-              className="rounded-lg border border-fundo-marca px-8 py-3 font-medium text-sm transition-colors hover:bg-fundo-marca hover:text-gold"
+              className="rounded-md border-2 border-nanquim px-8 py-3 font-semibold text-nanquim text-sm transition-colors hover:bg-nanquim hover:text-cal"
               onClick={() => setMostrando((n) => n + POR_PAGINA)}
               type="button"
             >
@@ -274,15 +274,15 @@ export function Catalogo() {
           </div>
         )}
 
-        <div className="mt-16 flex flex-col items-center gap-4 rounded-2xl bg-[#0b0d12] px-6 py-10 text-center md:flex-row md:justify-between md:px-10 md:text-left">
+        <div className="mt-16 flex flex-col items-center gap-4 rounded-lg bg-nanquim px-6 py-10 text-center md:flex-row md:justify-between md:px-10 md:text-left">
           <div>
-            <p className="font-semibold text-white text-xl">Não encontrou o que procura?</p>
-            <p className="mt-1 text-sm text-white/60">
+            <p className="font-display font-semibold text-cal text-xl">Não encontrou o que procura?</p>
+            <p className="mt-1 text-cal/70 text-sm">
               Nem todo imóvel está anunciado. Conte o que você precisa que a Alves Costa busca para você.
             </p>
           </div>
           <a
-            className="flex shrink-0 items-center gap-2 rounded-lg bg-gold px-6 py-3 font-medium text-black transition-colors hover:bg-gold-claro"
+            className="flex shrink-0 items-center gap-2 rounded-md bg-dourado px-6 py-3 font-semibold text-nanquim transition hover:brightness-110"
             href={whatsappLink("Olá! Vi o catálogo no site da Alves Costa e estou procurando um imóvel.")}
             rel="noreferrer"
             target="_blank"

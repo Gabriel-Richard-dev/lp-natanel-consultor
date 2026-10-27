@@ -1,16 +1,14 @@
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { Building2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
-import { OfertaCard } from "@/components/sections/oferta-card";
 import { useImoveis } from "@/hooks/use-imoveis";
-import { useOfertasScroll } from "@/hooks/use-ofertas-scroll";
 import type { Imovel } from "@/lib/api";
 import { whatsappLink } from "@/lib/contato";
 
-const PREVIEW_COUNT = 6;
+const NA_LISTA = 4;
 
 // A API devolve agrupado por construtora; na vitrine da home alterna entre elas
-// para os 6 cards mostrarem variedade em vez de uma construtora só.
+// para os destaques mostrarem variedade em vez de uma construtora só.
 function intercalar(imoveis: Imovel[]) {
   const grupos = new Map<string, Imovel[]>();
   for (const i of imoveis) grupos.set(i.construtora ?? "", [...(grupos.get(i.construtora ?? "") ?? []), i]);
@@ -22,62 +20,125 @@ function intercalar(imoveis: Imovel[]) {
   return saida;
 }
 
+const quem = (i: Imovel) => [i.construtora, i.fase].filter(Boolean).join(", ");
+const onde = (i: Imovel) => [i.bairro, i.cidade].filter(Boolean).join(", ");
+const ficha = (i: Imovel) =>
+  [
+    i.quartos ? `${i.quartos} ${i.quartos === 1 ? "quarto" : "quartos"}` : null,
+    i.area,
+    i.entrega ? `entrega ${i.entrega}` : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+function Foto({ imovel, className }: { imovel: Imovel; className: string }) {
+  return (
+    <div className={`overflow-hidden bg-concreto/60 ${className}`}>
+      {imovel.imagem ? (
+        <img
+          alt=""
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          decoding="async"
+          loading="lazy"
+          src={imovel.imagem}
+        />
+      ) : (
+        <div className="flex h-full items-center justify-center text-nanquim/25">
+          <Building2 className="h-10 w-10" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Ofertas() {
-  const { imoveis: ofertas, carregando, erro } = useImoveis();
+  const { imoveis, carregando, erro } = useImoveis();
   const [aberto, setAberto] = useState<Imovel | null>(null);
-  const ref = useOfertasScroll<HTMLDivElement>([ofertas.length]);
-  const preview = intercalar(ofertas).slice(0, PREVIEW_COUNT);
+  const [destaque, ...resto] = intercalar(imoveis).slice(0, NA_LISTA + 1);
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" id="ofertas">
-      <h2 className="mb-4 text-center font-bold text-3xl tracking-tight md:text-4xl">
-        Imóveis disponíveis agora
-      </h2>
-      <p className="mx-auto mb-16 max-w-xl text-center text-muted-foreground">
-        Seleção atualizada com as melhores oportunidades de Fortaleza e região.
-      </p>
+    <section className="bg-white py-20 md:py-24" id="ofertas">
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+        <h2 className="max-w-2xl font-display font-semibold text-3xl text-nanquim tracking-tight md:text-4xl">
+          Empreendimentos para visitar
+        </h2>
+        <p className="mt-3 max-w-xl text-nanquim/75 leading-relaxed">
+          Lançamentos, imóveis em obras e prontos para morar. O valor muda de unidade para unidade, por isso
+          confirmamos com você no atendimento.
+        </p>
 
-      {carregando ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }, (_, i) => (
-            <div className="h-96 animate-pulse rounded-2xl bg-muted" key={i} />
-          ))}
-        </div>
-      ) : preview.length ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" ref={ref}>
-          {preview.map((oferta) => (
-            <OfertaCard key={oferta.id} oferta={oferta} onAbrir={setAberto} />
-          ))}
-        </div>
-      ) : (
-        <div className="mx-auto max-w-xl rounded-2xl border border-border border-dashed py-14 text-center">
-          <p className="font-medium">
-            {erro ? "Não conseguimos carregar os imóveis agora." : "Estamos atualizando nossa seleção."}
-          </p>
-          <p className="mt-1 text-muted-foreground text-sm">Fale com a gente e receba as melhores opções direto no WhatsApp.</p>
-          <a
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-fundo-marca px-5 py-3 font-medium text-gold text-sm hover:bg-marca-2"
-            href={whatsappLink("Olá! Quero conhecer os imóveis disponíveis.")}
-            rel="noreferrer"
-            target="_blank"
-          >
-            <MessageCircle className="h-4 w-4" /> Chamar no WhatsApp
-          </a>
-        </div>
-      )}
-      {aberto && <ImovelDialog imovel={aberto} onFechar={() => setAberto(null)} />}
+        {carregando ? (
+          <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+            <div className="h-96 animate-pulse rounded-lg bg-cal" />
+            <div className="h-96 animate-pulse rounded-lg bg-cal" />
+          </div>
+        ) : destaque ? (
+          <div className="mt-12 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+            <button
+              className="group text-left"
+              onClick={() => setAberto(destaque)}
+              type="button"
+            >
+              <Foto className="aspect-[16/10] rounded-lg" imovel={destaque} />
+              <span className="mt-4 block text-mar text-sm">{quem(destaque)}</span>
+              <span className="mt-1 block font-display font-semibold text-2xl text-nanquim leading-snug group-hover:text-mar">
+                {destaque.titulo}
+              </span>
+              <span className="mt-1 block text-nanquim/70 text-sm">{onde(destaque)}</span>
+              <span className="mt-1 block text-nanquim/70 text-sm">{ficha(destaque)}</span>
+              <span className="mt-3 inline-block font-medium text-nanquim text-sm underline decoration-2 decoration-dourado underline-offset-4">
+                Ver detalhes
+              </span>
+            </button>
 
-      {ofertas.length > PREVIEW_COUNT && (
-        <div className="mt-12 text-center">
+            <ul className="divide-y divide-concreto border-concreto border-y lg:self-start">
+              {resto.map((i) => (
+                <li key={i.id}>
+                  <button
+                    className="group flex w-full gap-4 py-4 text-left"
+                    onClick={() => setAberto(i)}
+                    type="button"
+                  >
+                    <Foto className="h-24 w-28 shrink-0 rounded-md" imovel={i} />
+                    <span className="min-w-0">
+                      <span className="block text-mar text-xs">{quem(i)}</span>
+                      <span className="mt-0.5 line-clamp-2 block font-display font-semibold text-nanquim leading-snug group-hover:text-mar">
+                        {i.titulo}
+                      </span>
+                      <span className="mt-1 block truncate text-nanquim/70 text-xs">{onde(i)}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="mt-12 max-w-xl rounded-lg border border-concreto border-dashed p-8">
+            <p className="font-display font-semibold text-lg text-nanquim">
+              {erro ? "Não conseguimos carregar os imóveis agora." : "Estamos atualizando a lista de imóveis."}
+            </p>
+            <p className="mt-1 text-nanquim/70 text-sm">Chame a gente e receba as opções direto no WhatsApp.</p>
+            <a
+              className="mt-5 inline-flex items-center gap-2 rounded-md bg-nanquim px-5 py-3 font-semibold text-cal text-sm hover:bg-mar"
+              href={whatsappLink("Olá! Quero conhecer os imóveis disponíveis.")}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <MessageCircle className="h-4 w-4" /> Chamar no WhatsApp
+            </a>
+          </div>
+        )}
+
+        {imoveis.length > NA_LISTA + 1 && (
           <a
-            className="inline-flex items-center gap-2 font-medium text-gold-fundo hover:underline dark:text-gold"
+            className="mt-12 inline-block rounded-md border-2 border-nanquim px-6 py-3 font-semibold text-nanquim transition-colors hover:bg-nanquim hover:text-cal"
             href="/catalogo"
           >
-            Ver catálogo completo ({ofertas.length} imóveis)
-            <ArrowRight className="h-4 w-4" />
+            Ver os {imoveis.length} imóveis do catálogo
           </a>
-        </div>
-      )}
+        )}
+      </div>
+      {aberto && <ImovelDialog imovel={aberto} onFechar={() => setAberto(null)} />}
     </section>
   );
 }
