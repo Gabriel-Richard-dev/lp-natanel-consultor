@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
+import { FundoPlanta } from "@/components/ui/fundo-planta";
 import { TextoBrilhante } from "@/components/ui/texto-brilhante";
 import { useImoveis } from "@/hooks/use-imoveis";
 import { useParallax } from "@/hooks/use-parallax";
@@ -52,8 +53,7 @@ export function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-fundo-marca" id="top">
-      <div aria-hidden="true" className="planta -z-10 absolute inset-0" />
-      <div aria-hidden="true" className="-z-10 absolute -top-40 -right-40 h-[38rem] w-[38rem] rounded-full bg-gold/10 blur-3xl" />
+      <FundoPlanta />
 
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-28 pb-14 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:pt-36 lg:pb-20">
         <div>

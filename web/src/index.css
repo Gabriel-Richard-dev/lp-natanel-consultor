@@ -197,6 +197,8 @@
   --font-corpo: "Figtree Variable", "Geist Variable", sans-serif;
   --animate-progresso: progresso 1s linear both;
   --animate-brilho: brilho 2.6s ease-in-out infinite;
+  --animate-quadrado: quadrado 6s ease-in-out infinite;
+  --animate-holofote: holofote 14s ease-in-out infinite alternate;
   @keyframes brilho {
     0%,
     100% {
@@ -206,6 +208,24 @@
     50% {
       opacity: 1;
       transform: scale(1) rotate(90deg);
+    }
+  }
+  @keyframes quadrado {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    45%,
+    55% {
+      opacity: 1;
+    }
+  }
+  @keyframes holofote {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(9rem, 5rem, 0) scale(1.2);
     }
   }
   @keyframes progresso {
@@ -220,10 +240,18 @@ html {
   scroll-padding-top: 4.5rem;
 }
 
-/* foco de teclado visível em qualquer controle (links, botões, campos) */
-:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 2px;
+/* foco de teclado visível em qualquer controle. Fica na camada base para que campos (.campo) e
+   utilidades como outline-none, que desenham o próprio foco, consigam sobrescrever */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+/* a lista de sugestões do campo de busca já abre ao digitar; a seta nativa só atrapalha */
+input[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
 }
 
 /* Cada seção sobe sobre a anterior com cantos arredondados: a troca de cor vira uma curva, não um corte */
@@ -323,7 +351,7 @@ button:disabled {
   background-image: linear-gradient(rgb(212 175 75 / 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgb(212 175 75 / 0.07) 1px, transparent 1px);
   background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 70% 80% at 72% 45%, #000 15%, transparent 72%);
+  mask-image: radial-gradient(ellipse 80% 85% at 65% 45%, #000 20%, transparent 78%);
 }
 
 /* régua (input range) do simulador: trilho preenchido até o ponto atual e botão dourado */

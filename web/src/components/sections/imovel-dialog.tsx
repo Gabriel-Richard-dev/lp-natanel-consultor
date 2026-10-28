@@ -1,6 +1,17 @@
-import { BedDouble, Building2, CalendarClock, CheckCircle2, Loader2, MapPin, MessageCircle, Ruler, ShowerHead, X } from "lucide-react";
+import {
+  BedDouble,
+  Building2,
+  CalendarClock,
+  CheckCircle2,
+  Loader2,
+  MapPin,
+  MessageCircle,
+  Ruler,
+  ShowerHead,
+  X,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { campo } from "@/components/ui/campo";
+import { campoClaro } from "@/components/ui/campo";
 import { enviarLead, type Imovel } from "@/lib/api";
 import { formatPreco, whatsappOferta } from "@/lib/contato";
 import { mascaraTelefone } from "@/lib/telefone";
@@ -8,10 +19,14 @@ import { mensagemDe } from "@/lib/utils";
 
 const FOCAVEIS = 'a[href], button:not([disabled]), input:not([tabindex="-1"]), select, textarea, [tabindex]:not([tabindex="-1"])';
 
-function Ficha({ icone: Icone, children }: { icone: typeof BedDouble; children: React.ReactNode }) {
+function Dado({ icone: Icone, valor, rotulo }: { icone: typeof BedDouble; valor: string; rotulo: string }) {
   return (
-    <li className="flex items-center gap-2 text-sm text-white/75">
-      <Icone className="h-4 w-4 shrink-0 text-gold" /> {children}
+    <li className="flex items-center gap-3 rounded-lg border border-black/10 bg-white p-3">
+      <Icone className="h-5 w-5 shrink-0 text-ouro-texto" />
+      <span className="min-w-0 leading-tight">
+        <span className="block truncate font-display font-semibold text-fundo-marca">{valor}</span>
+        <span className="block text-fundo-marca/60 text-xs">{rotulo}</span>
+      </span>
     </li>
   );
 }
@@ -48,40 +63,39 @@ function ContatoRapido({ imovel }: { imovel: Imovel }) {
 
   if (enviado) {
     return (
-      <p aria-live="polite" className="flex items-center gap-2 rounded-lg bg-gold/10 p-4 text-gold text-sm" role="status">
-        <CheckCircle2 className="h-5 w-5 shrink-0" /> Recebemos seu contato! Falamos com você em breve.
+      <p aria-live="polite" className="flex items-start gap-2 rounded-lg bg-white p-4 text-fundo-marca text-sm" role="status">
+        <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-ouro-texto" /> Recebemos seu contato. Falamos com você no
+        próximo horário de atendimento.
       </p>
     );
   }
 
   return (
     <form className="space-y-3" onSubmit={enviar}>
-      <p className="font-medium text-sm text-white">Prefere que a gente te ligue?</p>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <input
-          aria-label="Seu nome"
-          autoComplete="name"
-          className={campo}
-          maxLength={100}
-          minLength={2}
-          onChange={(e) => setNome(e.target.value)}
-          placeholder="Seu nome"
-          required
-          value={nome}
-        />
-        <input
-          aria-label="Seu WhatsApp"
-          autoComplete="tel"
-          className={campo}
-          inputMode="tel"
-          onChange={(e) => setTelefone(mascaraTelefone(e.target.value))}
-          pattern="\(\d{2}\) \d{4,5}-\d{4}"
-          placeholder="(85) 90000-0000"
-          required
-          title="DDD e número, ex.: (85) 98778-5187"
-          value={telefone}
-        />
-      </div>
+      <p className="font-display font-semibold text-fundo-marca">Prefere que a gente te ligue?</p>
+      <input
+        aria-label="Seu nome"
+        autoComplete="name"
+        className={campoClaro}
+        maxLength={100}
+        minLength={2}
+        onChange={(e) => setNome(e.target.value)}
+        placeholder="Seu nome"
+        required
+        value={nome}
+      />
+      <input
+        aria-label="Seu WhatsApp"
+        autoComplete="tel"
+        className={campoClaro}
+        inputMode="tel"
+        onChange={(e) => setTelefone(mascaraTelefone(e.target.value))}
+        pattern="\(\d{2}\) \d{4,5}-\d{4}"
+        placeholder="(85) 90000-0000"
+        required
+        title="DDD e número, ex.: (85) 98778-5187"
+        value={telefone}
+      />
       <input
         aria-hidden="true"
         autoComplete="off"
@@ -91,7 +105,7 @@ function ContatoRapido({ imovel }: { imovel: Imovel }) {
         tabIndex={-1}
         value={isca}
       />
-      <label className="flex cursor-pointer items-start gap-3 text-white/55 text-xs leading-relaxed">
+      <label className="flex cursor-pointer items-start gap-3 text-fundo-marca/70 text-xs leading-relaxed">
         <input
           checked={aceite}
           className="mt-0.5 h-4 w-4 shrink-0 accent-gold"
@@ -102,12 +116,12 @@ function ContatoRapido({ imovel }: { imovel: Imovel }) {
         <span>Concordo em ser contatado pela Alves Costa. Uso seus dados apenas para este atendimento (LGPD).</span>
       </label>
       {erro && (
-        <p className="text-red-400 text-sm" role="alert">
+        <p className="text-red-700 text-sm" role="alert">
           {erro}
         </p>
       )}
       <button
-        className="flex w-full items-center justify-center gap-2 rounded-lg border border-gold/60 px-5 py-3 font-medium text-gold transition-colors hover:bg-gold hover:text-black disabled:opacity-60"
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-fundo-marca font-semibold text-fundo-marca transition-colors hover:bg-fundo-marca hover:text-gold disabled:opacity-60"
         disabled={enviando}
         type="submit"
       >
@@ -151,87 +165,94 @@ export function ImovelDialog({ imovel, onFechar }: { imovel: Imovel; onFechar: (
     };
   }, [onFechar]);
 
+  const dados = [
+    imovel.quartos ? { icone: BedDouble, valor: String(imovel.quartos), rotulo: imovel.quartos === 1 ? "quarto" : "quartos" } : null,
+    imovel.banheiros ? { icone: ShowerHead, valor: String(imovel.banheiros), rotulo: imovel.banheiros === 1 ? "banheiro" : "banheiros" } : null,
+    imovel.area ? { icone: Ruler, valor: imovel.area, rotulo: "área" } : null,
+    imovel.entrega ? { icone: CalendarClock, valor: imovel.entrega, rotulo: "entrega prevista" } : null,
+  ].filter((d): d is { icone: typeof BedDouble; valor: string; rotulo: string } => !!d);
+
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: o Esc já fecha (listener no document)
     <div
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+      className="fade-in fixed inset-0 z-[60] flex animate-in items-end justify-center bg-fundo-marca/70 p-0 backdrop-blur-sm duration-200 sm:items-center sm:p-6"
       onClick={(e) => e.target === e.currentTarget && onFechar()}
     >
       <div
         aria-labelledby="imovel-titulo"
         aria-modal="true"
-        className="relative grid max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-xl bg-marca font-corpo text-white shadow-2xl sm:rounded-xl md:grid-cols-2"
+        className="slide-in-from-bottom-8 sm:zoom-in-95 relative flex max-h-[94vh] w-full max-w-3xl animate-in flex-col overflow-hidden rounded-t-2xl bg-prata font-corpo text-fundo-marca shadow-2xl duration-300 sm:max-h-[92vh] sm:rounded-2xl"
         ref={painel}
         role="dialog"
       >
-        <button
-          aria-label="Fechar"
-          className="absolute top-3 right-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition-colors hover:bg-black/80"
-          onClick={onFechar}
-          type="button"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        <div className="relative h-56 bg-marca-2 md:h-auto md:min-h-[28rem]">
-          {imovel.imagem ? (
-            <img alt={imovel.titulo} className="absolute inset-0 h-full w-full object-cover" src={imovel.imagem} />
-          ) : (
-            <div className="flex h-full items-center justify-center text-white/20">
-              <Building2 className="h-14 w-14" />
-            </div>
-          )}
-          {imovel.fase && (
-            <span className="absolute top-3 left-3 rounded-full bg-fundo-marca/90 px-3 py-1 font-medium text-gold text-xs backdrop-blur">
-              {imovel.fase}
-            </span>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-5 p-6 md:p-8">
-          <div>
-            {imovel.construtora && (
-              <p className="mb-1 font-medium text-gold text-sm">{imovel.construtora}</p>
+        <div className="overflow-y-auto">
+          <div className="relative aspect-[16/10] w-full bg-black/10 sm:aspect-[5/2]">
+            {imovel.imagem ? (
+              <img alt={imovel.titulo} className="absolute inset-0 h-full w-full object-cover" src={imovel.imagem} />
+            ) : (
+              <div className="flex h-full items-center justify-center text-fundo-marca/25">
+                <Building2 className="h-14 w-14" />
+              </div>
             )}
-            <h2 className="font-display font-semibold text-2xl tracking-tight" id="imovel-titulo">
-              {imovel.titulo}
-            </h2>
-            {local && (
-              <p className="mt-1 flex items-center gap-1.5 text-sm text-white/60">
-                <MapPin className="h-4 w-4" /> {local}
+            {imovel.fase && (
+              <span className="absolute top-4 left-4 rounded-sm bg-fundo-marca px-2.5 py-1 font-medium text-gold text-xs">
+                {imovel.fase}
+              </span>
+            )}
+            <button
+              aria-label="Fechar"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-fundo-marca shadow-lg backdrop-blur transition-colors hover:bg-white"
+              onClick={onFechar}
+              type="button"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          <div className="grid gap-6 p-5 sm:p-7 md:grid-cols-[1.1fr_1fr]">
+            <div>
+              {imovel.construtora && <p className="mb-1 font-medium text-ouro-texto text-sm">{imovel.construtora}</p>}
+              <h2 className="font-display font-semibold text-2xl leading-tight tracking-tight sm:text-3xl" id="imovel-titulo">
+                {imovel.titulo}
+              </h2>
+              {local && (
+                <p className="mt-2 flex items-center gap-1.5 text-fundo-marca/70 text-sm">
+                  <MapPin className="h-4 w-4 shrink-0" /> {local}
+                </p>
+              )}
+              {dados.length > 0 && (
+                <ul className="mt-5 grid grid-cols-2 gap-2">
+                  {dados.map((d) => (
+                    <Dado icone={d.icone} key={d.rotulo} rotulo={d.rotulo} valor={d.valor} />
+                  ))}
+                </ul>
+              )}
+              <p className="mt-5 text-fundo-marca/60 text-xs leading-relaxed">
+                Imagens ilustrativas. Valores, metragens e disponibilidade podem mudar; confirmamos tudo com você no
+                atendimento.
               </p>
-            )}
+            </div>
+
+            <div className="space-y-5 rounded-xl bg-white p-5 shadow-sm">
+              <div>
+                <p className="text-fundo-marca/60 text-sm">Valor</p>
+                <p className="font-display font-semibold text-2xl">
+                  {imovel.preco != null ? formatPreco(imovel.preco) : "Consulte valores"}
+                </p>
+              </div>
+              <a
+                className="flex h-12 items-center justify-center gap-2 rounded-lg bg-gold font-semibold text-black transition-colors hover:bg-gold-claro"
+                href={whatsappOferta(imovel.titulo, imovel.url, imovel.construtora)}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <MessageCircle className="h-4 w-4" /> Falar sobre este imóvel
+              </a>
+              <div className="border-black/10 border-t pt-5">
+                <ContatoRapido imovel={imovel} />
+              </div>
+            </div>
           </div>
-
-          <p className="font-semibold text-gold text-xl">
-            {imovel.preco != null ? formatPreco(imovel.preco) : "Consulte valores"}
-          </p>
-
-          <ul className="space-y-2.5">
-            {!!imovel.quartos && <Ficha icone={BedDouble}>{imovel.quartos} {imovel.quartos === 1 ? "quarto" : "quartos"}</Ficha>}
-            {!!imovel.banheiros && (
-              <Ficha icone={ShowerHead}>{imovel.banheiros} {imovel.banheiros === 1 ? "banheiro" : "banheiros"}</Ficha>
-            )}
-            {imovel.area && <Ficha icone={Ruler}>{imovel.area}</Ficha>}
-            {imovel.entrega && <Ficha icone={CalendarClock}>Entrega prevista: {imovel.entrega}</Ficha>}
-          </ul>
-
-          <a
-            className="flex items-center justify-center gap-2 rounded-md bg-gold px-5 py-3.5 font-semibold text-black transition-colors hover:bg-gold-claro"
-            href={whatsappOferta(imovel.titulo, imovel.url, imovel.construtora)}
-            rel="noreferrer"
-            target="_blank"
-          >
-            <MessageCircle className="h-4 w-4" /> Falar sobre este imóvel
-          </a>
-
-          <div className="border-white/10 border-t pt-5">
-            <ContatoRapido imovel={imovel} />
-          </div>
-
-          <p className="text-white/40 text-xs leading-relaxed">
-            Imagens ilustrativas. Valores, metragens e disponibilidade podem mudar; confirmamos tudo com você no atendimento.
-          </p>
         </div>
       </div>
     </div>
