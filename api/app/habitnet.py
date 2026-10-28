@@ -1,6 +1,8 @@
 import html
 import logging
 import re
+import time
+import urllib.error
 import urllib.request
 from urllib.parse import urlparse
 
@@ -77,13 +79,32 @@ def extrair_cards(pagina: str, construtora: str) -> list[dict]:
     return cards
 
 
+TENTATIVAS = 3
+
+
+def _com_tentativas(req: urllib.request.Request, limite: int) -> bytes:
+    """A rede do servidor oscila (DNS, timeout, conexão derrubada): repete com espera crescente.
+    Resposta de erro do portal (404, 403...) não melhora ao repetir, então sobe na hora."""
+    for tentativa in range(1, TENTATIVAS + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as res:
+                return res.read(limite + 1)
+        except urllib.error.HTTPError as err:
+            if err.code < 500 or tentativa == TENTATIVAS:
+                raise
+        except OSError:  # URLError, timeout, conexão encerrada
+            if tentativa == TENTATIVAS:
+                raise
+        time.sleep(1.5 * tentativa)
+    raise AssertionError("inalcançável")
+
+
 def _baixar(url: str, limite: int) -> bytes:
     # só fala com o próprio portal: a URL vem de HTML de terceiro
     if urlparse(url).hostname != urlparse(config.HABITNET_URL).hostname:
         raise ValueError(f"endereço fora do portal: {url}")
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; ofertas-sync/1.0)"})
-    with urllib.request.urlopen(req, timeout=30) as res:
-        dados = res.read(limite + 1)
+    dados = _com_tentativas(req, limite)
     if len(dados) > limite:
         raise ValueError("resposta grande demais")
     return dados

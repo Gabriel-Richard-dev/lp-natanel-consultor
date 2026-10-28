@@ -72,7 +72,7 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [x] Catálogo e card de imóvel no tema claro; régua do simulador redesenhada
 - [x] Textos revisados com o humanizer (sem promessas sem base, sem repetição)
 - [x] Menos cara de template: sem manchas de luz, brilhos, quadrados animados nem vidro fosco; cobogó no lugar da grade (simulador e contato); lista editorial de construtoras; "lar" em dourado fixo
-- [x] Fundo do hero é a própria foto do carrossel, desfocada, trocando junto com ela
+- [x] Fundos do hero e do simulador limpos (só tons de preto); "lar" com gradiente animado e brilhos
 - [x] Busca do hero com menu de sugestões próprio (cidades, construtoras e bairros, com teclado)
 - [x] Modal do imóvel em portal no body (fica acima da navbar), coluna única, formulário só ao pedir
 - [ ] Conteúdo real que tira a cara de IA (precisa de vocês): fotos da equipe e de Fortaleza, depoimentos, CRECI e endereço
@@ -86,3 +86,18 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [ ] Revisar com fotos reais: os testes visuais foram feitos com dados de exemplo e sem imagens
 - [x] Logo em WebP (310 kB para 48 kB)
 - [ ] Seção de locação e busca por código (como no Ergue) dependem de dados que a Habitnet não traz
+
+## 7. Pendências (estado)
+Feito:
+- [x] Sync da Habitnet repete falha de rede até 3 vezes (DNS, timeout, conexão caída) e não repete 404; coberto em `api/test_app.py`
+- [x] Preview de compartilhamento: tags Open Graph e `public/og.png` (1200x630) no `index.html`; `theme-color` corrigido para o preto da marca
+- [x] Itaitinga (2) e Aquiraz (1) ficam fora de "Onde atendemos" (a lista é de Fortaleza, Eusébio, Maracanaú e Caucaia), mas aparecem no catálogo e na busca por bairro
+
+Em aberto (dependem de vocês ou do servidor):
+- [ ] Apagar os 2 registros de teste do banco de desenvolvimento ("teste", cidade "sdm,dms"; "natanael machado", cidade "DKSjdk"): painel admin, Imóveis, excluir. Conferir também o banco de produção
+- [ ] Definir em que fase entram "Última unidade" e "Últimas unidades" (2 empreendimentos): hoje ficam sem fase e só aparecem em "Todas"
+- [ ] `og:image` com endereço absoluto (precisa do domínio): trocar `/og.png` por `https://SEU-DOMINIO/og.png`
+- [ ] Confirmar autorização da Habitnet/Pedro Pimenta para republicar o conteúdo e para onde os botões levam
+- [ ] Rodar o sync na VPS (botão "Atualizar agora") e ver se o IP não é bloqueado; depois agendar (cron)
+- [ ] Conteúdo real: fotos da equipe e de Fortaleza, depoimentos, CRECI, endereço e telefone fixo
+- [ ] Logos das construtoras (precisa de autorização de uso das marcas) e locação (a Habitnet não traz aluguel)

@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BuscaHero } from "@/components/sections/busca-hero";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
+import { TextoBrilhante } from "@/components/ui/texto-brilhante";
 import { useImoveis } from "@/hooks/use-imoveis";
 import { useParallax } from "@/hooks/use-parallax";
 import type { Imovel } from "@/lib/api";
@@ -34,27 +35,11 @@ export function Hero() {
   const porFase = FASES.map((f) => ({ ...f, n: imoveis.filter((i) => grupoDaFase(i.fase) === f.valor).length }));
 
   return (
-    <section className="relative isolate overflow-x-clip bg-fundo-marca" id="top">
-      {/* fundo: a própria foto do carrossel, desfocada, trocando junto com ela */}
-      <div aria-hidden="true" className="-z-20 absolute inset-0 overflow-hidden">
-        {fotos.map((f, i) => (
-          <img
-            alt=""
-            className={cn(
-              "absolute inset-0 h-full w-full scale-125 object-cover blur-3xl saturate-150 transition-opacity duration-[1600ms]",
-              i === indice ? "opacity-55" : "opacity-0"
-            )}
-            key={f.id}
-            src={f.imagem ?? ""}
-          />
-        ))}
-      </div>
-      <div aria-hidden="true" className="-z-10 absolute inset-0 bg-gradient-to-b from-fundo-marca/55 via-fundo-marca/65 to-fundo-marca" />
-
+    <section className="relative isolate overflow-x-clip bg-gradient-to-b from-marca to-fundo-marca" id="top">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-28 pb-14 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:pt-36 lg:pb-20">
         <div>
           <h1 className="text-balance font-display font-semibold text-5xl text-white leading-[1.02] tracking-tight sm:text-6xl">
-            Encontre o seu <span className="text-gold">lar</span> em Fortaleza e região
+            Encontre o seu <TextoBrilhante>lar</TextoBrilhante> em Fortaleza e região
           </h1>
           <p className="mt-6 max-w-lg text-lg text-white/75 leading-relaxed">
             Lançamentos, imóveis em obras e prontos para morar. A gente vai com você nas visitas e acompanha tudo até a entrega das chaves.

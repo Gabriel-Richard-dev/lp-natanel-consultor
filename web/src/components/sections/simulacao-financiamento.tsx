@@ -140,9 +140,7 @@ export function SimulacaoFinanciamento() {
   );
 
   return (
-    <section className="folha relative isolate overflow-hidden bg-fundo-marca pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="simulador">
-      <div aria-hidden="true" className="cobogo -z-10 absolute inset-0" />
-      <div aria-hidden="true" className="-z-10 pointer-events-none absolute -top-20 -left-24 hidden h-[30rem] w-[19rem] rounded-t-full border border-gold/12 lg:block" />
+    <section className="folha bg-fundo-marca pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="simulador">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
       <Revelar>
         <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">

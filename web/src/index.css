@@ -196,6 +196,18 @@
   --font-display: "Bricolage Grotesque Variable", "Geist Variable", sans-serif;
   --font-corpo: "Figtree Variable", "Geist Variable", sans-serif;
   --animate-progresso: progresso 1s linear both;
+  --animate-brilho: brilho 2.6s ease-in-out infinite;
+  @keyframes brilho {
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1) rotate(90deg);
+    }
+  }
   @keyframes progresso {
     from {
       transform: scaleX(0);

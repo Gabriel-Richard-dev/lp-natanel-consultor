@@ -15,6 +15,7 @@ from PIL import Image
 from pydantic import ValidationError
 
 from app import auth, config, fotos, leads
+from app import habitnet
 from app.habitnet import extrair_cards
 from app.main import ImovelIn, LeadIn
 
@@ -103,5 +104,45 @@ for _ in range(leads.MAX_POR_JANELA):
     leads.registrar(ip, 10)
 assert leads.limitado(ip, 10)
 assert not leads.limitado(ip, 10 + leads.JANELA_S + 1)
+
+# download do portal: repete falha de rede, mas não repete 404
+import urllib.error
+import urllib.request
+
+class _Resposta:
+    def __init__(self, corpo): self.corpo = corpo
+    def read(self, n): return self.corpo[:n]
+    def __enter__(self): return self
+    def __exit__(self, *a): return False
+
+def _simular(erros):
+    chamadas = []
+    def falso(req, timeout):
+        chamadas.append(1)
+        if erros:
+            raise erros.pop(0)
+        return _Resposta(b"<html>ok</html>")
+    urllib.request.urlopen = falso
+    habitnet.time.sleep = lambda s: None
+    return chamadas
+
+original = urllib.request.urlopen
+try:
+    ch = _simular([urllib.error.URLError("dns"), TimeoutError("lento")])
+    assert habitnet._baixar("https://imoveis.habitnet.com.br/x", 100) == b"<html>ok</html>" and len(ch) == 3
+    ch = _simular([urllib.error.HTTPError("u", 404, "nao achou", {}, None)])
+    try:
+        habitnet._baixar("https://imoveis.habitnet.com.br/x", 100)
+        raise AssertionError("repetiu 404")
+    except urllib.error.HTTPError:
+        assert len(ch) == 1
+    ch = _simular([urllib.error.URLError("dns")] * 3)
+    try:
+        habitnet._baixar("https://imoveis.habitnet.com.br/x", 100)
+        raise AssertionError("não desistiu")
+    except urllib.error.URLError:
+        assert len(ch) == 3
+finally:
+    urllib.request.urlopen = original
 
 print("ok")
