@@ -1,3 +1,4 @@
+import { Revelar } from "@/components/ui/revelar";
 import { Chave } from "@/components/ui/chave";
 
 const ETAPAS = [
@@ -19,25 +20,27 @@ const ETAPAS = [
   },
   {
     titulo: "Chaves",
-    texto: "Seguimos ao seu lado até a entrega do imóvel.",
+    texto: "Acompanhamos você até a entrega do imóvel.",
   },
 ];
 
 export function ComoFunciona() {
   return (
-    <section className="bg-marca folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="como-funciona">
+    <section className="folha relative isolate overflow-hidden bg-marca pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="como-funciona">
+      <div aria-hidden="true" className="-z-10 pointer-events-none absolute top-24 -right-20 hidden h-[34rem] w-[22rem] rounded-t-full border border-gold/15 lg:block" />
+      <div aria-hidden="true" className="-z-10 pointer-events-none absolute top-40 -right-4 hidden h-[28rem] w-[16rem] rounded-t-full border border-gold/10 lg:block" />
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <h2 className="max-w-2xl font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
           Do primeiro contato até as chaves
         </h2>
         <ol className="mt-12">
           {ETAPAS.map((e, i) => (
-            <li className="grid gap-x-8 gap-y-2 py-6 sm:grid-cols-[3.5rem_14rem_1fr]" key={e.titulo}>
+            <Revelar as="li" atraso={i * 90} className="grid gap-x-8 gap-y-2 py-6 sm:grid-cols-[3.5rem_14rem_1fr]" key={e.titulo}>
               <span className="relative hidden sm:block">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/60 bg-fundo-marca font-display font-semibold text-gold tabular-nums">
+                <span className="flex h-12 w-10 items-center justify-center rounded-t-full rounded-b-md border border-gold/60 bg-fundo-marca pt-1 font-display font-semibold text-gold tabular-nums">
                   {i + 1}
                 </span>
-                {i < ETAPAS.length - 1 && <span aria-hidden="true" className="absolute top-[2.75rem] -bottom-[2.75rem] left-5 w-px bg-gold/25" />}
+                {i < ETAPAS.length - 1 && <span aria-hidden="true" className="absolute top-[3.25rem] -bottom-[3.25rem] left-5 w-px bg-gold/25" />}
               </span>
               <h3 className="flex items-center gap-3 font-display font-semibold text-white text-xl sm:pt-1.5">
                 <span className="font-display text-gold tabular-nums sm:hidden">{i + 1}.</span>
@@ -45,7 +48,7 @@ export function ComoFunciona() {
                 {i === ETAPAS.length - 1 && <Chave className="h-5 w-10 text-gold" />}
               </h3>
               <p className="max-w-lg text-white/65 leading-relaxed sm:pt-2">{e.texto}</p>
-            </li>
+            </Revelar>
           ))}
         </ol>
       </div>

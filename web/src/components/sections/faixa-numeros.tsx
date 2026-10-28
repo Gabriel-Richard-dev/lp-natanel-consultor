@@ -1,3 +1,4 @@
+import { ContaAte } from "@/components/ui/conta-ate";
 import { useImoveis } from "@/hooks/use-imoveis";
 import { CIDADES_ATENDIDAS } from "@/lib/cidades";
 
@@ -5,11 +6,11 @@ export function FaixaNumeros() {
   const { imoveis } = useImoveis();
   const construtoras = new Set(imoveis.map((i) => i.construtora).filter(Boolean)).size;
 
-  const itens = [
-    { valor: imoveis.length ? String(imoveis.length) : "…", rotulo: "empreendimentos disponíveis" },
-    { valor: construtoras ? String(construtoras) : "…", rotulo: "construtoras" },
-    { valor: String(CIDADES_ATENDIDAS.length), rotulo: "cidades atendidas" },
-    { valor: "Grátis", rotulo: "atendimento e simulação" },
+  const itens: { alvo?: number; texto?: string; rotulo: string }[] = [
+    { alvo: imoveis.length, rotulo: "empreendimentos disponíveis" },
+    { alvo: construtoras, rotulo: "construtoras" },
+    { alvo: CIDADES_ATENDIDAS.length, rotulo: "cidades atendidas" },
+    { texto: "Grátis", rotulo: "atendimento e simulação" },
   ];
 
   return (
@@ -18,7 +19,9 @@ export function FaixaNumeros() {
         {itens.map((n, i) => (
           <div className={`flex flex-col-reverse justify-end md:px-8 ${i ? "md:border-white/10 md:border-l" : "md:pl-0"}`} key={n.rotulo}>
             <dt className="mt-1 text-sm text-white/65">{n.rotulo}</dt>
-            <dd className="font-display font-semibold text-4xl text-gold tabular-nums">{n.valor}</dd>
+            <dd className="font-display font-semibold text-4xl text-gold tabular-nums">
+              {n.texto ?? (n.alvo ? <ContaAte alvo={n.alvo} key={n.alvo} /> : "…")}
+            </dd>
           </div>
         ))}
       </dl>

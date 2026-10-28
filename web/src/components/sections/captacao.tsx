@@ -1,5 +1,6 @@
 import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { Revelar } from "@/components/ui/revelar";
 import { Horario } from "@/components/layout/horario";
 import { campo } from "@/components/ui/campo";
 import { enviarLead } from "@/lib/api";
@@ -60,14 +61,15 @@ export function Captacao() {
     `${cidade ? ` em ${cidade}` : ""}${!vender && valor ? ` (${valor.toLowerCase()})` : ""}.`;
 
   return (
-    <section className="bg-prata folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="contato">
+    <section className="folha relative isolate overflow-hidden bg-prata pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="contato">
+      <div aria-hidden="true" className="planta-clara -z-10 absolute inset-0" />
       <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-[1fr_1.1fr]">
-        <div>
+        <Revelar>
           <h2 className="font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
             Conte o que você procura
           </h2>
           <p className="mt-4 max-w-md text-fundo-marca/70 leading-relaxed">
-            Nem todo imóvel está anunciado. Deixe seu contato e receba as melhores oportunidades para o seu momento.
+            Deixe seu contato e a gente envia opções que combinam com o que você procura.
           </p>
           <dl className="mt-8 divide-y divide-black/10 border-black/10 border-y">
             {BENEFICIOS.map(({ titulo, texto }) => (
@@ -81,9 +83,9 @@ export function Captacao() {
             <h3 className="mb-3 font-display font-semibold text-fundo-marca">Horário de atendimento</h3>
             <Horario claro />
           </div>
-        </div>
+        </Revelar>
 
-        <div className="rounded-lg border border-white/10 bg-marca p-6 md:p-10">
+        <Revelar atraso={140} className="rounded-lg border border-white/10 bg-marca p-6 md:p-10">
           {enviado ? (
             <div aria-live="polite" className="flex h-full flex-col justify-center" role="status">
               <CheckCircle2 className="mb-4 h-10 w-10 text-gold" />
@@ -223,11 +225,11 @@ export function Captacao() {
                 type="submit"
               >
                 {enviando && <Loader2 className="h-4 w-4 animate-spin" />}
-                Quero receber oportunidades
+                Quero receber opções
               </button>
             </form>
           )}
-        </div>
+        </Revelar>
       </div>
     </section>
   );

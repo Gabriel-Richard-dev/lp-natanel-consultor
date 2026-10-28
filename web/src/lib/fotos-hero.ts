@@ -2,7 +2,7 @@ import type { Imovel } from "@/lib/api";
 import { grupoDaFase } from "@/lib/fase";
 import { normalizar } from "@/lib/utils";
 
-// Até quatro fotos de empreendimentos diferentes para o hero: pronto, lançamento, em obras e Eusébio
+// Até cinco fotos de empreendimentos diferentes para o hero: pronto, lançamento, em obras, Eusébio e Maracanaú
 export function escolherFotos(imoveis: Imovel[]) {
   const com = imoveis.filter((i) => i.imagem && i.origem === "habitnet");
   const em = (cidade: string) => (i: Imovel) => normalizar(i.cidade ?? "") === cidade;
@@ -11,6 +11,7 @@ export function escolherFotos(imoveis: Imovel[]) {
     com.find((i) => grupoDaFase(i.fase) === "lancamento"),
     com.find((i) => grupoDaFase(i.fase) === "obras" && em("caucaia")(i)) ?? com.find((i) => grupoDaFase(i.fase) === "obras"),
     com.find(em("eusebio")),
+    com.find(em("maracanau")),
   ].filter((i): i is Imovel => !!i);
   const unicos = [...new Map(escolhas.map((i) => [i.id, i])).values()];
   if (unicos.length) return unicos;

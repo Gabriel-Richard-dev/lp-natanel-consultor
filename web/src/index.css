@@ -195,6 +195,24 @@
   --color-ouro-texto: #75590f;
   --font-display: "Bricolage Grotesque Variable", "Geist Variable", sans-serif;
   --font-corpo: "Figtree Variable", "Geist Variable", sans-serif;
+  --animate-progresso: progresso 1s linear both;
+  --animate-brilho: brilho 2.6s ease-in-out infinite;
+  @keyframes brilho {
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1) rotate(90deg);
+    }
+  }
+  @keyframes progresso {
+    from {
+      transform: scaleX(0);
+    }
+  }
 }
 
 /* o cabeçalho fixo não pode cobrir o topo da seção ao navegar por âncora */
@@ -212,14 +230,14 @@ html {
 @layer components {
   .folha {
     position: relative;
-    margin-top: -1.75rem;
-    border-radius: 1.75rem 1.75rem 0 0;
-    box-shadow: 0 -18px 40px -22px rgb(0 0 0 / 0.45);
+    margin-top: -1rem;
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 -14px 32px -20px rgb(0 0 0 / 0.45);
   }
   @media (min-width: 768px) {
     .folha {
-      margin-top: -2.5rem;
-      border-radius: 2.5rem 2.5rem 0 0;
+      margin-top: -1.5rem;
+      border-radius: 1.5rem 1.5rem 0 0;
     }
   }
 }
@@ -265,6 +283,24 @@ html {
   .campo-compacto {
     height: 2.75rem;
   }
+  .campo-claro {
+    background-color: #fff;
+    border-color: rgb(0 0 0 / 0.15);
+    color: var(--color-fundo-marca);
+  }
+  .campo-claro::placeholder {
+    color: rgb(11 13 18 / 0.45);
+  }
+  .campo-claro:hover {
+    border-color: rgb(0 0 0 / 0.35);
+  }
+  select.campo-claro {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2375590f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+  select.campo-claro option {
+    background-color: #fff;
+    color: var(--color-fundo-marca);
+  }
 }
 
 /* o reset do Tailwind v4 deixa o cursor padrão nos botões */
@@ -288,4 +324,76 @@ button:disabled {
     linear-gradient(90deg, rgb(212 175 75 / 0.07) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 70% 80% at 72% 45%, #000 15%, transparent 72%);
+}
+
+/* régua (input range) do simulador: trilho preenchido até o ponto atual e botão dourado */
+@layer components {
+  .regua {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    height: 1.75rem;
+    width: 100%;
+  }
+  .regua:focus {
+    outline: none;
+  }
+  .regua::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, var(--color-gold) var(--pct, 0%), rgb(255 255 255 / 0.14) var(--pct, 0%));
+    border-radius: 999px;
+    height: 6px;
+  }
+  .regua::-moz-range-track {
+    background: rgb(255 255 255 / 0.14);
+    border-radius: 999px;
+    height: 6px;
+  }
+  .regua::-moz-range-progress {
+    background: var(--color-gold);
+    border-radius: 999px;
+    height: 6px;
+  }
+  .regua::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--color-gold);
+    border: 4px solid var(--color-marca);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1.5px var(--color-gold), 0 2px 8px rgb(0 0 0 / 0.5);
+    height: 24px;
+    margin-top: -9px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    width: 24px;
+  }
+  .regua::-moz-range-thumb {
+    background: var(--color-gold);
+    border: 4px solid var(--color-marca);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1.5px var(--color-gold), 0 2px 8px rgb(0 0 0 / 0.5);
+    height: 16px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    width: 16px;
+  }
+  .regua:hover::-webkit-slider-thumb,
+  .regua:active::-webkit-slider-thumb {
+    transform: scale(1.12);
+  }
+  .regua:hover::-moz-range-thumb,
+  .regua:active::-moz-range-thumb {
+    transform: scale(1.12);
+  }
+  .regua:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 1.5px var(--color-gold), 0 0 0 7px rgb(212 175 75 / 0.3);
+  }
+  .regua:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 1.5px var(--color-gold), 0 0 0 7px rgb(212 175 75 / 0.3);
+  }
+}
+
+/* planta baixa em fundo claro */
+.planta-clara {
+  background-image: linear-gradient(rgb(117 89 15 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(117 89 15 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 80% at 85% 30%, #000 10%, transparent 70%);
 }

@@ -1,6 +1,6 @@
 import { ArrowLeft, MessageCircle, Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
-import { campoCompacto } from "@/components/ui/campo";
+import { campoCompactoClaro } from "@/components/ui/campo";
 import { Segmentado } from "@/components/ui/segmentado";
 import logo from "@/assets/logo/logo-alves-costa.webp";
 import { WhatsappFlutuante } from "@/components/layout/whatsapp-flutuante";
@@ -106,40 +106,39 @@ export function Catalogo() {
   }
 
   return (
-    <main className="min-h-screen bg-fundo-marca font-corpo text-white">
-      <header className="bg-preto">
-        <div className="mx-auto max-w-6xl px-4 pt-6 pb-12 md:px-6 md:pb-16">
-          <div className="mb-12 flex items-center justify-between">
+    <main className="min-h-screen bg-prata font-corpo text-fundo-marca">
+      <header>
+        <div className="bg-fundo-marca">
+          <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 md:px-6">
             <a href="/">
-              <img alt="Alves Costa" className="h-16 w-auto" src={logo} />
+              <img alt="Alves Costa" className="h-14 w-auto" src={logo} />
             </a>
-            <a
-              className="flex items-center gap-1.5 font-medium text-white/70 text-sm hover:text-gold"
-              href="/"
-            >
+            <a className="flex items-center gap-1.5 font-medium text-sm text-white/70 hover:text-gold" href="/">
               <ArrowLeft className="h-4 w-4" />
               Voltar para o site
             </a>
           </div>
-          <h1 className="font-display font-semibold text-3xl text-white tracking-tight md:text-5xl">
+        </div>
+        <div className="mx-auto max-w-6xl px-4 pt-12 pb-10 md:px-6 md:pt-16 md:pb-12">
+          <h1 className="font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-5xl">
             Catálogo de imóveis
           </h1>
-          <p className="mt-3 max-w-xl text-white/70">
+          <p className="mt-3 max-w-xl text-fundo-marca/70">
             {carregando
               ? "Carregando imóveis…"
-              : `${imoveis.length} imóveis disponíveis em Fortaleza e região, todos com acompanhamento da Alves Costa do início ao fim.`}
+              : `${imoveis.length} imóveis em Fortaleza e região, com acompanhamento da Alves Costa até a entrega das chaves.`}
           </p>
         </div>
       </header>
 
-      <div className="border-white/10 border-b bg-fundo-marca/95 backdrop-blur md:sticky md:top-0 md:z-20">
+      <div className="border-black/10 border-b bg-prata/95 backdrop-blur md:sticky md:top-0 md:z-20">
         <div className="mx-auto max-w-6xl space-y-3 px-4 py-4 md:px-6">
           <div className="grid gap-3 md:grid-cols-[1fr_14rem]">
             <div className="relative">
-              <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-white/50" />
+              <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-fundo-marca/55" />
               <input
                 aria-label="Buscar por bairro, nome ou construtora"
-                className={cn(campoCompacto, "w-full pl-10")}
+                className={cn(campoCompactoClaro, "w-full pl-10")}
                 onChange={(e) => mudar({ busca: e.target.value })}
                 placeholder="Buscar por bairro, nome ou construtora"
                 type="search"
@@ -148,7 +147,7 @@ export function Catalogo() {
             </div>
             <select
               aria-label="Ordenar"
-              className={cn(campoCompacto, "w-full")}
+              className={cn(campoCompactoClaro, "w-full")}
               onChange={(e) => mudar({ ordem: e.target.value as Ordem })}
               value={ordem}
             >
@@ -160,6 +159,7 @@ export function Catalogo() {
 
           <div className="flex flex-wrap items-center gap-3">
             <Segmentado
+              claro
               className="w-full md:w-[25rem]"
               onChange={(v) => mudar({ fase: v as FaseGrupo | "" })}
               opcoes={FASES_FILTRO}
@@ -169,7 +169,7 @@ export function Catalogo() {
 
             <button
               aria-expanded={maisFiltros}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-white/15 text-sm text-white md:hidden"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-black/15 text-sm text-fundo-marca md:hidden"
               onClick={() => setMaisFiltros((v) => !v)}
               type="button"
             >
@@ -180,7 +180,7 @@ export function Catalogo() {
             <div className={cn("w-full grid-cols-2 gap-3", maisFiltros ? "grid" : "hidden", "md:contents")}>
               <select
                 aria-label="Cidade"
-                className={cn(campoCompacto, "w-full md:w-44")}
+                className={cn(campoCompactoClaro, "w-full md:w-44")}
                 onChange={(e) => mudar({ cidade: e.target.value })}
                 value={cidade}
               >
@@ -192,7 +192,7 @@ export function Catalogo() {
               {construtoras.length > 1 && (
                 <select
                   aria-label="Construtora"
-                  className={cn(campoCompacto, "w-full md:w-48")}
+                  className={cn(campoCompactoClaro, "w-full md:w-48")}
                   onChange={(e) => mudar({ construtora: e.target.value })}
                   value={construtora}
                 >
@@ -203,6 +203,7 @@ export function Catalogo() {
                 </select>
               )}
               <Segmentado
+              claro
                 className="col-span-2 md:col-span-1 md:w-64"
                 onChange={(v) => mudar({ quartos: v })}
                 opcoes={QUARTOS_FILTRO}
@@ -216,12 +217,12 @@ export function Catalogo() {
 
       <section className="mx-auto max-w-6xl px-4 py-10 md:px-6">
         {!carregando && (
-          <div className="mb-6 flex items-center justify-between text-white/65 text-sm">
+          <div className="mb-6 flex items-center justify-between text-fundo-marca/70 text-sm">
             <p>
               {filtrando ? `${visiveis.length} de ${imoveis.length} imóveis` : `${imoveis.length} imóveis`}
             </p>
             {filtrando && (
-              <button className="font-medium text-gold hover:underline" onClick={limpar} type="button">
+              <button className="font-medium text-ouro-texto hover:underline" onClick={limpar} type="button">
                 Limpar filtros
               </button>
             )}
@@ -231,7 +232,7 @@ export function Catalogo() {
         {carregando ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }, (_, i) => (
-              <div className="h-96 animate-pulse rounded-lg bg-white/5" key={i} />
+              <div className="h-96 animate-pulse rounded-lg bg-black/5" key={i} />
             ))}
           </div>
         ) : visiveis.length ? (
@@ -241,9 +242,9 @@ export function Catalogo() {
             ))}
           </div>
         ) : (
-          <div className="rounded-lg border border-white/10 border-dashed bg-marca py-16 text-center">
-            <p className="font-display font-semibold text-white">{erro ? "Não conseguimos carregar os imóveis agora" : "Nenhum imóvel com esses filtros"}</p>
-            <button className="mt-2 text-gold text-sm hover:underline" onClick={limpar} type="button">
+          <div className="rounded-lg border border-black/10 border-dashed bg-white py-16 text-center">
+            <p className="font-display font-semibold text-fundo-marca">{erro ? "Não conseguimos carregar os imóveis agora" : "Nenhum imóvel com esses filtros"}</p>
+            <button className="mt-2 text-ouro-texto text-sm hover:underline" onClick={limpar} type="button">
               Limpar filtros
             </button>
           </div>
@@ -252,7 +253,7 @@ export function Catalogo() {
         {visiveis.length > pagina.length && (
           <div className="mt-10 text-center">
             <button
-              className="rounded-md border-2 border-gold px-8 py-3 font-semibold text-gold text-sm transition-colors hover:bg-gold hover:text-black"
+              className="rounded-md border-2 border-fundo-marca px-8 py-3 font-semibold text-fundo-marca text-sm transition-colors hover:bg-fundo-marca hover:text-gold"
               onClick={() => setMostrando((n) => n + POR_PAGINA)}
               type="button"
             >
@@ -264,8 +265,8 @@ export function Catalogo() {
         <div className="mt-16 flex flex-col items-center gap-4 rounded-lg bg-preto px-6 py-10 text-center md:flex-row md:justify-between md:px-10 md:text-left">
           <div>
             <p className="font-display font-semibold text-white text-xl">Não encontrou o que procura?</p>
-            <p className="mt-1 text-white/70 text-sm">
-              Nem todo imóvel está anunciado. Conte o que você precisa que a Alves Costa busca para você.
+            <p className="mt-1 text-sm text-white/70">
+              Conte o que você precisa e a Alves Costa procura para você.
             </p>
           </div>
           <a

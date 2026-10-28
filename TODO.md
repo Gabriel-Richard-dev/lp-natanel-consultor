@@ -66,6 +66,11 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [x] Transições: seções como "folhas" sobrepostas com cantos arredondados e sombra (`.folha`), fundo prata no lugar do branco puro
 - [x] Elementos de marca: arcos (hero e "Quem somos"), silhueta de prédios (eco das barras da logo), planta baixa sutil no hero, etiquetas de construtora com contagem
 - [x] Removido o lema "A chave da felicidade é sonhar" do texto do site (continua dentro da imagem da logo)
+- [x] Navbar em pílula flutuante: seção ativa em destaque, linha de progresso da rolagem e "Aberto agora"
+- [x] Hero: busca única (bairro, cidade ou construtora, com sugestões) e atalhos por fase; "lar" com gradiente animado e brilhos; carrossel com zoom suave, barra de progresso, setas e arrastar
+- [x] Efeitos de rolagem: números que contam, arcos que abrem, prédios que crescem, paralaxe do arco, itens que entram escalonados (todos respeitam "reduzir movimento")
+- [x] Catálogo e card de imóvel no tema claro; régua do simulador redesenhada
+- [x] Textos revisados com o humanizer (sem promessas sem base, sem repetição)
 - [x] Filtros: componente `Segmentado` no hero e no catálogo, barra do catálogo em duas linhas
 - [x] Ritmo de fundos: Empreendimentos, Onde atendemos e Contato em branco; o resto escuro
 - [x] Quatro cidades atendidas (Fortaleza, Eusébio, Maracanaú e Caucaia) em `lib/cidades.ts`; cidade sem empreendimento leva ao formulário

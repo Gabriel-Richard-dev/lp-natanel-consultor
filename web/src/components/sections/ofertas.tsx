@@ -1,5 +1,6 @@
 import { Building2, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { Revelar } from "@/components/ui/revelar";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
 import { useImoveis } from "@/hooks/use-imoveis";
 import type { Imovel } from "@/lib/api";
@@ -59,15 +60,16 @@ export function Ofertas() {
   const [destaque, ...resto] = intercalar(imoveis.filter((i) => !noHero.has(i.id))).slice(0, NA_LISTA + 1);
 
   return (
-    <section className="bg-prata folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="ofertas">
+    <section className="bg-prata folha pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="ofertas">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <h2 className="max-w-2xl font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
-          Empreendimentos para visitar
-        </h2>
-        <p className="mt-3 max-w-xl text-fundo-marca/70 leading-relaxed">
-          Lançamentos, imóveis em obras e prontos para morar. O valor muda de unidade para unidade, por isso
-          confirmamos com você no atendimento.
-        </p>
+        <Revelar>
+          <h2 className="max-w-2xl font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
+            Empreendimentos para visitar
+          </h2>
+          <p className="mt-3 max-w-xl text-fundo-marca/70 leading-relaxed">
+            O valor muda de unidade para unidade, então confirmamos com você no atendimento.
+          </p>
+        </Revelar>
 
         {carregando ? (
           <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
@@ -83,7 +85,7 @@ export function Ofertas() {
             >
               <Foto className="aspect-[16/10] rounded-lg" imovel={destaque} />
               <span className="mt-4 block text-ouro-texto text-sm">{quem(destaque)}</span>
-              <span className="mt-1 block font-display font-semibold text-2xl text-fundo-marca leading-snug group-hover:text-gold">
+              <span className="mt-1 block font-display font-semibold text-2xl text-fundo-marca leading-snug group-hover:text-ouro-texto">
                 {destaque.titulo}
               </span>
               <span className="mt-1 block text-fundo-marca/70 text-sm">{onde(destaque)}</span>
@@ -94,8 +96,8 @@ export function Ofertas() {
             </button>
 
             <ul className="divide-y divide-black/10 border-black/10 border-y lg:self-start">
-              {resto.map((i) => (
-                <li key={i.id}>
+              {resto.map((i, n) => (
+                <Revelar as="li" atraso={n * 90} key={i.id}>
                   <button
                     className="group flex w-full gap-4 py-4 text-left"
                     onClick={() => setAberto(i)}
@@ -104,13 +106,13 @@ export function Ofertas() {
                     <Foto className="h-24 w-28 shrink-0 rounded-md" imovel={i} />
                     <span className="min-w-0">
                       <span className="block text-ouro-texto text-xs">{quem(i)}</span>
-                      <span className="mt-0.5 line-clamp-2 block font-display font-semibold text-fundo-marca leading-snug group-hover:text-gold">
+                      <span className="mt-0.5 line-clamp-2 block font-display font-semibold text-fundo-marca leading-snug group-hover:text-ouro-texto">
                         {i.titulo}
                       </span>
                       <span className="mt-1 block truncate text-fundo-marca/70 text-xs">{onde(i)}</span>
                     </span>
                   </button>
-                </li>
+                </Revelar>
               ))}
             </ul>
           </div>

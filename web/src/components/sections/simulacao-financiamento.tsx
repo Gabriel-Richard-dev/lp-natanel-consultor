@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { MessageCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Revelar } from "@/components/ui/revelar";
 import { formatPreco, whatsappLink } from "@/lib/contato";
 import { type Sistema, simular } from "@/lib/financiamento";
 import { cn } from "@/lib/utils";
@@ -61,13 +62,20 @@ function Controle({
   dica?: string;
   alerta?: boolean;
 }) {
+  const pct = Math.min(Math.max(((value - min) / (max - min)) * 100, 0), 100);
+  // extremos da régua: "R$ 100 mil" e "R$ 2 mi" em reais; "5 anos" e "6%" nos demais
+  const extremo = (n: number) =>
+    dinheiro
+      ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(n)
+      : `${n}${sufixo === "%" ? "%" : sufixo ? ` ${sufixo}` : ""}`;
+
   return (
     <div>
       <div className="mb-2 flex items-center justify-between gap-3">
         <label className="font-medium text-sm" htmlFor={id}>
           {label}
         </label>
-        <div className="flex w-36 items-center rounded-lg border border-white/10 bg-white/5 px-2.5 focus-within:ring-2 focus-within:ring-gold/30 sm:w-40">
+        <div className="flex h-10 w-36 items-center rounded-lg border border-white/15 bg-white/5 px-3 transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/25 hover:border-white/30 sm:w-40">
           {prefixo && <span className="text-white/60 text-xs">{prefixo}</span>}
           {/* reais: texto com separador de milhar; o resto: campo numérico nativo
               (aceita "10,5" sem engolir a vírgula no meio da digitação) */}
@@ -87,14 +95,19 @@ function Controle({
       </div>
       <input
         aria-label={label}
-        className="w-full accent-gold"
+        className="regua"
         max={max}
         min={min}
         onChange={(e) => onChange(Number(e.target.value))}
         step={step}
+        style={{ "--pct": `${pct}%` } as React.CSSProperties}
         type="range"
         value={Math.min(Math.max(value, min), max)}
       />
+      <div aria-hidden="true" className="-mt-0.5 flex justify-between text-white/45 text-xs tabular-nums">
+        <span>{extremo(min)}</span>
+        <span>{extremo(max)}</span>
+      </div>
       {dica && (
         <p className={cn("mt-1 text-xs", alerta ? "text-amber-400" : "text-white/60")}>
           {dica}
@@ -127,18 +140,22 @@ export function SimulacaoFinanciamento() {
   );
 
   return (
-    <section className="bg-fundo-marca folha pt-[6.5rem] pb-20 md:pt-[8.5rem] md:pb-24" id="simulador">
+    <section className="folha relative isolate overflow-hidden bg-fundo-marca pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="simulador">
+      <div aria-hidden="true" className="planta -z-10 absolute inset-0" />
+      <div aria-hidden="true" className="-z-10 pointer-events-none absolute -top-20 -left-24 hidden h-[30rem] w-[19rem] rounded-t-full border border-gold/12 lg:block" />
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-      <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
-        Simule seu financiamento
-      </h2>
-      <p className="mt-3 mb-12 max-w-xl text-white/70 leading-relaxed">
-        Veja quanto fica a parcela, quanto você paga de juros e qual renda os bancos
-        costumam pedir.
-      </p>
+      <Revelar>
+        <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
+          Simule seu financiamento
+        </h2>
+        <p className="mt-3 mb-12 max-w-xl text-white/70 leading-relaxed">
+          Veja quanto fica a parcela, quanto você paga de juros e qual renda os bancos
+          costumam pedir.
+        </p>
+      </Revelar>
 
       <div className="grid items-start gap-6 lg:grid-cols-[1.15fr_1fr]">
-        <div className="space-y-7 rounded-lg border border-white/10 bg-marca p-6 md:p-8">
+        <Revelar className="space-y-7 rounded-lg border border-white/10 bg-marca p-6 md:p-8">
           <Controle
             dinheiro
             id="valor-imovel"
@@ -214,9 +231,10 @@ export function SimulacaoFinanciamento() {
               ))}
             </div>
           </fieldset>
-        </div>
+        </Revelar>
 
-        <div className="rounded-lg bg-preto p-6 text-white md:p-8 lg:sticky lg:top-8">
+        <Revelar atraso={120} className="lg:sticky lg:top-28">
+        <div className="rounded-lg bg-preto p-6 text-white md:p-8">
           <p className="text-sm text-white/60">
             {sistema === "sac" ? "Primeira parcela" : "Parcela fixa"}
           </p>
@@ -291,6 +309,7 @@ export function SimulacaoFinanciamento() {
             análise de crédito.
           </p>
         </div>
+        </Revelar>
       </div>
       </div>
     </section>
