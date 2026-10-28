@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import re
 import uuid
 from contextlib import asynccontextmanager
 from typing import Annotated
@@ -10,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
-from . import auth, chaves_na_mao, config, fotos, sessions
+from . import auth, config, fotos, habitnet, leads, sessions
 from .db import aplicar_schema, pool
 
 REFRESH_COOKIE = "refresh"
@@ -100,6 +101,39 @@ class ImovelIn(BaseModel):
         return None if isinstance(v, str) and not v.strip() else v
 
 
+class LeadIn(BaseModel):
+    nome: str = Field(min_length=2, max_length=100)
+    telefone: str
+    interesse: Texto = None
+    orcamento: Texto = None
+    cidade: Texto = None
+    imovel: Annotated[str | None, Field(max_length=200)] = None
+    mensagem: Annotated[str | None, Field(max_length=500)] = None
+    origem: Annotated[str | None, Field(max_length=40)] = None
+    consentimento: bool
+    site: str | None = None  # isca para robôs: pessoa nenhuma vê nem preenche
+
+    @field_validator("telefone")
+    @classmethod
+    def so_digitos(cls, v: str) -> str:
+        digitos = re.sub(r"\D", "", v)
+        if not 10 <= len(digitos) <= 13:
+            raise ValueError("telefone inválido")
+        return digitos
+
+    @field_validator("consentimento")
+    @classmethod
+    def precisa_aceitar(cls, v: bool) -> bool:
+        if not v:
+            raise ValueError("consentimento obrigatório")
+        return v
+
+    @field_validator("*", mode="before")
+    @classmethod
+    def vazio_vira_nulo(cls, v):
+        return None if isinstance(v, str) and not v.strip() else v
+
+
 CAMPOS = "titulo, preco, url, imagem, bairro, cidade, quartos, banheiros, area"
 VALORES = "%(titulo)s, %(preco)s, %(url)s, %(imagem)s, %(bairro)s, %(cidade)s, %(quartos)s, %(banheiros)s, %(area)s"
 
@@ -151,7 +185,9 @@ def logout(token: str | None = Cookie(default=None, alias=REFRESH_COOKIE)):
 @app.get("/imoveis")
 def listar():
     with pool.connection() as conn:
-        return conn.execute("select * from imoveis order by criado_em desc").fetchall()
+        return conn.execute(
+            "select * from imoveis order by criado_em desc, construtora, titulo"
+        ).fetchall()
 
 
 @app.post("/imoveis", status_code=201, dependencies=[Admin])
@@ -185,10 +221,55 @@ def remover(id: str):
     return Response(status_code=204)
 
 
-@app.post("/sync/chaves-na-mao", dependencies=[Admin])
+@app.post("/leads", status_code=201)
+def novo_lead(dados: LeadIn, request: Request):
+    if dados.site:
+        return {"ok": True}  # robô: finge que deu certo e não guarda
+    ip = request.client.host if request.client else "?"
+    if leads.limitado(ip):
+        raise HTTPException(429, "muitas solicitações, tente de novo mais tarde")
+    leads.registrar(ip)
+    campos = dados.model_dump(exclude={"consentimento", "site"})
+    with pool.connection() as conn:
+        conn.execute(
+            """insert into leads (id, nome, telefone, interesse, orcamento, cidade, imovel, mensagem, origem)
+               values (%(id)s, %(nome)s, %(telefone)s, %(interesse)s, %(orcamento)s, %(cidade)s,
+                 %(imovel)s, %(mensagem)s, %(origem)s)""",
+            {"id": str(uuid.uuid4()), **campos},
+        )
+    return {"ok": True}
+
+
+@app.get("/leads", dependencies=[Admin])
+def listar_leads():
+    with pool.connection() as conn:
+        return conn.execute("select * from leads order by atendido, criado_em desc").fetchall()
+
+
+@app.put("/leads/{id}", dependencies=[Admin])
+def marcar_lead(id: str, atendido: bool = True):
+    with pool.connection() as conn:
+        linha = conn.execute(
+            "update leads set atendido = %s where id = %s returning *", [atendido, id]
+        ).fetchone()
+    if not linha:
+        raise HTTPException(404, "contato não encontrado")
+    return linha
+
+
+@app.delete("/leads/{id}", status_code=204, dependencies=[Admin])
+def remover_lead(id: str):
+    with pool.connection() as conn:
+        cur = conn.execute("delete from leads where id = %s", [id])
+    if not cur.rowcount:
+        raise HTTPException(404, "contato não encontrado")
+    return Response(status_code=204)
+
+
+@app.post("/sync/habitnet", dependencies=[Admin])
 def sync():
     try:
-        return {"ok": True, "total": chaves_na_mao.sincronizar()}
+        return {"ok": True, **habitnet.sincronizar()}
     except Exception as err:
         raise HTTPException(502, f"falha ao sincronizar: {err}")
 

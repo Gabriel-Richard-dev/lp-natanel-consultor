@@ -1,11 +1,11 @@
 import { ArrowUpRight, Building2, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { type Imovel, removerImovel } from "@/lib/api";
-import { formatPreco } from "@/lib/contato";
+import { formatPrecoOuConsulta } from "@/lib/contato";
 import { cn, mensagemDe, normalizar } from "@/lib/utils";
 import { botaoPrimario, Cabecalho, cartao, inputCls, type Painel } from "./ui";
 
-type Filtro = "todos" | "manual" | "chaves_na_mao";
+type Filtro = "todos" | "manual" | "habitnet";
 
 const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? "" : "s"}`;
 
@@ -49,14 +49,14 @@ function Linha({
       <div className="min-w-0 flex-1">
         <p className="line-clamp-2 text-sm sm:line-clamp-1">{imovel.titulo}</p>
         {info && <p className="truncate text-apagado text-xs">{info}</p>}
-        <p className="mt-0.5 text-sm tabular-nums sm:hidden">{formatPreco(imovel.preco)}</p>
+        <p className="mt-0.5 text-sm tabular-nums sm:hidden">{formatPrecoOuConsulta(imovel.preco)}</p>
       </div>
 
       <p className={cn("hidden w-28 shrink-0 text-xs md:block", manual ? "text-ouro-texto" : "text-apagado")}>
-        {manual ? "Seu cadastro" : "Chaves na Mão"}
+        {manual ? "Seu cadastro" : (imovel.construtora ?? "Portal")}
       </p>
       <p className="hidden w-28 shrink-0 text-right text-sm tabular-nums sm:block">
-        {formatPreco(imovel.preco)}
+        {formatPrecoOuConsulta(imovel.preco)}
       </p>
 
       <div className="flex shrink-0 items-center justify-end gap-1 sm:w-28">
@@ -99,7 +99,7 @@ function Linha({
         ) : (
           imovel.url && (
             <a
-              aria-label="Ver anúncio no Chaves na Mão"
+              aria-label="Ver anúncio de origem"
               className="inline-flex items-center gap-0.5 rounded-md p-2 text-apagado text-sm hover:bg-papel hover:text-tinta sm:px-2.5 sm:py-1.5"
               href={imovel.url}
               rel="noreferrer"
@@ -143,7 +143,7 @@ export function ListaImoveis({ painel }: { painel: Painel }) {
   const filtros: { valor: Filtro; label: string; total: number }[] = [
     { valor: "todos", label: "Todos", total: lista.length },
     { valor: "manual", label: "Seus cadastros", total: totalManual },
-    { valor: "chaves_na_mao", label: "Chaves na Mão", total: lista.length - totalManual },
+    { valor: "habitnet", label: "Construtoras", total: lista.length - totalManual },
   ];
 
   return (

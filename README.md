@@ -1,8 +1,8 @@
-# Natanael Machado — Consultor Imobiliário
+# Alves Costa — Imóveis
 
 ```
 web/      site (React + Vite) e painel admin em /#/admin
-api/      API (FastAPI + Postgres), fotos no MinIO, sync com o Chaves na Mão
+api/      API (FastAPI + Postgres), fotos no MinIO, sync com o portal Habitnet (construtoras)
 ```
 
 ## Rodar
@@ -19,7 +19,9 @@ docker compose up -d --build
 - API: http://localhost:8080/api (e direto em http://localhost:3001, só na própria máquina)
 - MinIO (console das fotos): http://localhost:9001 — só acessível na própria máquina
 
-Os imóveis do Chaves na Mão só são sincronizados pelo botão no painel. Imóveis cadastrados à mão nunca são alterados pelo sync.
+Os empreendimentos das construtoras vêm do portal Habitnet e só são sincronizados pelo botão no painel (`POST /sync/habitnet`). O portal não informa preço, então esses cards mostram "Consulte valores". Imóveis cadastrados à mão nunca são alterados pelo sync.
+
+O portal e o consultor da vitrine são configuráveis por `HABITNET_URL` e `HABITNET_CONSULTOR`; as construtoras lidas ficam em `api/app/habitnet.py` (`CONSTRUTORAS`).
 
 ## Desenvolvimento
 
@@ -35,3 +37,4 @@ cd web && npm install && npm run dev
 - Fotos: toda imagem é reprocessada para WebP (bloqueia arquivo disfarçado e remove GPS/EXIF), máx. 5MB.
 - Postgres não é exposto fora do Docker; console do MinIO só em 127.0.0.1.
 - Checagens: `docker compose run --rm --no-deps api python test_app.py`
+- Contatos: o formulário da landing grava em `POST /leads` (com aceite de LGPD e limite por IP); aparecem em `/admin/contatos`.

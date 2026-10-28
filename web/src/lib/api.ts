@@ -1,7 +1,8 @@
 export type Imovel = {
   id: string;
   titulo: string;
-  preco: number;
+  // empreendimentos do portal não trazem preço: null = "consulte valores"
+  preco: number | null;
   url: string | null;
   imagem: string | null;
   bairro: string | null;
@@ -9,14 +10,40 @@ export type Imovel = {
   quartos: number | null;
   banheiros: number | null;
   area: string | null;
-  origem: "chaves_na_mao" | "manual";
+  construtora: string | null;
+  fase: string | null;
+  entrega: string | null;
+  origem: "habitnet" | "manual";
   atualizado_em: string;
 };
 
 // preço fica null enquanto o campo do formulário está vazio
-export type ImovelInput = Omit<Imovel, "id" | "origem" | "atualizado_em" | "preco"> & {
+export type ImovelInput = Omit<
+  Imovel,
+  "id" | "origem" | "atualizado_em" | "preco" | "construtora" | "fase" | "entrega"
+> & {
   preco: number | null;
 };
+
+export type Lead = {
+  id: string;
+  nome: string;
+  telefone: string;
+  interesse: string | null;
+  orcamento: string | null;
+  cidade: string | null;
+  imovel: string | null;
+  mensagem: string | null;
+  origem: string | null;
+  atendido: boolean;
+  criado_em: string;
+};
+
+export type LeadInput = Pick<Lead, "nome" | "telefone"> &
+  Partial<Pick<Lead, "interesse" | "orcamento" | "cidade" | "imovel" | "mensagem" | "origem">> & {
+    consentimento: boolean;
+    site?: string;
+  };
 
 const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
@@ -101,11 +128,22 @@ export const atualizarImovel = (id: string, dados: ImovelInput) =>
 export const removerImovel = (id: string) =>
   request<void>(`/imoveis/${id}`, { method: "DELETE" });
 
-export const sincronizarChavesNaMao = () =>
-  request<{ ok: true; total: number }>("/sync/chaves-na-mao", { method: "POST" });
+export const sincronizarHabitnet = () =>
+  request<{ ok: true; total: number; falhas: string[] }>("/sync/habitnet", { method: "POST" });
 
 export function enviarImagem(arquivo: File) {
   const form = new FormData();
   form.append("imagem", arquivo);
   return request<{ url: string }>("/upload", { method: "POST", body: form });
 }
+
+// público: é o formulário da landing
+export const enviarLead = (dados: LeadInput) =>
+  request<{ ok: true }>("/leads", { method: "POST", body: JSON.stringify(dados) });
+
+export const listarLeads = () => request<Lead[]>("/leads");
+
+export const marcarLead = (id: string, atendido: boolean) =>
+  request<Lead>(`/leads/${id}?atendido=${atendido}`, { method: "PUT" });
+
+export const removerLead = (id: string) => request<void>(`/leads/${id}`, { method: "DELETE" });

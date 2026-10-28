@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
 import { MessageCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { Revelar } from "@/components/ui/revelar";
 import { formatPreco, whatsappLink } from "@/lib/contato";
 import { type Sistema, simular } from "@/lib/financiamento";
 import { cn } from "@/lib/utils";
@@ -62,14 +62,21 @@ function Controle({
   dica?: string;
   alerta?: boolean;
 }) {
+  const pct = Math.min(Math.max(((value - min) / (max - min)) * 100, 0), 100);
+  // extremos da régua: "R$ 100 mil" e "R$ 2 mi" em reais; "5 anos" e "6%" nos demais
+  const extremo = (n: number) =>
+    dinheiro
+      ? new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(n)
+      : `${n}${sufixo === "%" ? "%" : sufixo ? ` ${sufixo}` : ""}`;
+
   return (
     <div>
       <div className="mb-2 flex items-center justify-between gap-3">
         <label className="font-medium text-sm" htmlFor={id}>
           {label}
         </label>
-        <div className="flex w-36 items-center rounded-lg border border-input bg-background px-2.5 focus-within:ring-2 focus-within:ring-emerald-600/30 sm:w-40">
-          {prefixo && <span className="text-muted-foreground text-xs">{prefixo}</span>}
+        <div className="flex h-10 w-36 items-center rounded-lg border border-white/15 bg-white/5 px-3 transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/25 hover:border-white/30 sm:w-40">
+          {prefixo && <span className="text-white/60 text-xs">{prefixo}</span>}
           {/* reais: texto com separador de milhar; o resto: campo numérico nativo
               (aceita "10,5" sem engolir a vírgula no meio da digitação) */}
           <input
@@ -83,21 +90,26 @@ function Controle({
             type={dinheiro ? "text" : "number"}
             value={dinheiro ? value.toLocaleString("pt-BR") : value}
           />
-          {sufixo && <span className="text-muted-foreground text-xs">{sufixo}</span>}
+          {sufixo && <span className="text-white/60 text-xs">{sufixo}</span>}
         </div>
       </div>
       <input
         aria-label={label}
-        className="w-full accent-emerald-600"
+        className="regua"
         max={max}
         min={min}
         onChange={(e) => onChange(Number(e.target.value))}
         step={step}
+        style={{ "--pct": `${pct}%` } as React.CSSProperties}
         type="range"
         value={Math.min(Math.max(value, min), max)}
       />
+      <div aria-hidden="true" className="-mt-0.5 flex justify-between text-white/45 text-xs tabular-nums">
+        <span>{extremo(min)}</span>
+        <span>{extremo(max)}</span>
+      </div>
       {dica && (
-        <p className={cn("mt-1 text-xs", alerta ? "text-amber-700" : "text-muted-foreground")}>
+        <p className={cn("mt-1 text-xs", alerta ? "text-amber-400" : "text-white/60")}>
           {dica}
         </p>
       )}
@@ -106,7 +118,6 @@ function Controle({
 }
 
 export function SimulacaoFinanciamento() {
-  const ref = useScrollReveal<HTMLDivElement>({ selector: ".sim-anim" });
   const [valorImovel, setValorImovel] = useState(300_000);
   const [entradaPct, setEntradaPct] = useState(20);
   const [anos, setAnos] = useState(30);
@@ -116,30 +127,33 @@ export function SimulacaoFinanciamento() {
   const entrada = Math.round((valorImovel * entradaPct) / 100);
   const s = simular({ valor: valorImovel, entrada, anos, taxaAnual, sistema });
   const partes = [
-    { nome: "Entrada", valor: Math.min(entrada, valorImovel), cor: "bg-amber-300" },
-    { nome: "Valor financiado", valor: s.financiado, cor: "bg-emerald-400" },
+    { nome: "Entrada", valor: Math.min(entrada, valorImovel), cor: "bg-white/80" },
+    { nome: "Valor financiado", valor: s.financiado, cor: "bg-gold" },
     { nome: "Juros", valor: s.totalJuros, cor: "bg-white/35" },
   ];
 
   const waLink = whatsappLink(
-    `Olá Natanael! Fiz uma simulação no seu site: imóvel de ${formatPreco(valorImovel)}, ` +
+    `Olá! Fiz uma simulação no site da Alves Costa: imóvel de ${formatPreco(valorImovel)}, ` +
       `entrada de ${formatPreco(entrada)} (${Math.round(entradaPct)}%), ${anos} anos, ` +
       `tabela ${sistema === "sac" ? "SAC" : "Price"} a ${String(taxaAnual).replace(".", ",")}% ao ano. ` +
       `${sistema === "sac" ? "Primeira parcela" : "Parcela"} estimada em ${formatPreco(s.primeira)}. Podemos conversar?`
   );
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" id="simulador" ref={ref}>
-      <h2 className="sim-anim mb-4 text-center font-bold text-3xl tracking-tight md:text-4xl">
-        Simule seu financiamento
-      </h2>
-      <p className="sim-anim mx-auto mb-12 max-w-xl text-center text-muted-foreground">
-        Veja quanto fica a parcela, quanto você paga de juros e qual renda os bancos
-        costumam pedir.
-      </p>
+    <section className="folha bg-fundo-marca pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="simulador">
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+      <Revelar>
+        <h2 className="font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
+          Simule seu financiamento
+        </h2>
+        <p className="mt-3 mb-12 max-w-xl text-white/70 leading-relaxed">
+          Veja quanto fica a parcela, quanto você paga de juros e qual renda os bancos
+          costumam pedir.
+        </p>
+      </Revelar>
 
       <div className="grid items-start gap-6 lg:grid-cols-[1.15fr_1fr]">
-        <div className="sim-anim space-y-7 rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8">
+        <Revelar className="space-y-7 rounded-lg border border-white/10 bg-marca p-6 md:p-8">
           <Controle
             dinheiro
             id="valor-imovel"
@@ -200,28 +214,29 @@ export function SimulacaoFinanciamento() {
                   className={cn(
                     "rounded-xl border p-3 text-left transition",
                     sistema === opcao.valor
-                      ? "border-emerald-600 bg-emerald-50 ring-1 ring-emerald-600"
-                      : "border-border hover:bg-muted"
+                      ? "border-gold bg-gold/10 ring-1 ring-gold"
+                      : "border-white/10 bg-marca hover:border-gold"
                   )}
                   key={opcao.valor}
                   onClick={() => setSistema(opcao.valor)}
                   type="button"
                 >
                   <span className="block font-semibold text-sm">{opcao.nome}</span>
-                  <span className="mt-0.5 block text-muted-foreground text-xs leading-snug">
+                  <span className="mt-0.5 block text-white/60 text-xs leading-snug">
                     {opcao.descricao}
                   </span>
                 </button>
               ))}
             </div>
           </fieldset>
-        </div>
+        </Revelar>
 
-        <div className="sim-anim rounded-2xl bg-[#0b1210] p-6 text-white md:p-8 lg:sticky lg:top-8">
+        <Revelar atraso={120} className="lg:sticky lg:top-28">
+        <div className="rounded-lg bg-preto p-6 text-white md:p-8">
           <p className="text-sm text-white/60">
             {sistema === "sac" ? "Primeira parcela" : "Parcela fixa"}
           </p>
-          <p className="font-bold text-4xl text-emerald-400 tracking-tight md:text-5xl">
+          <p className="font-display font-semibold text-4xl text-gold tracking-tight md:text-5xl">
             <AnimatedValor value={s.primeira} />
             <span className="font-normal text-base text-white/50"> /mês</span>
           </p>
@@ -279,19 +294,21 @@ export function SimulacaoFinanciamento() {
           </div>
 
           <a
-            className="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-5 py-3 font-medium text-black transition-colors hover:bg-emerald-400"
+            className="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-gold px-5 py-3 font-medium text-black transition-colors hover:bg-gold-claro"
             href={waLink}
             rel="noreferrer"
             target="_blank"
           >
             <MessageCircle className="h-4 w-4" />
-            Enviar simulação para o Natanael
+            Enviar simulação pelo WhatsApp
           </a>
           <p className="mt-3 text-white/40 text-xs leading-relaxed">
             Estimativa sem seguros obrigatórios, taxas do banco e TR. O valor final depende da
             análise de crédito.
           </p>
         </div>
+        </Revelar>
+      </div>
       </div>
     </section>
   );

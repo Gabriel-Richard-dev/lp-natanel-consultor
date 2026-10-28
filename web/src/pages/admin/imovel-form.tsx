@@ -44,7 +44,7 @@ export function PaginaImovel({ painel, id }: { painel: Painel; id?: string }) {
       <div className="py-16 text-center">
         <p className="font-medium">Imóvel não encontrado</p>
         <p className="mt-1 mb-5 text-apagado text-sm">
-          Ele pode ter sido excluído, ou é um anúncio do Chaves na Mão (esses não são editados aqui).
+          Ele pode ter sido excluído, ou é um empreendimento das construtoras (esses vêm do portal e não são editados aqui).
         </p>
         <a className={botaoSecundario} href="/admin/imoveis">
           Voltar para imóveis
@@ -124,6 +124,9 @@ function Formulario({
     atualizado_em: "",
     titulo: dados.titulo || "Título do anúncio",
     preco: dados.preco ?? 0,
+    construtora: null,
+    fase: null,
+    entrega: null,
   };
 
   return (
@@ -274,7 +277,7 @@ function Formulario({
         <aside className="lg:sticky lg:top-10">
           <p className="mb-3 text-apagado text-xs">Prévia no site</p>
           <div inert>
-            <OfertaCard oferta={preview} />
+            <OfertaCard oferta={preview} onAbrir={() => {}} />
           </div>
         </aside>
       </div>

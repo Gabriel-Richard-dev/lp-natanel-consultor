@@ -1,7 +1,7 @@
 import { Building2, Plus, RefreshCw } from "lucide-react";
 import { useState } from "react";
-import { sincronizarChavesNaMao } from "@/lib/api";
-import { formatPreco } from "@/lib/contato";
+import { sincronizarHabitnet } from "@/lib/api";
+import { formatPrecoOuConsulta } from "@/lib/contato";
 import { cn, mensagemDe } from "@/lib/utils";
 import { botaoPrimario, botaoSecundario, Cabecalho, cartao, type Painel } from "./ui";
 
@@ -36,25 +36,31 @@ export function VisaoGeral({ painel }: { painel: Painel }) {
 
   const lista = imoveis ?? [];
   const proprios = lista.filter((i) => i.origem === "manual");
-  const doPortal = lista.filter((i) => i.origem === "chaves_na_mao");
+  const doPortal = lista.filter((i) => i.origem === "habitnet");
   const ultimaSync = doPortal.reduce<string | null>(
     (max, i) => (!max || i.atualizado_em > max ? i.atualizado_em : max),
     null
   );
-  const precoMedio = lista.length ? lista.reduce((s, i) => s + i.preco, 0) / lista.length : 0;
+  const comPreco = lista.filter((i) => i.preco != null);
+  const precoMedio = comPreco.length ? comPreco.reduce((s, i) => s + (i.preco ?? 0), 0) / comPreco.length : 0;
   const numeros = [
     { label: "No site", valor: lista.length },
     { label: "Cadastrados por você", valor: proprios.length },
-    { label: "Vindos do Chaves na Mão", valor: doPortal.length },
-    { label: "Preço médio", valor: precoCurto(precoMedio) },
+    { label: "Das construtoras", valor: doPortal.length },
+    { label: "Preço médio", valor: comPreco.length ? precoCurto(precoMedio) : "—" },
   ];
 
   async function sincronizar() {
     setSincronizando(true);
     try {
-      const { total } = await sincronizarChavesNaMao();
+      const { total, falhas } = await sincronizarHabitnet();
       await recarregar();
-      avisar(`${total} anúncios atualizados do Chaves na Mão`);
+      avisar(
+        falhas.length
+          ? `${total} empreendimentos atualizados. Falhou: ${falhas.map((f) => f.split(":")[0]).join(", ")}`
+          : `${total} empreendimentos atualizados`,
+        falhas.length > 0
+      );
     } catch (err) {
       avisar(mensagemDe(err, "falha ao sincronizar"), true);
     } finally {
@@ -64,7 +70,7 @@ export function VisaoGeral({ painel }: { painel: Painel }) {
 
   return (
     <div className="space-y-8">
-      <Cabecalho sobre={<span className="first-letter:uppercase">{hoje()}</span>} titulo={`${saudacao()}, Natanael`}>
+      <Cabecalho sobre={<span className="first-letter:uppercase">{hoje()}</span>} titulo={saudacao()}>
         <a className={botaoPrimario} href="/admin/novo">
           <Plus className="h-4 w-4" /> Cadastrar imóvel
         </a>
@@ -118,7 +124,7 @@ export function VisaoGeral({ painel }: { painel: Painel }) {
                         {[imovel.bairro, imovel.cidade].filter(Boolean).join(", ") || "Sem localização"}
                       </p>
                     </div>
-                    <p className="shrink-0 text-sm tabular-nums">{formatPreco(imovel.preco)}</p>
+                    <p className="shrink-0 text-sm tabular-nums">{formatPrecoOuConsulta(imovel.preco)}</p>
                   </a>
                 </li>
               ))}
@@ -136,9 +142,9 @@ export function VisaoGeral({ painel }: { painel: Painel }) {
         </section>
 
         <section className={cn(cartao, "flex flex-col p-5")}>
-          <h2 className="font-medium text-sm">Chaves na Mão</h2>
+          <h2 className="font-medium text-sm">Construtoras</h2>
           <p className="mt-1 text-apagado text-sm leading-relaxed">
-            Use o botão abaixo para trazer seus anúncios do portal para o site.
+            Use o botão abaixo para trazer os empreendimentos das construtoras para o site.
           </p>
           <dl className="my-5 space-y-2 text-sm">
             <div className="flex justify-between gap-3">

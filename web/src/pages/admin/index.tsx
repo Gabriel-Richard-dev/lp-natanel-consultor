@@ -1,18 +1,20 @@
-import { Building2, ExternalLink, LayoutDashboard, Loader2, LogOut, Plus } from "lucide-react";
+import { Building2, ExternalLink, LayoutDashboard, Loader2, LogOut, Plus, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import logo from "@/assets/logo/logo-natanael.png";
+import logo from "@/assets/logo/logo-alves-costa.webp";
 import { type Imovel, listarImoveis, logout, restaurarSessao } from "@/lib/api";
 import { cn, mensagemDe } from "@/lib/utils";
+import { Contatos } from "./contatos";
 import { ListaImoveis } from "./imoveis";
 import { PaginaImovel } from "./imovel-form";
 import { Login } from "./login";
 import type { Painel } from "./ui";
 import { VisaoGeral } from "./visao-geral";
 
-// Rotas: /admin, /admin/imoveis, /admin/imoveis/<id>, /admin/novo
+// Rotas: /admin, /admin/imoveis, /admin/imoveis/<id>, /admin/contatos, /admin/novo
 const NAV = [
   { href: "/admin", secao: "", label: "Visão geral", curto: "Início", icone: LayoutDashboard },
   { href: "/admin/imoveis", secao: "imoveis", label: "Imóveis", curto: "Imóveis", icone: Building2 },
+  { href: "/admin/contatos", secao: "contatos", label: "Contatos", curto: "Contatos", icone: Users },
   { href: "/admin/novo", secao: "novo", label: "Cadastrar imóvel", curto: "Cadastrar", icone: Plus },
 ];
 
@@ -53,6 +55,8 @@ function Layout({ rota, onSair }: { rota: string; onSair: () => void }) {
       <PaginaImovel id={id} painel={painel} />
     ) : secao === "imoveis" ? (
       <ListaImoveis painel={painel} />
+    ) : secao === "contatos" ? (
+      <Contatos painel={painel} />
     ) : secao === "novo" ? (
       <PaginaImovel painel={painel} />
     ) : (
@@ -61,9 +65,9 @@ function Layout({ rota, onSair }: { rota: string; onSair: () => void }) {
 
   return (
     <div className="min-h-screen bg-papel text-tinta md:pl-60">
-      <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col bg-[#0b1210] py-6 md:flex">
+      <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col bg-[#0b0d12] py-6 md:flex">
         <a className="mb-10 px-6" href="/admin">
-          <img alt="Natanael Machado" className="h-14 w-auto" src={logo} />
+          <img alt="Alves Costa" className="h-20 w-auto" src={logo} />
         </a>
         <nav>
           {NAV.map((item) => {
@@ -102,8 +106,8 @@ function Layout({ rota, onSair }: { rota: string; onSair: () => void }) {
         </div>
       </aside>
 
-      <header className="sticky top-0 z-20 flex items-center justify-between bg-[#0b1210] px-4 py-2.5 md:hidden">
-        <img alt="Natanael Machado" className="h-9 w-auto" src={logo} />
+      <header className="sticky top-0 z-20 flex items-center justify-between bg-[#0b0d12] px-4 py-2.5 md:hidden">
+        <img alt="Alves Costa" className="h-10 w-auto" src={logo} />
         <div className="flex items-center">
           <a aria-label="Ver o site" className="p-2 text-white/60 hover:text-white" href="/">
             <ExternalLink className="h-5 w-5" />
@@ -116,7 +120,7 @@ function Layout({ rota, onSair }: { rota: string; onSair: () => void }) {
 
       <main className="mx-auto max-w-5xl px-4 pt-6 pb-28 md:px-10 md:py-10">{pagina}</main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-3 border-linha border-t bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-linha border-t bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
         {NAV.map((item) => {
           const ativo = item.secao === secao;
           return (

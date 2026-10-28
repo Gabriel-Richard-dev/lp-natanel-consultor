@@ -14,7 +14,12 @@ export default defineConfig({
   // dev: mesmo caminho que o nginx usa em produção
   server: {
     proxy: {
-      '/api': { target: 'http://localhost:3001', rewrite: (p) => p.replace(/^\/api/, '') },
+      // o refresh token vive em /auth; o nginx de produção reescreve o caminho do cookie, aqui também
+      '/api': {
+        target: 'http://localhost:3001',
+        rewrite: (p) => p.replace(/^\/api/, ''),
+        cookiePathRewrite: { '/auth': '/api/auth' },
+      },
       '/fotos': { target: 'http://localhost:9000', rewrite: (p) => p.replace(/^\/fotos/, '') },
     },
   },

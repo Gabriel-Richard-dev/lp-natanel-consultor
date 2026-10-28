@@ -1,45 +1,48 @@
-import { BedDouble, Building2, Ruler, ShowerHead } from "lucide-react";
+import { BedDouble, Building2, CalendarClock, Ruler, ShowerHead } from "lucide-react";
 import type { Imovel } from "@/lib/api";
-import { useTilt } from "@/hooks/use-tilt";
-import { formatPreco, whatsappOferta } from "@/lib/contato";
+import { formatPreco } from "@/lib/contato";
+import { cn } from "@/lib/utils";
 
-export function OfertaCard({ oferta }: { oferta: Imovel }) {
-  const tiltRef = useTilt<HTMLDivElement>();
-
+export function OfertaCard({ oferta, onAbrir }: { oferta: Imovel; onAbrir: (oferta: Imovel) => void }) {
   return (
-    <div
-      className="oferta-card flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-xl"
-      ref={tiltRef}
-      style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
-    >
-      <div className="relative h-48 w-full overflow-hidden bg-muted">
-        {/* 135% de altura centralizada: sobra margem para o parallax da home
-            (yPercent ±12) sem mostrar borda, e fica centrada onde não há parallax */}
+    <div className="flex flex-col overflow-hidden rounded-lg border border-black/10 bg-white font-corpo">
+      {/* o botão abaixo é o controle de teclado; clicar na foto faz o mesmo para quem usa mouse/toque */}
+      <div className="group relative h-48 w-full cursor-pointer overflow-hidden bg-black/5" onClick={() => onAbrir(oferta)}>
         {oferta.imagem ? (
           <img
             alt={oferta.titulo}
-            className="oferta-img absolute inset-x-0 top-[-17.5%] h-[135%] w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            decoding="async"
             loading="lazy"
             src={oferta.imagem}
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground/40">
+          <div className="flex h-full items-center justify-center text-fundo-marca/20">
             <Building2 className="h-10 w-10" />
           </div>
         )}
+        {oferta.fase && (
+          <span className="absolute top-3 left-3 rounded-sm bg-fundo-marca px-2.5 py-1 font-medium text-gold text-xs">
+            {oferta.fase}
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <span className="mb-1 font-semibold text-emerald-700 text-xl dark:text-emerald-400">
-          {formatPreco(oferta.preco)}
-        </span>
-        <h3 className="mb-2 line-clamp-2 font-medium text-sm leading-snug">
+        {oferta.construtora && <span className="mb-1 font-medium text-ouro-texto text-sm">{oferta.construtora}</span>}
+        {oferta.preco != null && (
+          <span className="mb-1 font-display font-semibold text-fundo-marca text-xl">{formatPreco(oferta.preco)}</span>
+        )}
+        <h3
+          className={cn(
+            "mb-2 line-clamp-2 font-display text-fundo-marca leading-snug",
+            oferta.preco != null ? "font-medium text-sm" : "font-semibold text-lg"
+          )}
+        >
           {oferta.titulo}
         </h3>
-        <p className="mb-4 text-muted-foreground text-xs">
-          {[oferta.bairro, oferta.cidade].filter(Boolean).join(", ")}
-        </p>
+        <p className="mb-4 text-fundo-marca/70 text-xs">{[oferta.bairro, oferta.cidade].filter(Boolean).join(", ")}</p>
 
-        <div className="mb-5 flex items-center gap-4 text-muted-foreground text-xs">
+        <div className={cn("flex items-center gap-4 text-fundo-marca/70 text-xs", oferta.entrega ? "mb-2" : "mb-5")}>
           {!!oferta.quartos && (
             <span className="flex items-center gap-1">
               <BedDouble className="h-3.5 w-3.5" /> {oferta.quartos}
@@ -56,15 +59,19 @@ export function OfertaCard({ oferta }: { oferta: Imovel }) {
             </span>
           )}
         </div>
+        {oferta.entrega && (
+          <p className="mb-5 flex items-center gap-1 text-fundo-marca/70 text-xs">
+            <CalendarClock className="h-3.5 w-3.5" /> Entrega prevista: {oferta.entrega}
+          </p>
+        )}
 
-        <a
-          className="mt-auto rounded-lg bg-emerald-600 py-2.5 text-center font-medium text-sm text-white transition-colors hover:bg-emerald-700"
-          href={whatsappOferta(oferta.titulo, oferta.url)}
-          rel="noreferrer"
-          target="_blank"
+        <button
+          className="mt-auto rounded-md bg-gold py-2.5 text-center font-semibold text-black text-sm transition-colors hover:bg-gold-claro"
+          onClick={() => onAbrir(oferta)}
+          type="button"
         >
-          Quero essa oferta
-        </a>
+          Ver detalhes
+        </button>
       </div>
     </div>
   );

@@ -1,95 +1,58 @@
-import { MapPin, Search, TrendingUp } from "lucide-react";
-import natanaelFoto from "@/assets/natanael/natanael-2.jpeg";
+import logo from "@/assets/logo/logo-alves-costa.webp";
+import { Revelar } from "@/components/ui/revelar";
+import { Skyline } from "@/components/ui/skyline";
 import { useImoveis } from "@/hooks/use-imoveis";
-import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { useParallax } from "@/hooks/use-parallax";
+import { useVisivel } from "@/hooks/use-visivel";
+import { outrasFotos } from "@/lib/fotos-hero";
+import { cn } from "@/lib/utils";
 
-const servicos = [
-  {
-    icon: Search,
-    title: "Compra assessorada",
-    description:
-      "Filtramos as opções certas pro seu perfil e orçamento, visitamos junto com você e negociamos o melhor preço.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Avaliação e investimento",
-    description:
-      "Análise de mercado real para você saber o valor justo do imóvel ou identificar boas oportunidades de investimento.",
-  },
-];
+// Janela em arco (o mesmo desenho do hero): a foto "abre" de baixo para cima e anda num ritmo próprio na rolagem
+function Arco({ src, className, fator, atraso }: { src?: string | null; className?: string; fator: number; atraso: number }) {
+  const paralaxe = useParallax<HTMLDivElement>(fator);
+  const [ref, visivel] = useVisivel<HTMLDivElement>();
+  return (
+    <div className={className} ref={paralaxe}>
+      <div className="relative h-full" ref={ref}>
+        <div aria-hidden="true" className="absolute inset-0 -translate-x-2 translate-y-2 rounded-t-[999px] rounded-b-xl border border-gold/40" />
+        <div
+          className={cn(
+            "relative h-full overflow-hidden rounded-t-[999px] rounded-b-xl bg-marca transition-[clip-path] duration-[1200ms] ease-out",
+            visivel ? "[clip-path:inset(0_0_0_0)]" : "[clip-path:inset(100%_0_0_0)]"
+          )}
+          style={{ transitionDelay: visivel ? `${atraso}ms` : undefined }}
+        >
+          {src && <img alt="" className="h-full w-full object-cover" decoding="async" loading="lazy" src={src} />}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function Sobre() {
-  const ref = useScrollReveal<HTMLDivElement>({ selector: ".sobre-anim" });
   const { imoveis } = useImoveis();
-
-  const precos = imoveis.map((o) => o.preco);
-  const faixaPreco = precos.length
-    ? `R$ ${Math.min(...precos).toLocaleString("pt-BR")} — ${Math.max(...precos).toLocaleString("pt-BR")}`
-    : "—";
-
-  const stats = [
-    { label: "Imóveis ativos", valor: `${imoveis.length}` },
-    { label: "Faixa de preço", valor: faixaPreco },
-    { label: "CRECI-CE", valor: "20127" },
-  ];
+  const [a, b] = outrasFotos(imoveis, 2, 1);
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 md:px-6" id="sobre">
-      <div className="grid items-center gap-12 md:grid-cols-2" ref={ref}>
-        <div className="sobre-anim order-2 md:order-1">
-          <h2 className="mb-4 font-bold text-3xl tracking-tight md:text-4xl">
-            Natanael Machado
+    <section className="folha overflow-hidden bg-fundo-marca pt-24 pb-32 text-white md:pt-[7.5rem] md:pb-40" id="sobre">
+      <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 md:px-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="mx-auto flex w-full max-w-sm gap-5">
+          <Arco atraso={0} className="mt-14 aspect-[3/5] w-1/2" fator={0.06} src={a?.imagem} />
+          <Arco atraso={200} className="aspect-[3/5] w-1/2" fator={-0.05} src={b?.imagem} />
+        </div>
+        <Revelar>
+          <img alt="Alves Costa" className="mb-8 w-48" loading="lazy" src={logo} />
+          <h2 className="font-display font-semibold text-3xl tracking-tight md:text-4xl">
+            Quem vai atender você
           </h2>
-          <p className="mb-4 text-lg text-muted-foreground leading-relaxed">
-            Consultor de imóveis dedicado a transformar a busca por um novo
-            lar em uma experiência tranquila. Conheço a fundo o mercado da
-            região metropolitana de Fortaleza e ajudo cada cliente a tomar a
-            melhor decisão, com transparência do início ao fim.
+          <p className="mt-5 max-w-xl text-white/65 leading-relaxed">
+            A Alves Costa é uma consultoria imobiliária de Fortaleza. A gente atende quem quer comprar, investir ou
+            vender um imóvel em Fortaleza, Eusébio, Maracanaú e Caucaia, e fica junto nas visitas, na simulação e na
+            documentação até a entrega das chaves.
           </p>
-          <div className="mb-8 flex items-center gap-2 font-medium text-emerald-700 dark:text-emerald-400">
-            <MapPin className="h-5 w-5" />
-            <span>Atendo Fortaleza, Eusébio e Maracanaú</span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-4 border-border border-t pt-6">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <div className="font-semibold text-lg">{stat.valor}</div>
-                <div className="text-muted-foreground text-xs">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="sobre-anim order-1 flex justify-center md:order-2">
-          <img
-            alt="Natanael Machado, consultor de imóveis"
-            className="w-full max-w-sm rounded-2xl border border-border object-cover shadow-lg"
-            src={natanaelFoto}
-          />
-        </div>
+        </Revelar>
       </div>
-
-      <div className="sobre-anim mt-16 border-border border-t pt-12">
-        <h3 className="mb-6 font-medium text-muted-foreground text-sm uppercase tracking-wide">
-          Como posso te ajudar
-        </h3>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {servicos.map(({ icon: Icon, title, description }) => (
-            <div
-              className="rounded-2xl border border-border bg-card p-6 shadow-sm"
-              key={title}
-            >
-              <Icon className="mb-3 h-6 w-6 text-emerald-600" />
-              <h4 className="mb-1.5 font-semibold">{title}</h4>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Skyline className="absolute inset-x-0 bottom-0 h-20 w-full text-gold/10 md:h-28" />
     </section>
   );
 }

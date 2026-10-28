@@ -11,7 +11,9 @@ MINIO_SECRET_KEY = os.environ["MINIO_SECRET_KEY"]
 MINIO_BUCKET = os.environ["MINIO_BUCKET"]
 MINIO_PUBLIC_URL = os.environ["MINIO_PUBLIC_URL"].rstrip("/")
 
-CHAVES_NA_MAO_URL = os.environ["CHAVES_NA_MAO_URL"]
+# Portal Habitnet: vitrines em {HABITNET_URL}/{construtora}/{HABITNET_CONSULTOR}
+HABITNET_URL = os.environ.get("HABITNET_URL", "https://imoveis.habitnet.com.br").rstrip("/")
+HABITNET_CONSULTOR = os.environ.get("HABITNET_CONSULTOR", "pedro-pimenta")
 
 # Cookie do refresh token. Em produção (HTTPS) defina COOKIE_SECURE=true.
 # Se o site e a API ficarem em domínios diferentes, use COOKIE_SAMESITE=none
