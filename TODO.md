@@ -71,7 +71,7 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [x] Efeitos de rolagem: números que contam, arcos que abrem, prédios que crescem, paralaxe do arco, itens que entram escalonados (todos respeitam "reduzir movimento")
 - [x] Catálogo e card de imóvel no tema claro; régua do simulador redesenhada
 - [x] Textos revisados com o humanizer (sem promessas sem base, sem repetição)
-- [x] Menos cara de template: sem manchas de luz, brilhos, quadrados animados nem vidro fosco; cobogó no lugar da grade (simulador e contato); lista editorial de construtoras; "lar" em dourado fixo
+- [x] Menos cara de template: sem manchas de luz, brilhos, quadrados animados nem vidro fosco; cobogó removido de todas as seções (simulador, contato e hero ficaram com fundo liso); lista editorial de construtoras; "lar" em dourado fixo
 - [x] Simulador com fundo limpo; hero com fim de tarde (degradê dourado subindo da base e silhueta de prédios); "lar" com gradiente animado e brilhos
 - [x] Busca do hero com menu de sugestões próprio (cidades, construtoras e bairros, com teclado)
 - [x] Modal do imóvel em portal no body (fica acima da navbar), coluna única, formulário só ao pedir
