@@ -3,17 +3,19 @@ import { useVisivel } from "@/hooks/use-visivel";
 // Silhueta de prédios, em eco às três barras da logo; os prédios crescem quando a seção aparece
 const BARRAS = [34, 56, 42, 78, 52, 96, 64, 44, 84, 58, 38, 70, 50, 90, 46, 60];
 
-export function Skyline({ className }: { className?: string }) {
+// repeticoes > 1 deixa os prédios mais finos, variando a ordem das alturas a cada volta
+export function Skyline({ className, repeticoes = 1 }: { className?: string; repeticoes?: number }) {
   const [ref, visivel] = useVisivel<SVGSVGElement>("0px 0px 0px 0px");
+  const barras = Array.from({ length: repeticoes }, (_, r) => BARRAS.map((_, i) => BARRAS[(i + r * 5) % BARRAS.length])).flat();
   return (
     <svg
       aria-hidden="true"
       className={className}
       preserveAspectRatio="none"
       ref={ref}
-      viewBox={`0 0 ${BARRAS.length * 20} 100`}
+      viewBox={`0 0 ${barras.length * 20} 100`}
     >
-      {BARRAS.map((h, i) => (
+      {barras.map((h, i) => (
         <rect
           fill="currentColor"
           height={h}

@@ -72,7 +72,7 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [x] Catálogo e card de imóvel no tema claro; régua do simulador redesenhada
 - [x] Textos revisados com o humanizer (sem promessas sem base, sem repetição)
 - [x] Menos cara de template: sem manchas de luz, brilhos, quadrados animados nem vidro fosco; cobogó no lugar da grade (simulador e contato); lista editorial de construtoras; "lar" em dourado fixo
-- [x] Fundos do hero e do simulador limpos (só tons de preto); "lar" com gradiente animado e brilhos
+- [x] Simulador com fundo limpo; hero com fim de tarde (degradê dourado subindo da base e silhueta de prédios); "lar" com gradiente animado e brilhos
 - [x] Busca do hero com menu de sugestões próprio (cidades, construtoras e bairros, com teclado)
 - [x] Modal do imóvel em portal no body (fica acima da navbar), coluna única, formulário só ao pedir
 - [ ] Conteúdo real que tira a cara de IA (precisa de vocês): fotos da equipe e de Fortaleza, depoimentos, CRECI e endereço

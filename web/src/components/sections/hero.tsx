@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BuscaHero } from "@/components/sections/busca-hero";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
+import { Skyline } from "@/components/ui/skyline";
 import { TextoBrilhante } from "@/components/ui/texto-brilhante";
 import { useImoveis } from "@/hooks/use-imoveis";
 import { useParallax } from "@/hooks/use-parallax";
@@ -36,6 +37,9 @@ export function Hero() {
 
   return (
     <section className="relative isolate overflow-x-clip bg-gradient-to-b from-marca to-fundo-marca" id="top">
+      {/* fim de tarde: luz dourada subindo da base e a silhueta dos prédios na frente dela */}
+      <div aria-hidden="true" className="-z-10 absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-gold/25 via-gold/8 to-transparent" />
+      <Skyline className="-z-10 absolute inset-x-0 bottom-0 h-24 w-full text-fundo-marca md:h-36" repeticoes={2} />
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-28 pb-14 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:pt-36 lg:pb-20">
         <div>
           <h1 className="text-balance font-display font-semibold text-5xl text-white leading-[1.02] tracking-tight sm:text-6xl">
