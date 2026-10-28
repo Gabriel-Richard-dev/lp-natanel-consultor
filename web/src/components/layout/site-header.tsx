@@ -54,9 +54,9 @@ export function SiteHeader() {
     <header className="fixed inset-x-0 top-3 z-50 px-3 md:top-4 md:px-6">
       <div
         className={cn(
-          "relative mx-auto max-w-6xl border border-white/10 backdrop-blur-xl transition-[background-color,box-shadow,border-radius] duration-300",
+          "relative mx-auto max-w-6xl border border-white/10 transition-[background-color,box-shadow,border-radius] duration-300",
           aberto ? "rounded-3xl" : "rounded-full",
-          rolou || aberto ? "bg-fundo-marca/90 shadow-2xl shadow-black/40" : "bg-fundo-marca/55"
+          rolou || aberto ? "bg-fundo-marca shadow-2xl shadow-black/40" : "bg-fundo-marca/90"
         )}
       >
         <div className="flex h-14 items-center justify-between pr-2 pl-5 md:h-16 md:pl-7">

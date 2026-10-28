@@ -71,6 +71,11 @@ Fonte do estado anterior: branch `wip-habitnet`. Referência de estrutura: https
 - [x] Efeitos de rolagem: números que contam, arcos que abrem, prédios que crescem, paralaxe do arco, itens que entram escalonados (todos respeitam "reduzir movimento")
 - [x] Catálogo e card de imóvel no tema claro; régua do simulador redesenhada
 - [x] Textos revisados com o humanizer (sem promessas sem base, sem repetição)
+- [x] Menos cara de template: sem manchas de luz, brilhos, quadrados animados nem vidro fosco; cobogó no lugar da grade (simulador e contato); lista editorial de construtoras; "lar" em dourado fixo
+- [x] Fundo do hero é a própria foto do carrossel, desfocada, trocando junto com ela
+- [x] Busca do hero com menu de sugestões próprio (cidades, construtoras e bairros, com teclado)
+- [x] Modal do imóvel em portal no body (fica acima da navbar), coluna única, formulário só ao pedir
+- [ ] Conteúdo real que tira a cara de IA (precisa de vocês): fotos da equipe e de Fortaleza, depoimentos, CRECI e endereço
 - [x] Filtros: componente `Segmentado` no hero e no catálogo, barra do catálogo em duas linhas
 - [x] Ritmo de fundos: Empreendimentos, Onde atendemos e Contato em branco; o resto escuro
 - [x] Quatro cidades atendidas (Fortaleza, Eusébio, Maracanaú e Caucaia) em `lib/cidades.ts`; cidade sem empreendimento leva ao formulário

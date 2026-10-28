@@ -43,11 +43,12 @@ export function Sobre() {
         <Revelar>
           <img alt="Alves Costa" className="mb-8 w-48" loading="lazy" src={logo} />
           <h2 className="font-display font-semibold text-3xl tracking-tight md:text-4xl">
-            Consultoria imobiliária em Fortaleza e região
+            Quem vai atender você
           </h2>
           <p className="mt-5 max-w-xl text-white/65 leading-relaxed">
-            A Alves Costa atende quem quer comprar, investir ou vender um imóvel em Fortaleza, Eusébio, Maracanaú e
-            Caucaia. Acompanhamos as visitas, a simulação e a documentação até a entrega das chaves.
+            A Alves Costa é uma consultoria imobiliária de Fortaleza. A gente atende quem quer comprar, investir ou
+            vender um imóvel em Fortaleza, Eusébio, Maracanaú e Caucaia, e fica junto nas visitas, na simulação e na
+            documentação até a entrega das chaves.
           </p>
         </Revelar>
       </div>

@@ -64,7 +64,7 @@ export function Ofertas() {
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <Revelar>
           <h2 className="max-w-2xl font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
-            Empreendimentos para visitar
+            Alguns para começar
           </h2>
           <p className="mt-3 max-w-xl text-fundo-marca/70 leading-relaxed">
             O valor muda de unidade para unidade, então confirmamos com você no atendimento.

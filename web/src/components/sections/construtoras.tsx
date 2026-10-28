@@ -1,5 +1,5 @@
-import { Revelar } from "@/components/ui/revelar";
 import { Chave } from "@/components/ui/chave";
+import { Revelar } from "@/components/ui/revelar";
 import { useImoveis } from "@/hooks/use-imoveis";
 import { CONSTRUTORAS } from "@/lib/construtoras";
 
@@ -9,6 +9,7 @@ export function Construtoras() {
   const lista = CONSTRUTORAS.map((nome) => ({ nome, n: imoveis.filter((i) => i.construtora === nome).length }))
     .filter((c) => !imoveis.length || c.n > 0)
     .sort((a, b) => b.n - a.n);
+  const total = lista.reduce((soma, c) => soma + c.n, 0);
 
   return (
     <section aria-label="Construtoras" className="folha relative isolate overflow-hidden bg-fundo-marca pt-24 pb-20 md:pt-[7.5rem] md:pb-24">
@@ -16,20 +17,22 @@ export function Construtoras() {
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <Revelar>
           <h2 className="max-w-2xl font-display font-semibold text-3xl text-white tracking-tight md:text-4xl">
-            Empreendimentos de {lista.length} construtoras
+            {total ? `${lista.length} construtoras, ${total} empreendimentos` : "Construtoras"}
           </h2>
           <p className="mt-3 max-w-xl text-white/65 leading-relaxed">Escolha uma e veja só os empreendimentos dela.</p>
         </Revelar>
-        <ul className="mt-8 flex flex-wrap gap-3">
+        <ul className="mt-10 grid border-white/10 border-t md:grid-cols-2 md:gap-x-16">
           {lista.map(({ nome, n }, i) => (
-            <Revelar as="li" atraso={i * 45} key={nome}>
+            <Revelar as="li" atraso={i * 40} key={nome}>
               <a
-                className="group flex items-center gap-3 rounded-full border border-white/15 bg-white/5 py-3 pr-3 pl-6 font-display font-medium text-lg text-white transition-colors hover:border-gold hover:bg-gold/10"
+                className="group flex items-baseline justify-between gap-4 border-white/10 border-b py-4 transition-colors hover:border-gold"
                 href={`/catalogo?construtora=${encodeURIComponent(nome)}`}
               >
-                {nome}
+                <span className="font-display font-medium text-2xl text-white transition-colors group-hover:text-gold">{nome}</span>
                 {n > 0 && (
-                  <span className="rounded-full bg-gold px-2.5 py-0.5 font-semibold text-black text-sm tabular-nums">{n}</span>
+                  <span className="shrink-0 text-sm text-white/55 tabular-nums">
+                    {n} {n === 1 ? "empreendimento" : "empreendimentos"}
+                  </span>
                 )}
               </a>
             </Revelar>

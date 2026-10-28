@@ -62,7 +62,7 @@ export function Captacao() {
 
   return (
     <section className="folha relative isolate overflow-hidden bg-prata pt-24 pb-20 md:pt-[7.5rem] md:pb-24" id="contato">
-      <div aria-hidden="true" className="planta-clara -z-10 absolute inset-0" />
+      <div aria-hidden="true" className="cobogo-claro -z-10 absolute inset-0" />
       <div className="mx-auto grid max-w-6xl gap-12 px-4 md:px-6 lg:grid-cols-[1fr_1.1fr]">
         <Revelar>
           <h2 className="font-display font-semibold text-3xl text-fundo-marca tracking-tight md:text-4xl">
