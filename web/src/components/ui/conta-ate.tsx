@@ -6,10 +6,10 @@ import { movimentoReduzido } from "@/lib/utils";
 export function ContaAte({ alvo, duracao = 1200 }: { alvo: number; duracao?: number }) {
   const [ref, visivel] = useVisivel<HTMLSpanElement>("0px 0px -5% 0px");
   const [valor, setValor] = useState(0);
+  const reduzido = movimentoReduzido();
 
   useEffect(() => {
-    if (!visivel) return;
-    if (movimentoReduzido()) return setValor(alvo);
+    if (!visivel || reduzido) return;
     const inicio = performance.now();
     let quadro = requestAnimationFrame(function passo(agora) {
       const t = Math.min((agora - inicio) / duracao, 1);
@@ -17,7 +17,7 @@ export function ContaAte({ alvo, duracao = 1200 }: { alvo: number; duracao?: num
       if (t < 1) quadro = requestAnimationFrame(passo);
     });
     return () => cancelAnimationFrame(quadro);
-  }, [visivel, alvo, duracao]);
+  }, [visivel, reduzido, alvo, duracao]);
 
-  return <span ref={ref}>{valor}</span>;
+  return <span ref={ref}>{reduzido ? alvo : valor}</span>;
 }
