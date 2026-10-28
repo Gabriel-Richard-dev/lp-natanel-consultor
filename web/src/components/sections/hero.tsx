@@ -1,22 +1,20 @@
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { BuscaHero } from "@/components/sections/busca-hero";
 import { ImovelDialog } from "@/components/sections/imovel-dialog";
 import { FundoPlanta } from "@/components/ui/fundo-planta";
 import { TextoBrilhante } from "@/components/ui/texto-brilhante";
 import { useImoveis } from "@/hooks/use-imoveis";
 import { useParallax } from "@/hooks/use-parallax";
 import type { Imovel } from "@/lib/api";
-import { CIDADES_ATENDIDAS } from "@/lib/cidades";
 import { FASES, grupoDaFase } from "@/lib/fase";
 import { escolherFotos } from "@/lib/fotos-hero";
-import { navegar } from "@/lib/rota";
 import { cn, movimentoReduzido } from "@/lib/utils";
 
 const TROCA_MS = 7000;
 
 export function Hero() {
   const { imoveis, carregando } = useImoveis();
-  const [busca, setBusca] = useState("");
   const [atual, setAtual] = useState(0);
   const [pausado, setPausado] = useState(false);
   const [aberto, setAberto] = useState<Imovel | null>(null);
@@ -35,24 +33,10 @@ export function Hero() {
     return () => clearTimeout(id);
   }, [atual, fotos.length, pausado, aberto]);
 
-  // sugestões do campo de busca: cidades, construtoras e bairros que existem nos dados
-  const sugestoes = useMemo(
-    () =>
-      [...new Set([...CIDADES_ATENDIDAS, ...imoveis.flatMap((i) => [i.construtora, i.bairro])])]
-        .filter((s): s is string => !!s)
-        .sort((a, b) => a.localeCompare(b, "pt-BR")),
-    [imoveis]
-  );
   const porFase = FASES.map((f) => ({ ...f, n: imoveis.filter((i) => grupoDaFase(i.fase) === f.valor).length }));
 
-  function buscar(e: React.FormEvent) {
-    e.preventDefault();
-    const termo = busca.trim();
-    navegar(`/catalogo${termo ? `?q=${encodeURIComponent(termo)}` : ""}`);
-  }
-
   return (
-    <section className="relative isolate overflow-hidden bg-fundo-marca" id="top">
+    <section className="relative isolate overflow-x-clip bg-fundo-marca" id="top">
       <FundoPlanta />
 
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-28 pb-14 md:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:pt-36 lg:pb-20">
@@ -64,32 +48,7 @@ export function Hero() {
             Lançamentos, imóveis em obras e prontos para morar. A Alves Costa acompanha você até a entrega das chaves.
           </p>
 
-          <form aria-label="Buscar imóveis" className="mt-9 max-w-xl" onSubmit={buscar}>
-            <div className="flex items-center gap-2 rounded-2xl border border-white/15 bg-marca p-2 transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/25">
-              <Search aria-hidden="true" className="ml-3 h-5 w-5 shrink-0 text-gold" />
-              <input
-                aria-label="Buscar por bairro, cidade ou construtora"
-                autoComplete="off"
-                className="h-12 min-w-0 flex-1 bg-transparent px-2 text-base text-white outline-none placeholder:text-white/45"
-                list="sugestoes-busca"
-                onChange={(e) => setBusca(e.target.value)}
-                placeholder="Bairro ou cidade"
-                type="search"
-                value={busca}
-              />
-              <button
-                className="h-12 shrink-0 rounded-xl bg-gold px-6 font-semibold text-black transition-colors hover:bg-gold-claro"
-                type="submit"
-              >
-                Buscar
-              </button>
-            </div>
-            <datalist id="sugestoes-busca">
-              {sugestoes.map((s) => (
-                <option key={s} value={s} />
-              ))}
-            </datalist>
-          </form>
+          <BuscaHero imoveis={imoveis} />
 
           <ul className="mt-5 flex flex-wrap gap-2">
             {porFase.map((f) => (

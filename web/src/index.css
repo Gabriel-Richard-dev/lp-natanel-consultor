@@ -249,10 +249,7 @@ html {
   }
 }
 
-/* a lista de sugestões do campo de busca já abre ao digitar; a seta nativa só atrapalha */
-input[list]::-webkit-calendar-picker-indicator {
-  display: none !important;
-}
+
 
 /* Cada seção sobe sobre a anterior com cantos arredondados: a troca de cor vira uma curva, não um corte */
 @layer components {
